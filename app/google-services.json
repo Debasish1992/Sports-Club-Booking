@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "431550388392",
+    "firebase_url": "https://sports-club-eeee7.firebaseio.com",
+    "project_id": "sports-club-eeee7",
+    "storage_bucket": "sports-club-eeee7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431550388392:android:51f455b22b1ee371",
+        "android_client_info": {
+          "package_name": "com.conlistech.sportsclubbookingengine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431550388392-lp1ihosqbcor43m7ocdb863gp9tk8d2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.conlistech.sportsclubbookingengine",
+            "certificate_hash": "1af06883b89ae4b944f330a980b6e50bdaad8e67"
+          }
+        },
+        {
+          "client_id": "431550388392-nup48trh3sb1k50s4aprlrm2tuhadlh3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "431550388392-nup48trh3sb1k50s4aprlrm2tuhadlh3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxy3acmloCZ22ixmk4rZLuUhm7AEGnBkY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431550388392-nup48trh3sb1k50s4aprlrm2tuhadlh3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
