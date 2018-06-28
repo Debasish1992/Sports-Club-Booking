@@ -2,12 +2,19 @@ package com.conlistech.sportsclubbookingengine.models;
 
 public class VenueInfoModel {
 
-    String address, amenities,
+    String  address, amenities,
             owner_name, venue_email,
             venue_equipments, venue_image,
             venue_name, venue_offers,
-            venue_phone, venue_website;
+            venue_phone, venue_website, venueId;
 
+    public String getVenueId() {
+        return venueId;
+    }
+
+    public void setVenueId(String venueId) {
+        this.venueId = venueId;
+    }
 
     public String getAddress() {
         return address;

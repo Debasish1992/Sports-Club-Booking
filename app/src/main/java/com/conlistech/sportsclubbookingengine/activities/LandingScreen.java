@@ -2,6 +2,10 @@ package com.conlistech.sportsclubbookingengine.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -28,7 +32,9 @@ import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.models.VenueInfoModel;
 import com.conlistech.sportsclubbookingengine.models.VenueModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
+import com.conlistech.sportsclubbookingengine.utils.GetAddress;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
+import com.conlistech.sportsclubbookingengine.utils.LocationTracker;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
@@ -42,6 +48,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -118,9 +125,25 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        LocationTracker locationTracker = new LocationTracker(LandingScreen.this);
+
+        if (locationTracker.canGetLocation()) {
+            Double latitude = locationTracker.getLatitude();
+            Double longitude = locationTracker.getLongitude();
+            List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+            String locAddress = address.get(0).getAddressLine(0);
+            String city = address.get(0).getLocality();
+            Log.d("Address", address.toString());
+            toolbar.setTitle(locAddress);
+            toolbar.setSubtitle(city);
+        } else {
+            System.out.println("Unable to locate the position");
+        }
+
         // Getting all the venues
         getAllVenues();
     }
+
 
     // Fetching and Setting User Data
     public void setUserData() {
@@ -274,6 +297,7 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
                 // whenever data at this location is updated.
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     VenueInfoModel venues = noteDataSnapshot.getValue(VenueInfoModel.class);
+                    venues.setVenueId(noteDataSnapshot.getKey());
                     venueInfoModels.add(venues);
                 }
                 setUpAdapter();
@@ -292,11 +316,11 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
 
     // Setting up the adapter
     public void setUpAdapter() {
-        if(venueInfoModels.size() > 0){
+        if (venueInfoModels.size() > 0) {
             venueAdapter = new VenueAdapter(LandingScreen.this, venueInfoModels);
             venueRecyclerView.setAdapter(venueAdapter);
             venueAdapter.setClickListener(this);
-        }else{
+        } else {
             Toast.makeText(LandingScreen.this, "No Teammates Found", Toast.LENGTH_LONG).show();
             venueAdapter = new VenueAdapter(LandingScreen.this, venueInfoModels);
             venueRecyclerView.setAdapter(venueAdapter);

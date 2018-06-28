@@ -22,7 +22,7 @@
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/tvDistance"
         android:layout_marginTop="10dp"
-        android:text="Balewadi Statium"
+        android:text=""
         android:textColor="@color/black"
         android:textSize="20sp" />
 
@@ -34,7 +34,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="8dp"
-        android:text="sadsadsadsadsadsadsadsaaaaadsadsadsadsadsadsadsadsadsa"
+        android:text=""
         android:textSize="15sp" />
 
     <RatingBar
@@ -42,6 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvAddress"
+        android:isIndicator="true"
+        android:paddingBottom="10dp"
+        style="?android:attr/ratingBarStyleIndicator"
         android:layout_marginTop="8dp" />
 
     <TextView
@@ -49,8 +52,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="dADSADSADSA"
-        android:layout_marginRight="5dp"
+        android:text=""
+        android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
         android:layout_below="@+id/ivVenueImage"
         />

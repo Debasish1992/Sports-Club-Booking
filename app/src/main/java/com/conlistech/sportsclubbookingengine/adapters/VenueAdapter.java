@@ -56,10 +56,6 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> 
         if(getVenueImage != null){
             Picasso.get().load(getVenueImage).into(viewHolder.ivVenueImage);
         }
-
-      //  viewHolder.tv_venue_address.setBackgroundResource(R.drawable.ic_person_black_48dp);
-
-
     }
 
     // Function responsible for refreshing the list
