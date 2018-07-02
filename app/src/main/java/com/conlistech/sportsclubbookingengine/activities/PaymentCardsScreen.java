@@ -57,7 +57,6 @@ public class PaymentCardsScreen extends AppCompatActivity {
     ArrayList<PaymentCardModel> paymentCardModels;
     PaymentCardAdapter paymentCardAdapter;
 
-
     @OnClick(R.id.fabAddCard)
     void addCard() {
         onScanPress();

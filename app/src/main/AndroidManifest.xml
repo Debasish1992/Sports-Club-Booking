@@ -60,7 +60,8 @@
             android:name=".activities.SettingsScreen"
             android:label="@string/title_activity_settings_screen" />
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.PaymentCardsScreen"></activity>
+        <activity android:name=".activities.PaymentCardsScreen" />
+        <activity android:name=".activities.DetailsScreen"></activity>
     </application>
 
 </manifest>

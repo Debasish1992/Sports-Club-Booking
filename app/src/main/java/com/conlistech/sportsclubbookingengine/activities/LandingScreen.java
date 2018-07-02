@@ -67,7 +67,7 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
     SharedPreferences pref;
     ArrayList<VenueInfoModel> venueInfoModels;
     VenueAdapter venueAdapter;
-    String venueId = null;
+    public static String venueId = null;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -331,9 +331,9 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
 
     @Override
     public void onClick(View view, int position) {
-        /*final VenueInfoModel venues = VenueAdapter.mArrayList.get(position);
-        //venueId = venues.get
-        Intent i = new Intent(this, ProfileScreen.class);
-        startActivity(i);*/
+        final VenueInfoModel venues = VenueAdapter.mArrayList.get(position);
+        venueId = venues.getVenueId();
+        Intent i = new Intent(this, DetailsScreen.class);
+        startActivity(i);
     }
 }

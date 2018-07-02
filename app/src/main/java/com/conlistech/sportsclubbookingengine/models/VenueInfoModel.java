@@ -6,7 +6,7 @@ public class VenueInfoModel {
             owner_name, venue_email,
             venue_equipments, venue_image,
             venue_name, venue_offers,
-            venue_phone, venue_website, venueId;
+            venue_phone, venue_website, venueId, venueDesc;
 
     public String getVenueId() {
         return venueId;
@@ -94,5 +94,13 @@ public class VenueInfoModel {
 
     public void setVenue_website(String venue_website) {
         this.venue_website = venue_website;
+    }
+
+    public String getVenueDesc() {
+        return venueDesc;
+    }
+
+    public void setVenueDesc(String venueDesc) {
+        this.venueDesc = venueDesc;
     }
 }
