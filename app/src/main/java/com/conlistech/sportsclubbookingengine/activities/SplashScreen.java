@@ -26,7 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -52,6 +54,8 @@ public class SplashScreen extends AppCompatActivity {
 
         db_sqlite = new SqliteHelper(this);
 
+        //add_timeSlots();
+
         // Fetching the sports from the database
         if (db_sqlite.getSportsCount() == 0) {
             fetchUserDetails();
@@ -68,10 +72,10 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 SplashScreen.this.finish();
-                if(TextUtils.isEmpty(getCurrentUserId())){
+                if (TextUtils.isEmpty(getCurrentUserId())) {
                     startActivity(new Intent(SplashScreen.this,
                             LoginScreen.class));
-                }else{
+                } else {
                     startActivity(new Intent(SplashScreen.this,
                             LandingScreen.class));
                 }
@@ -112,4 +116,28 @@ public class SplashScreen extends AppCompatActivity {
     }
 
 
+    public void add_timeSlots() {
+        ArrayList<String> arrayList = new ArrayList();
+        arrayList.add("100");
+        arrayList.add("150");
+        arrayList.add("60");
+        arrayList.add("250");
+
+        ArrayList<String> arrayList1 = new ArrayList();
+        arrayList1.add("-LFaxAYqiZb-1g-1kiEi");
+        arrayList1.add("-LFayI-yoGkP06VNxTa6");
+        arrayList1.add("-LFb2xylAm59CQkqOyRB");
+        arrayList1.add("-LFpwKNw_O0JbAt9z2BE");
+
+
+        for (int i = 0; i < arrayList1.size(); i++) {
+            String date = String.valueOf(i);
+            DatabaseReference mDatabaseReviews =
+                    FirebaseDatabase.getInstance().getReference("venues")
+                            .child(arrayList1.get(i)).child("price");
+            mDatabaseReviews.setValue(arrayList.get(i));
+        }
+
+
+    }
 }

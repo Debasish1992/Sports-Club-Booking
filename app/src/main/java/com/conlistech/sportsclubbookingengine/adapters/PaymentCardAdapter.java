@@ -51,6 +51,11 @@ public class PaymentCardAdapter extends
         viewHolder.tv_name.setText(mFilteredList.get(position).getCardNumber());
         viewHolder.tv_fav_sports.setText(mFilteredList.get(position).getCardExpiry());
 
+        boolean isPrimary = mFilteredList.get(position).isPrimary();
+
+        if (isPrimary) {
+            viewHolder.tvPrimary.setText("DEFAULT");
+        }
         String cardType = mFilteredList.get(position).getCardType();
 
         if(cardType != null && cardType.equalsIgnoreCase("VISA")){
@@ -78,13 +83,14 @@ public class PaymentCardAdapter extends
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_name, tv_fav_sports;
+        private TextView tv_name, tv_fav_sports, tvPrimary;
         ImageView ivProfileImage;
 
         public ViewHolder(View view) {
             super(view);
             tv_name = (TextView) view.findViewById(R.id.tvName);
             tv_fav_sports = (TextView) view.findViewById(R.id.tvPrimarySport);
+            tvPrimary = (TextView) view.findViewById(R.id.tvPrimary);
             ivProfileImage = (ImageView) view.findViewById(R.id.iv_profile_pic);
             view.setTag(view);
         }

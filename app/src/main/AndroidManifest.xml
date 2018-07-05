@@ -61,7 +61,10 @@
             android:label="@string/title_activity_settings_screen" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.PaymentCardsScreen" />
-        <activity android:name=".activities.DetailsScreen"></activity>
+        <activity android:name=".activities.DetailsScreen" />
+        <activity android:name=".activities.TimeSlotSelector" />
+        <activity android:name=".activities.SelectTimeSlot" />
+        <activity android:name=".activities.GameInfoScreen"></activity>
     </application>
 
 </manifest>

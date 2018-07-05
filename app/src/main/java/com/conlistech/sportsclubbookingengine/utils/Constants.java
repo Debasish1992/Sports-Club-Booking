@@ -1,5 +1,7 @@
 package com.conlistech.sportsclubbookingengine.utils;
 
+import java.util.ArrayList;
+
 public class Constants {
 
     public static final String USER_ID = "user_id";
@@ -14,5 +16,18 @@ public class Constants {
     // Firebase Constants
     public static final String TEAMMATE_TABLE = "teammates";
     public static final String TEAMMATE_REQUEST_TABLE = "teammate_request";
+
+
+    //Game Schedule Constants
+    public static String venueId = null;
+    public static String venuePricing = null;
+    public static String gameScheduledDate = null;
+    public static ArrayList<String> bookingTimeSlots = new ArrayList<>();
+    public static String gameName = null;
+    public static String venueTotalBookingPrice = null;
+    public static String gameTotalNoPlayers = null;
+    public static String maximumNoPlayers = null;
+    public static String gameNotes = null;
+
 
 }

@@ -57,11 +57,23 @@
                 android:id="@+id/tvVenueAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layVenueRating"
+                android:layout_below="@+id/tvVenuePrice"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Venue Address" />
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:textColor="@color/md_orange_400"
+                android:layout_below="@+id/layVenueRating"
+                android:id="@+id/tvVenuePrice"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <RelativeLayout
                 android:id="@+id/layVenueRating"

@@ -50,7 +50,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.tv_venue_name.setText(mArrayList.get(position).getVenue_name());
-        viewHolder.tv_venue_address.setText(mArrayList.get(position).getAddress());
+        viewHolder.tv_venue_address.setText("$"+ mArrayList.get(position).getPrice() + "/hour");
         viewHolder.tv_venue_distance.setText("5.0 Miles");
         String getVenueImage = mArrayList.get(position).getVenue_image();
         if(getVenueImage != null){

@@ -1,12 +1,23 @@
 package com.conlistech.sportsclubbookingengine.models;
 
+import java.util.ArrayList;
+
 public class VenueInfoModel {
 
     String  address, amenities,
             owner_name, venue_email,
             venue_equipments, venue_image,
             venue_name, venue_offers,
-            venue_phone, venue_website, venueId, venueDesc;
+            venue_phone, venue_website, venueId,
+            venueDesc, price;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
     public String getVenueId() {
         return venueId;

@@ -50,5 +50,6 @@ dependencies {
     implementation 'io.card:android-sdk:5.5.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.stepstone.apprating:app-rating:2.2.0'
+    implementation 'com.applandeo:material-calendar-view:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

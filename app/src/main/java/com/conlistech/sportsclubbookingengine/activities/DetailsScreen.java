@@ -1,5 +1,6 @@
 package com.conlistech.sportsclubbookingengine.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,14 +64,22 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
     TextView tvVenueEquipments;
     @BindView(R.id.layVenueRating)
     RelativeLayout layRatings;
+    @BindView(R.id.tvVenuePrice)
+    TextView tvVenuePrice;
     SharedPreferences pref;
     VenueInfoModel venueInfoModel;
 
     @OnClick(R.id.layVenueRating)
     void Ratimgs() {
         //Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
-
         showDialog();
+    }
+
+    @OnClick(R.id.btnBookSlot)
+    void setTimeSlot() {
+        Constants.venuePricing = venueInfoModel.getPrice();
+        Constants.venueId = venueInfoModel.getVenueId();
+        startActivity(new Intent(DetailsScreen.this, TimeSlotSelector.class));
     }
 
     @Override
@@ -107,7 +116,7 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                VenueInfoModel venueInfoModel = dataSnapshot.getValue(VenueInfoModel.class);
+                venueInfoModel = dataSnapshot.getValue(VenueInfoModel.class);
                 setDataInView(venueInfoModel);
                 LoaderUtils.dismissProgress();
             }
@@ -139,6 +148,7 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
             tvVenueWebsite.setText("WebSite - " + venueInfoModel.getVenue_website());
             tvVenueEquipments.setText(venueInfoModel.getVenue_equipments());
             toolbar.setTitle(venueInfoModel.getVenue_name());
+            tvVenuePrice.setText("$" + venueInfoModel.getPrice() + "/hour");
         }
     }
 
@@ -156,6 +166,7 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
         return value;
     }
 
+    // Displaying the app review dialog
     private void showDialog() {
         new AppRatingDialog.Builder()
                 .setPositiveButtonText("Submit")
@@ -181,8 +192,6 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
 
     @Override
     public void onPositiveButtonClicked(int rate, String s) {
-       // Toast.makeText(this, String.valueOf(rate), Toast.LENGTH_SHORT).show();
-
         VenueReviewModel venueReviewModel = new VenueReviewModel();
         venueReviewModel.setUserId(getCurrentUserId());
         venueReviewModel.setUsrName(getCurrentUserName());
@@ -212,7 +221,6 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
     public String getCurrentUserName() {
         return pref.getString(Constants.USER_FULL_NAME, null);
     }
-
 
 
     // Storing Venue Ratings

@@ -3,6 +3,15 @@ package com.conlistech.sportsclubbookingengine.models;
 public class PaymentCardModel {
 
     String cardNumber, cardExpiry, cardType;
+    boolean isPrimary;
+
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(boolean primary) {
+        isPrimary = primary;
+    }
 
     public PaymentCardModel(){
 

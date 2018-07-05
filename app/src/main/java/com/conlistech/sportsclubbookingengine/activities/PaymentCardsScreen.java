@@ -204,6 +204,11 @@ public class PaymentCardsScreen extends AppCompatActivity {
         paymentCardModel.setCardNumber(cardNumber);
         paymentCardModel.setCardExpiry(cardExpiry);
         paymentCardModel.setCardType(cardType);
+        if (paymentCardModels.size() == 0) {
+            paymentCardModel.setPrimary(true);
+        } else {
+            paymentCardModel.setPrimary(false);
+        }
         return paymentCardModel;
     }
 
@@ -221,11 +226,9 @@ public class PaymentCardsScreen extends AppCompatActivity {
     }
 
 
-
     // Fetching all cards
     public void fetchAllCards() {
         LoaderUtils.showProgressBar(PaymentCardsScreen.this, "Please wait while loading...");
-
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("payment_cards")
                 .child(getCurrentUserId());
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -235,8 +238,8 @@ public class PaymentCardsScreen extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
-                    PaymentCardModel paymentCardModel = noteDataSnapshot.getValue(PaymentCardModel.class);
-                    // Getting user id from model
+                    PaymentCardModel paymentCardModel =
+                            noteDataSnapshot.getValue(PaymentCardModel.class);
                     paymentCardModels.add(paymentCardModel);
                     setUpAdapter();
                 }
