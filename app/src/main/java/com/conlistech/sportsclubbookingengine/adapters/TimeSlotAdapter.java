@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.activities.GameInfoScreen;
 import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +31,8 @@ public class TimeSlotAdapter extends
     private ItemAdapter.ItemClickListener clickListener;
     TextView Summary, tvTitle;
     Button btnConfirm;
+    public static ArrayList<String> refreshedTimeSlotArray;
+
 
 
     public TimeSlotAdapter(Context ctx, ArrayList<String>
@@ -39,6 +42,7 @@ public class TimeSlotAdapter extends
         this.Summary = btnSummary;
         this.tvTitle = titleTxt;
         this.btnConfirm = buttonConfirm;
+        this.refreshedTimeSlotArray = arrayList;
     }
 
 
@@ -63,9 +67,13 @@ public class TimeSlotAdapter extends
                 String getTimeSlot = mArrayList.get(position);
 
                 if (isChecked) {
+                    // Getting the clicked Index
+                    int indexClicked = getItemPos(getTimeSlot);
+                    GameInfoScreen.indicesArray.add(indexClicked);
                     Constants.bookingTimeSlots.add(getTimeSlot);
                 } else {
                     int indexClicked = getCategoryPos(getTimeSlot);
+                    GameInfoScreen.indicesArray.remove(indexClicked);
                     Constants.bookingTimeSlots.remove(indexClicked);
                 }
 
@@ -105,6 +113,11 @@ public class TimeSlotAdapter extends
     private int getCategoryPos(String category) {
         return Constants.bookingTimeSlots.indexOf(category);
     }
+
+    private int getItemPos(String category) {
+        return refreshedTimeSlotArray.indexOf(category);
+    }
+
 
     @Override
     public int getItemCount() {

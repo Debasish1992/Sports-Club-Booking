@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,18 +24,19 @@ public class TimeSlotSelector extends AppCompatActivity {
     @BindView(R.id.calendarView)
     com.applandeo.materialcalendarview.CalendarView calenderView;
     public static String formattedDate = null;
+    public static TimeSlotSelector timeSlotSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_slot_selector);
         ButterKnife.bind(this);
+        timeSlotSelector = this;
 
         calenderView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
                 String date = eventDay.getCalendar().getTime().toString();
-                Toast.makeText(TimeSlotSelector.this, date, Toast.LENGTH_SHORT).show();
                 formattedDate = formatDate(date);
                 Intent intent = new Intent(TimeSlotSelector.this, SelectTimeSlot.class);
                 startActivity(intent);
@@ -52,6 +54,7 @@ public class TimeSlotSelector extends AppCompatActivity {
             Date d = df1.parse(formatDate);
 
             formattedDate = df2.format(d);
+            Constants.gameScheduledDate = formattedDate;
             Log.d("Formatted date", formattedDate);
         }catch(Exception ex){
             ex.printStackTrace();

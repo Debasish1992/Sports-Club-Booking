@@ -1,14 +1,20 @@
 package com.conlistech.sportsclubbookingengine.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +34,8 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.VenueAdapter;
+import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.models.VenueInfoModel;
 import com.conlistech.sportsclubbookingengine.models.VenueModel;
@@ -54,20 +62,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class LandingScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, VenueAdapter.ItemClickListener {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Toolbar toolbar;
-
     @BindView(R.id.venues_recycler_view)
     RecyclerView venueRecyclerView;
     TextView tvFullName;
     TextView tvEmail;
+    String userPrimarySport = null;
     View header;
     SharedPreferences pref;
     ArrayList<VenueInfoModel> venueInfoModels;
     VenueAdapter venueAdapter;
     public static String venueId = null;
+    PaymentCardModel paymentCardModel;
+    SqliteHelper db_sqlite;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    LocationTracker locationTracker;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -99,6 +113,7 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
         initializeNabViews();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        db_sqlite = new SqliteHelper(this);
 
         initViews();
 
@@ -125,23 +140,35 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        LocationTracker locationTracker = new LocationTracker(LandingScreen.this);
+        locationTracker = new LocationTracker(LandingScreen.this);
 
-        if (locationTracker.canGetLocation()) {
-            Double latitude = locationTracker.getLatitude();
-            Double longitude = locationTracker.getLongitude();
-            List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
-            String locAddress = address.get(0).getAddressLine(0);
-            String city = address.get(0).getLocality();
-            Log.d("Address", address.toString());
-            toolbar.setTitle(locAddress);
-            toolbar.setSubtitle(city);
-        } else {
-            System.out.println("Unable to locate the position");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkPermission()) {
+                if (locationTracker.canGetLocation()) {
+                    Double latitude = locationTracker.getLatitude();
+                    Double longitude = locationTracker.getLongitude();
+                    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+                    String locAddress = address.get(0).getAddressLine(0);
+                    String city = address.get(0).getLocality();
+                    Log.d("Address", address.toString());
+                    getSupportActionBar().setTitle(locAddress);
+                    toolbar.setSubtitle(userPrimarySport);
+
+                    // Checking for the payment card table existance
+                    if (db_sqlite.getPaymentCardCount() == 0) {
+                        getUserPaymentMethods();
+                    } else {
+                        // Getting all the venues
+                        getAllVenues();
+                    }
+                } else {
+                    System.out.println("Unable to locate the position");
+                }
+            } else {
+                requestPermission();
+            }
         }
 
-        // Getting all the venues
-        getAllVenues();
     }
 
 
@@ -149,6 +176,8 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
     public void setUserData() {
         tvFullName.setText(pref.getString(Constants.USER_FULL_NAME, null));
         tvEmail.setText(pref.getString(Constants.USER_EMAIL, null));
+        userPrimarySport = pref.getString(Constants.USER_FAV_SPORT, null);
+
     }
 
     @Override
@@ -252,8 +281,8 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 String placeName = place.getName().toString();
                 String placeAddress = place.getAddress().toString();
-                toolbar.setTitle(placeName);
-                toolbar.setSubtitle(placeAddress);
+                getSupportActionBar().setTitle(placeName);
+                toolbar.setSubtitle(userPrimarySport);
                 double placeLat = place.getLatLng().latitude;
                 double placeLng = place.getLatLng().longitude;
                 Log.i("Place is", "Place: " + place.getName());
@@ -335,5 +364,170 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
         venueId = venues.getVenueId();
         Intent i = new Intent(this, DetailsScreen.class);
         startActivity(i);
+    }
+
+
+    public void getUserPaymentMethods() {
+        LoaderUtils.showProgressBar(LandingScreen.this, "Please wait while checking...");
+        paymentCardModel = new PaymentCardModel();
+        DatabaseReference mDatabase = FirebaseDatabase
+                .getInstance()
+                .getReference("payment_cards");
+        /* .child(getCurrentUserId())*/
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                LoaderUtils.dismissProgress();
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                if (dataSnapshot.hasChild(getCurrentUserId())) {
+                    // Getting all the Payment details
+                    getUserPaymentMethodsSDetails();
+                } else {
+                    // Getting all the venues
+                    getAllVenues();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                LoaderUtils.dismissProgress();
+                // Failed to read value
+                Log.w("HomeScreen", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    public void getUserPaymentMethodsSDetails() {
+        LoaderUtils.showProgressBar(LandingScreen.this, "Please wait while loading Payment Details...");
+        paymentCardModel = new PaymentCardModel();
+        DatabaseReference mDatabase = FirebaseDatabase
+                .getInstance()
+                .getReference("payment_cards")
+                .child(getCurrentUserId());
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    int primaryStatus = 0;
+                    String cardId = noteDataSnapshot.getKey();
+                    paymentCardModel = noteDataSnapshot.getValue(PaymentCardModel.class);
+                    boolean isPrimary = paymentCardModel.isPrimary();
+                    String cardNumber = paymentCardModel.getCardNumber();
+                    String cardType = paymentCardModel.getCardType();
+                    String cardExp = paymentCardModel.getCardExpiry();
+                    if (isPrimary) {
+                        primaryStatus = 1;
+                    }
+                    // Inserting the Payment Details into local Db
+                    db_sqlite.insertPaymentDetails(Integer.parseInt(cardId), cardNumber, cardType, cardExp,
+                            primaryStatus);
+                }
+
+                LoaderUtils.dismissProgress();
+                // Getting all the venues
+                getAllVenues();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                LoaderUtils.dismissProgress();
+                // Failed to read value
+                Log.w("HomeScreen", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+
+    public String getCurrentUserId() {
+        return pref.getString(Constants.USER_ID, null);
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),
+                ACCESS_FINE_LOCATION);
+
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},
+                PERMISSION_REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                    LocationTracker locationTracker = new LocationTracker(LandingScreen.this);
+                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (locationAccepted)
+                        if (locationTracker.canGetLocation()) {
+                            Double latitude = locationTracker.getLatitude();
+                            Double longitude = locationTracker.getLongitude();
+
+                            List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+
+                            if (address.size() > 0) {
+                                String locAddress = address.get(0).getAddressLine(0);
+                                String city = address.get(0).getLocality();
+                                Log.d("Address", address.toString());
+                                getSupportActionBar().setTitle(locAddress);
+                                toolbar.setSubtitle(userPrimarySport);
+                                // Checking for the payment card table existance
+                                if (db_sqlite.getPaymentCardCount() == 0) {
+                                    getUserPaymentMethods();
+                                } else {
+                                    // Getting all the venues
+                                    getAllVenues();
+                                }
+
+                            } else {
+                                Toast.makeText(LandingScreen.this, "Not able to fetch your current location", Toast.LENGTH_SHORT).show();
+                                LandingScreen.this.finish();
+                            }
+
+                        } else {
+                            System.out.println("Unable to locate the position");
+                        }
+                    else {
+                        Toast.makeText(this, "Permission Denied, You cannot access location data and camera.", Toast.LENGTH_SHORT).show();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+                                showMessageOKCancel("You need to allow access to Location the permissions",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                    requestPermissions(new String[]{ACCESS_FINE_LOCATION},
+                                                            PERMISSION_REQUEST_CODE);
+                                                }
+                                            }
+                                        });
+                                return;
+                            }
+                        }
+
+                    }
+                }
+
+
+                break;
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(LandingScreen.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 }

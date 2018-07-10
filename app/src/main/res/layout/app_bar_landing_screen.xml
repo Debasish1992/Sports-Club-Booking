@@ -17,8 +17,8 @@
             android:layout_height="60dp"
             android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:subtitle="dsadsadsa"
-            app:title="dsadsadsadsa" />
+            app:subtitle=""
+            app:title="" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
         android:background="@color/colorPrimary"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/ic_explore_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

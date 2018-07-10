@@ -24,7 +24,7 @@
         android:layout_marginTop="10dp"
         android:text=""
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/tvAddress"
@@ -37,7 +37,7 @@
         android:textColor="@color/md_orange_400"
         android:textStyle="bold"
         android:text=""
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <RatingBar
         android:id="@+id/rbVenue"
@@ -45,8 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvAddress"
         android:isIndicator="true"
+        android:layout_marginLeft="10dp"
         android:paddingBottom="10dp"
-        style="?android:attr/ratingBarStyleIndicator"
+        style="?android:attr/ratingBarStyleSmall"
         android:layout_marginTop="8dp" />
 
     <TextView

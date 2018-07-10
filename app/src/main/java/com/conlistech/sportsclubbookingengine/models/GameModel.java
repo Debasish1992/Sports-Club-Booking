@@ -2,8 +2,15 @@ package com.conlistech.sportsclubbookingengine.models;
 
 public class GameModel {
 
-    String gameId, gameName, gameTotalAmount, timeSlot, gameNote, venueId, gameTotalNoOfplayers, gameDate;
+    String gameId, gameName, gameTotalAmount, timeSlot, gameNote, venueId, gameTotalNoOfplayers, gameDate, gameSport;
 
+    public String getGameSport() {
+        return gameSport;
+    }
+
+    public void setGameSport(String gameSport) {
+        this.gameSport = gameSport;
+    }
 
     public String getGameId() {
         return gameId;

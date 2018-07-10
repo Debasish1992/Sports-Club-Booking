@@ -28,6 +28,25 @@ public class Constants {
     public static String gameTotalNoPlayers = null;
     public static String maximumNoPlayers = null;
     public static String gameNotes = null;
+    public static String gameSport = null;
+    public static final String APP_FIREBASE_BASE_LINK = "https://sports-club-eeee7.firebaseio.com/";
+    public static final String APP_BASE_LINK = "http://www.conlistech.com/";
+    public static final String APP_PACKAGE_NAME = "com.conlistech.sportsclubbookingengine";
+
+
+    public static String buildFireBaseDeepLinkingURL(String gameId) {
+        String deepLink = null;
+
+        try {
+            deepLink = APP_FIREBASE_BASE_LINK
+                    + "link=" + APP_BASE_LINK + gameId
+                    + "&apn=" + APP_PACKAGE_NAME;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return deepLink;
+    }
 
 
 }

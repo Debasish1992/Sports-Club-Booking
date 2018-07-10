@@ -22,6 +22,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         // create notes table
         db.execSQL(DatabaseConstants.CREATE_SPORT_TABLE);
         db.execSQL(DatabaseConstants.CREATE_TEAMMATE_TABLE);
+        db.execSQL(DatabaseConstants.CREATE_PAYMENT_TABLE);
     }
 
     // Upgrading database
@@ -30,6 +31,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseConstants.SPORTS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseConstants.TEAMMATE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseConstants.PAYMENT_TABLE);
         // Create tables again
         onCreate(db);
     }
@@ -78,11 +80,74 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
 
+    // Inserting Payment Card Details into Sqlite Db
+    public long insertPaymentDetails(int card_id,
+                                     String card_number,
+                                     String card_type,
+                                     String card_expiry,
+                                     int primary_status) {
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        // `id` and `timestamp` will be inserted automatically.
+        // no need to add them
+        values.put(DatabaseConstants.CARD_ID, card_id);
+        values.put(DatabaseConstants.CARD_NUMBER, card_number);
+        values.put(DatabaseConstants.CARD_EXPIRY, card_expiry);
+        values.put(DatabaseConstants.CARD_TYPE, card_type);
+        values.put(DatabaseConstants.PRIMARY_STATUS, primary_status);
+
+
+        // insert row
+        long id = db.insert(DatabaseConstants.PAYMENT_TABLE, null, values);
+
+        // close db connection
+        db.close();
+
+        // return newly inserted row id
+        return id;
+    }
+
+    // Getting card no from payment table
+    public String getPrimaryCardNo(){
+        String primaryCardQuery = "SELECT  card_number FROM " +
+                DatabaseConstants.PAYMENT_TABLE + " WHERE is_primary = 1";
+        String cardNo = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(primaryCardQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                cardNo = cursor.getString(cursor.getColumnIndex(DatabaseConstants.CARD_NUMBER));
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+        return cardNo;
+    }
+
+
 
     // Getting the row Count
     public int getSportsCount() {
         String countQuery = "SELECT  * FROM " +
                 DatabaseConstants.SPORTS_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        int count = cursor.getCount();
+        cursor.close();
+
+        // return count
+        return count;
+    }
+
+    public int getPaymentCardCount() {
+        String countQuery = "SELECT  * FROM " +
+                DatabaseConstants.PAYMENT_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
 
@@ -162,6 +227,14 @@ public class SqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase(); // helper is object extends SQLiteOpenHelper
         //db.delete(DatabaseConstants.SPORTS_TABLE, null, null);
         db.delete(DatabaseConstants.TEAMMATE_TABLE, null, null);
+        db.close();
+    }
+
+    // Removing all the data from the tables
+    public void removeAllRecords(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from "+ DatabaseConstants.TEAMMATE_TABLE);
+        db.execSQL("delete from "+ DatabaseConstants.PAYMENT_TABLE);
         db.close();
     }
 }

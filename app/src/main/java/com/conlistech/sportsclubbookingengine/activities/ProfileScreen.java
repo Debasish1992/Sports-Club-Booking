@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,8 +68,7 @@ public class ProfileScreen extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
-        sqliteHelper = new SqliteHelper(this);
-        sqliteHelper.clearDb();
+        sqliteHelper.removeAllRecords();
         finish();
         finishAllActivities();
 
@@ -94,15 +95,21 @@ public class ProfileScreen extends AppCompatActivity {
         setContentView(R.layout.activity_profile_screen);
         ButterKnife.bind(this);
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        sqliteHelper = new SqliteHelper(this);
+
+        ArrayList<String> getAllTeammates = sqliteHelper.getAllTeammateIds();
 
         String currentUserId = getCurrentUserId();
 
         ivLogoutUser.setVisibility(ImageView.GONE);
 
+
         // Check for current User
         if (TeammatesScreen.userId.equalsIgnoreCase(currentUserId)) {
             ivAddFriend.setVisibility(ImageView.GONE);
             ivLogoutUser.setVisibility(ImageView.VISIBLE);
+        } else if (getAllTeammates.contains(TeammatesScreen.userId)) {
+            ivAddFriend.setVisibility(ImageView.GONE);
         }
 
         getUserDetails();

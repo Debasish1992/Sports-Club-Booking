@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.SportsModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
@@ -40,6 +41,8 @@ public class SplashScreen extends AppCompatActivity {
     SharedPrefManager hashMap = null;
     SqliteHelper db_sqlite;
     SharedPreferences prefs;
+    DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +50,15 @@ public class SplashScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Stetho.initializeWithDefaults(this);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+
+       /* if (mDatabase == null) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(true);
+            mDatabase = database.getReference();
+        }*/
 
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
 
@@ -62,8 +72,6 @@ public class SplashScreen extends AppCompatActivity {
         } else {
             redirectUser();
         }
-
-
     }
 
     public void redirectUser() {
@@ -87,7 +95,7 @@ public class SplashScreen extends AppCompatActivity {
     public void fetchUserDetails() {
         LoaderUtils.showProgressBar(SplashScreen.this,
                 "Please wait while fetching the details..");
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("sports");
+        mDatabase = FirebaseDatabase.getInstance().getReference("sports");
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,6 +108,7 @@ public class SplashScreen extends AppCompatActivity {
                     db_sqlite.insertSports(sportId, sportName);
                 }
                 redirectUser();
+                LoaderUtils.dismissProgress();
             }
 
             @Override
@@ -116,7 +125,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
 
-    public void add_timeSlots() {
+    /*public void add_timeSlots() {
         ArrayList<String> arrayList = new ArrayList();
         arrayList.add("100");
         arrayList.add("150");
@@ -137,7 +146,5 @@ public class SplashScreen extends AppCompatActivity {
                             .child(arrayList1.get(i)).child("price");
             mDatabaseReviews.setValue(arrayList.get(i));
         }
-
-
-    }
+    }*/
 }

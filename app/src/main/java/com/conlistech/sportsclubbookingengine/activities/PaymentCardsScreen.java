@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.PaymentCardAdapter;
+import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
@@ -56,6 +57,7 @@ public class PaymentCardsScreen extends AppCompatActivity {
     SharedPreferences pref;
     ArrayList<PaymentCardModel> paymentCardModels;
     PaymentCardAdapter paymentCardAdapter;
+    SqliteHelper sqliteHelper;
 
     @OnClick(R.id.fabAddCard)
     void addCard() {
@@ -73,6 +75,7 @@ public class PaymentCardsScreen extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         checkPermission();
         pref = getSharedPreferences("MyPref", MODE_PRIVATE);
+        sqliteHelper = new SqliteHelper(this);
 
         initViews();
 
@@ -136,7 +139,6 @@ public class PaymentCardsScreen extends AppCompatActivity {
                         == PackageManager.PERMISSION_GRANTED) {
                     onScanPress();
                 } else {
-                    Toast.makeText(this, "We need the camera permission to set up your payments.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -214,13 +216,33 @@ public class PaymentCardsScreen extends AppCompatActivity {
 
     // Storing user Payment Cards
     public void storeUserPaymentCardDetails(PaymentCardModel paymentCardModel) {
+        int cardId = RandomNumberGenerator.getRandomNumber();
         DatabaseReference mDatabasePayments =
                 FirebaseDatabase.getInstance().getReference("payment_cards")
-                        .child(getCurrentUserId()).child(String.valueOf(RandomNumberGenerator.getRandomNumber()));
-        mDatabasePayments.setValue(paymentCardModel);
+                        .child(getCurrentUserId()).child(String.valueOf(cardId));
+        mDatabasePayments.setValue(paymentCardModel, cardId);
+        storeCardLocally(paymentCardModel, cardId);
+    }
+
+
+    // Storing the Card Details Locally
+    public void storeCardLocally(PaymentCardModel paymentCardModel, int cardId) {
+        int primaryStatus = 0;
+        boolean isPrimary = paymentCardModel.isPrimary();
+        if (isPrimary) {
+            primaryStatus = 1;
+        }
+
+        // Inserting to the local Db
+        sqliteHelper.insertPaymentDetails(cardId,
+                                        paymentCardModel.getCardNumber(),
+                                        paymentCardModel.getCardType(),
+                                        paymentCardModel.getCardExpiry(),
+                                        primaryStatus);
         Toast.makeText(this, "Card Information Saved Successfully.", Toast.LENGTH_SHORT).show();
     }
 
+    // Getting current user id
     public String getCurrentUserId() {
         return pref.getString(Constants.USER_ID, null);
     }

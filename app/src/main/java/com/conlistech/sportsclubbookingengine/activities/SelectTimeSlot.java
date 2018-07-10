@@ -46,6 +46,7 @@ public class SelectTimeSlot extends AppCompatActivity {
     String pattern = "dd-MM-yyyy";
     ArrayList<String> timeSlotModelArr;
     TimeSlotAdapter timeSlotAdapter;
+    public static SelectTimeSlot selectTimeSlot;
 
     @OnClick(R.id.btnConfirm)
     void redirectToGameInfoPage() {
@@ -59,10 +60,10 @@ public class SelectTimeSlot extends AppCompatActivity {
         ButterKnife.bind(this);
         titleTv.setVisibility(TextView.GONE);
         btnConfirm.setVisibility(Button.GONE);
+        selectTimeSlot = this;
 
         initViews();
 
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -77,13 +78,11 @@ public class SelectTimeSlot extends AppCompatActivity {
             timeSlotAdapter = new TimeSlotAdapter(SelectTimeSlot.this,
                     timeSlotModelArr, tvSummaryText, titleTv, btnConfirm);
             rcv_time_slots.setAdapter(timeSlotAdapter);
-            //timeSlotAdapter.setClickListener(this);
         } else {
             Toast.makeText(SelectTimeSlot.this, "No Teammates Found", Toast.LENGTH_LONG).show();
             timeSlotAdapter = new TimeSlotAdapter(SelectTimeSlot.this,
                     timeSlotModelArr, tvSummaryText, titleTv, btnConfirm);
             rcv_time_slots.setAdapter(timeSlotAdapter);
-            //itemAdapter.setClickListener(this);
         }
     }
 

@@ -51,7 +51,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Venue Name"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvVenueAddress"
@@ -61,17 +61,18 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:textSize="14sp"
                 android:text="Venue Address" />
 
             <TextView
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="@color/md_orange_400"
                 android:layout_below="@+id/layVenueRating"
                 android:id="@+id/tvVenuePrice"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -83,7 +84,7 @@
 
                 <RatingBar
                     android:id="@+id/rbVenueRating"
-                    style="?android:attr/ratingBarStyleIndicator"
+                    style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -103,8 +104,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Venue Sports Offerings"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
+                android:textColor="@color/md_orange_400"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/tvVenueOfferingsValues"
@@ -125,8 +126,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Venue Equipments"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
+                android:textColor="@color/md_orange_400"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/tvVenueEquipmentsValues"
@@ -147,8 +148,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Venue Amenities"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
+                android:textColor="@color/md_orange_400"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/tvVenueAmenitiesValues"
@@ -168,9 +169,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:textSize="18sp"
                 android:text="Venue Contact Details"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textColor="@color/md_orange_400"
+                 />
 
 
             <TextView

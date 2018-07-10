@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
@@ -68,18 +70,17 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
     TextView tvVenuePrice;
     SharedPreferences pref;
     VenueInfoModel venueInfoModel;
+    public static DetailsScreen detailsScreen;
 
     @OnClick(R.id.layVenueRating)
-    void Ratimgs() {
+    void Ratings() {
         //Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
         showDialog();
     }
 
     @OnClick(R.id.btnBookSlot)
     void setTimeSlot() {
-        Constants.venuePricing = venueInfoModel.getPrice();
-        Constants.venueId = venueInfoModel.getVenueId();
-        startActivity(new Intent(DetailsScreen.this, TimeSlotSelector.class));
+        displaySportOfferingDialog();
     }
 
     @Override
@@ -87,6 +88,7 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_screen);
         ButterKnife.bind(this);
+        detailsScreen = this;
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,6 +99,31 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
 
         // Fetching all the details
         fetchVenueDetails();
+    }
+
+    public void displaySportOfferingDialog() {
+        new MaterialDialog.Builder(this)
+                .title("Please select sport to create game")
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
+                .items(getSportsOfferings())
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        /**
+                         * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                         * returning false here won't allow the newly selected radio button to actually be selected.
+                         **/
+                        Constants.venuePricing = venueInfoModel.getPrice();
+                        Constants.venueId = venueInfoModel.getVenueId();
+                        Constants.gameSport = text.toString();
+                        startActivity(new Intent(DetailsScreen.this, TimeSlotSelector.class));
+                        return false;
+                    }
+                })
+                .positiveText("Confirm")
+                .negativeText("Cancel")
+                .show();
     }
 
     @Override
@@ -164,6 +191,12 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
             value = value.replace("|", ",");
         }
         return value;
+    }
+
+    public String[] getSportsOfferings() {
+        String getValue = removeSpecialChars(venueInfoModel.getVenue_offers().toString());
+        String[] splittedString = getValue.split(",");
+        return splittedString;
     }
 
     // Displaying the app review dialog

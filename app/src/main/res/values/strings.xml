@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sports Club Booking Engine</string>
+    <string name="app_name">ConSports</string>
     <string name="title_activity_home_screen">HomeScreen</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Notifications</string>
