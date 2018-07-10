@@ -16,6 +16,8 @@ import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -84,6 +86,7 @@ public class ShareGameScreen extends AppCompatActivity {
         super.onBackPressed();
         ShareGameScreen.this.finish();
         GameInvitesScreen.finishAllScreens();
+        releaseAllValues();
     }
 
     // Generating DeepLink
@@ -98,5 +101,29 @@ public class ShareGameScreen extends AppCompatActivity {
 
         Uri dynamicLinkUri = dynamicLink.getUri();
         return dynamicLinkUri.toString();
+    }
+
+    public static void releaseAllValues(){
+        GameInfoScreen.gameModel = null;
+        Constants.gameName = null;
+        Constants.maximumNoPlayers = null;
+        Constants.gameNotes = null;
+        Constants.venueId = null;
+        Constants.venuePricing = null;
+        Constants.gameScheduledDate = null;
+        Constants.bookingTimeSlots = null;
+        Constants.venueTotalBookingPrice = null;
+        Constants.gameTotalNoPlayers = null;
+        Constants.maximumNoPlayers = null;
+        Constants.gameSport = null;
+        LandingScreen.venueId = null;
+        TimeSlotSelector.formattedDate = null;
+        GameInfoScreen.primaryCardNo = null;
+        GameInfoScreen.gameModel = null;
+        GameInfoScreen.gameId = null;
+        GameInfoScreen.indicesArray = null;
+        GameInvitesScreen.gameInvitedUserId = null;
+
+
     }
 }

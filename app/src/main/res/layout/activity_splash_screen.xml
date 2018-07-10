@@ -7,9 +7,16 @@
     tools:context=".activities.SplashScreen">
 
     <ImageView
+        android:id="@+id/imgBackBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imgBackBg"
-        android:background="@drawable/ic_launcher_image"
-        />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/launcher_image_basketball" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/app_logo" />
 </RelativeLayout>

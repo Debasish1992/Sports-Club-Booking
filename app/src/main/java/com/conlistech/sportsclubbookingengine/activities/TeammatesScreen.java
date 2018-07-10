@@ -55,15 +55,19 @@ public class TeammatesScreen extends AppCompatActivity
     String countStr;
     @BindView(R.id.fabAddTeammates)
     android.support.design.widget.FloatingActionButton fabAddTeammates;
+    @BindView(R.id.tvTeammatesNotFound)
+    TextView tvNoTeamatesFound;
     public static TeammatesScreen teammatesScreen;
     SqliteHelper sqliteHelper;
 
-    @OnClick (R.id.layTeammateRequest) void redirectUser(){
+    @OnClick(R.id.layTeammateRequest)
+    void redirectUser() {
         Intent intent = new Intent(TeammatesScreen.this, FriendRequestsScreen.class);
         startActivity(intent);
     }
 
-    @OnClick(R.id.fabAddTeammates) void addTeammates(){
+    @OnClick(R.id.fabAddTeammates)
+    void addTeammates() {
         Intent intent = new Intent(TeammatesScreen.this, AddTeammates.class);
         startActivity(intent);
     }
@@ -80,6 +84,7 @@ public class TeammatesScreen extends AppCompatActivity
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         layTeammates.setVisibility(RelativeLayout.GONE);
+        tvNoTeamatesFound.setVisibility(TextView.GONE);
         teammatesScreen = TeammatesScreen.this;
 
         sqliteHelper = new SqliteHelper(this);
@@ -120,12 +125,14 @@ public class TeammatesScreen extends AppCompatActivity
 
     // Setting up the adapter
     public void setUpAdapter() {
-        if(userModel.size() > 0){
+        if (userModel.size() > 0) {
+            tvNoTeamatesFound.setVisibility(TextView.GONE);
             itemAdapter = new ItemAdapter(TeammatesScreen.this, userModel);
             mRecyclerView.setAdapter(itemAdapter);
             itemAdapter.setClickListener(this);
-        }else{
-            Toast.makeText(teammatesScreen, "No Teammates Found", Toast.LENGTH_LONG).show();
+        } else {
+            tvNoTeamatesFound.setVisibility(TextView.VISIBLE);
+            search.setVisible(false);
             itemAdapter = new ItemAdapter(TeammatesScreen.this, userModel);
             mRecyclerView.setAdapter(itemAdapter);
             itemAdapter.setClickListener(this);
@@ -149,7 +156,7 @@ public class TeammatesScreen extends AppCompatActivity
         LoaderUtils.showProgressBar(TeammatesScreen.this, "Please wait while loading...");
         userModel = new ArrayList<>();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("teammates")
-                .child("my_teamates").child(getCurrentUserId()) ;
+                .child("my_teamates").child(getCurrentUserId());
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -161,8 +168,8 @@ public class TeammatesScreen extends AppCompatActivity
                     String userName = users.getUserFullName();
                     sqliteHelper.insertTeammates(userId, userName);
                     userModel.add(users);
-                    setUpAdapter();
                 }
+                setUpAdapter();
                 LoaderUtils.dismissProgress();
             }
 
@@ -221,7 +228,7 @@ public class TeammatesScreen extends AppCompatActivity
             } else {
                 tvRequests.setText(countStr + " Teammates Requests Pending");
             }
-        }else{
+        } else {
             layTeammates.setVisibility(RelativeLayout.GONE);
         }
 
@@ -246,11 +253,10 @@ public class TeammatesScreen extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if(TeammatesScreen.isRequestResponded){
+        if (TeammatesScreen.isRequestResponded) {
             fetchAllRequests();
             TeammatesScreen.isRequestResponded = false;
         }
-
 
 
     }

@@ -54,7 +54,10 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> 
         viewHolder.tv_venue_distance.setText("5.0 Miles");
         String getVenueImage = mArrayList.get(position).getVenue_image();
         if(getVenueImage != null){
-            Picasso.get().load(getVenueImage).into(viewHolder.ivVenueImage);
+            Picasso.get()
+                    .load(getVenueImage)
+                    .placeholder(R.drawable.default_loading)
+                    .into(viewHolder.ivVenueImage);
         }
     }
 

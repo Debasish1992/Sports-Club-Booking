@@ -129,6 +129,7 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
+        ShareGameScreen.releaseAllValues();
         return true;
     }
 
@@ -165,7 +166,10 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
             String venueImage = venueInfoModel.getVenue_image();
 
             if (venueImage != null) {
-                Picasso.get().load(venueImage).into(ivVenueImage);
+                Picasso.get()
+                        .load(venueImage)
+                        .placeholder(R.drawable.default_loading)
+                        .into(ivVenueImage);
             }
             tvVenueName.setText(venueInfoModel.getVenue_name());
             tvVenueAddress.setText(venueInfoModel.getVenueDesc());

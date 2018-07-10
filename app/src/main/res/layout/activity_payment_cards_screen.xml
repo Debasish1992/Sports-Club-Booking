@@ -44,7 +44,16 @@
         android:scrollbars="vertical"
         tools:layout_editor_absoluteX="0dp" />
 
-
+    <TextView
+        android:id="@+id/tvCardNotFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:text="Oops !! You did not have added any payment methods yet. Please click the add button in bottom right corner to add payment methods."
+        android:textSize="20sp" />
 
 
 </RelativeLayout>

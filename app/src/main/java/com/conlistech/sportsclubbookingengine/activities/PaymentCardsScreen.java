@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conlistech.sportsclubbookingengine.R;
@@ -54,6 +55,8 @@ public class PaymentCardsScreen extends AppCompatActivity {
     android.support.design.widget.FloatingActionButton fabAddCard;
     @BindView(R.id.rcv_payment_add)
     RecyclerView rcvPaymentCards;
+    @BindView(R.id.tvCardNotFound)
+    TextView tvCardNotFound;
     SharedPreferences pref;
     ArrayList<PaymentCardModel> paymentCardModels;
     PaymentCardAdapter paymentCardAdapter;
@@ -76,6 +79,7 @@ public class PaymentCardsScreen extends AppCompatActivity {
         checkPermission();
         pref = getSharedPreferences("MyPref", MODE_PRIVATE);
         sqliteHelper = new SqliteHelper(this);
+        tvCardNotFound.setVisibility(TextView.GONE);
 
         initViews();
 
@@ -232,7 +236,6 @@ public class PaymentCardsScreen extends AppCompatActivity {
         if (isPrimary) {
             primaryStatus = 1;
         }
-
         // Inserting to the local Db
         sqliteHelper.insertPaymentDetails(cardId,
                                         paymentCardModel.getCardNumber(),
@@ -263,8 +266,8 @@ public class PaymentCardsScreen extends AppCompatActivity {
                     PaymentCardModel paymentCardModel =
                             noteDataSnapshot.getValue(PaymentCardModel.class);
                     paymentCardModels.add(paymentCardModel);
-                    setUpAdapter();
                 }
+                setUpAdapter();
                 LoaderUtils.dismissProgress();
             }
 
@@ -280,10 +283,12 @@ public class PaymentCardsScreen extends AppCompatActivity {
     // Setting up adapter
     public void setUpAdapter() {
         if (paymentCardModels.size() > 0) {
+            tvCardNotFound.setVisibility(TextView.GONE);
             paymentCardAdapter = new PaymentCardAdapter(PaymentCardsScreen.this, paymentCardModels);
             rcvPaymentCards.setAdapter(paymentCardAdapter);
+
         } else {
-            Toast.makeText(PaymentCardsScreen.this, "No Cards Found.", Toast.LENGTH_SHORT).show();
+            tvCardNotFound.setVisibility(TextView.VISIBLE);
             paymentCardAdapter = new PaymentCardAdapter(PaymentCardsScreen.this, paymentCardModels);
             rcvPaymentCards.setAdapter(paymentCardAdapter);
         }

@@ -50,9 +50,9 @@ public class LoginScreen extends AppCompatActivity {
     @BindView(R.id.link_forgotpassword)
     TextView tvForgorPassword;
     private FirebaseAuth firebaseAuth;
+    public static LoginScreen loginScreen;
 
     @OnClick(R.id.link_signup) void submit() {
-        finish();
         startActivity(new Intent(LoginScreen.this,
                 SignupScreen.class));
     }
@@ -74,6 +74,7 @@ public class LoginScreen extends AppCompatActivity {
         setContentView(R.layout.activity_login_screen);
         ButterKnife.bind(this);
         firebaseAuth = FirebaseAuth.getInstance();
+        loginScreen = this;
     }
 
     // Function Responsible for letting the user login

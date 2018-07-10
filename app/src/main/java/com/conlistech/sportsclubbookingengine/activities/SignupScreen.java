@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +52,10 @@ public class SignupScreen extends AppCompatActivity {
     Button btnSignUp;
     @BindView(R.id.tvFavoriteSports)
     TextView tvFavSports;
+    @BindView(R.id.ivDismiss)
+    ImageView ivDismiss;
+    @BindView(R.id.link_login)
+    TextView tvLoginLink;
     private FirebaseAuth firebaseAuth;
     public static SignupScreen SignUpScreen;
     SqliteHelper sqLite;
@@ -65,10 +71,20 @@ public class SignupScreen extends AppCompatActivity {
         setUpSportsDialog();
     }
 
+    @OnClick (R.id.ivDismiss) void Dismiss(){
+        SignupScreen.this.finish();
+    }
+
+    @OnClick(R.id.link_login) void goLogin(){
+        SignupScreen.this.finish();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup_screen);
         ButterKnife.bind(this);
         SignUpScreen = SignupScreen.this;
@@ -105,6 +121,9 @@ public class SignupScreen extends AppCompatActivity {
         LoaderUtils.dismissProgress();
         Toast.makeText(getBaseContext(), "Registration Successful.", Toast.LENGTH_LONG).show();
         btnSignUp.setEnabled(false);
+        if(LoginScreen.loginScreen != null){
+            LoginScreen.loginScreen.finish();
+        }
         finish();
         startActivity(new Intent(SignupScreen.this, LandingScreen.class));
     }
@@ -262,4 +281,6 @@ public class SignupScreen extends AppCompatActivity {
         editor.putBoolean(Constants.USER_CONTACTS_VISIBILITY, true);
         editor.commit();
     }
+
+
 }

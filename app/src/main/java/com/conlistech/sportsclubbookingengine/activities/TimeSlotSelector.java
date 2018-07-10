@@ -61,4 +61,10 @@ public class TimeSlotSelector extends AppCompatActivity {
         }
         return formattedDate;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ShareGameScreen.releaseAllValues();
+    }
 }

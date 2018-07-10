@@ -69,6 +69,10 @@ public class TimeSlotAdapter extends
                 if (isChecked) {
                     // Getting the clicked Index
                     int indexClicked = getItemPos(getTimeSlot);
+
+                    if(GameInfoScreen.indicesArray == null){
+                        GameInfoScreen.indicesArray = new ArrayList<>();
+                    }
                     GameInfoScreen.indicesArray.add(indexClicked);
                     Constants.bookingTimeSlots.add(getTimeSlot);
                 } else {

@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:background="@drawable/launcher_image_basketball"
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:scrollbars="none"
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingTop="30dp"
             android:orientation="vertical"
             android:paddingLeft="24dp"
-            android:paddingRight="24dp">
+            android:paddingRight="24dp"
+            android:paddingTop="30dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="72dp"
+                android:layout_marginTop="30dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/app_logo"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="15dp" />
 
             <!-- Email Label -->
             <android.support.design.widget.TextInputLayout
@@ -37,11 +39,12 @@
                     android:id="@+id/input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email"
-                    android:textColorHint="@color/white"
                     android:backgroundTint="@color/colorAccent"
+                    android:hint="Email"
+                    android:textSize="12sp"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- Password Label -->
@@ -56,11 +59,12 @@
                     android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:textColorHint="@color/white"
                     android:backgroundTint="@color/colorAccent"
+                    android:hint="Password"
+                    android:textSize="12sp"
                     android:inputType="textPassword"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
@@ -87,10 +91,12 @@
                 android:id="@+id/link_signup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="No account yet? Create one"
-                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:text="Do not have a account yet? Create one"
+                android:textColor="@color/white"
                 android:textSize="16dp" />
         </LinearLayout>
     </ScrollView>

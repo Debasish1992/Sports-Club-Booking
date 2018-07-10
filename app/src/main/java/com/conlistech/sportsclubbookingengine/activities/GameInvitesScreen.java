@@ -92,6 +92,7 @@ public class GameInvitesScreen extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
+        ShareGameScreen.releaseAllValues();
         return true;
     }
 
@@ -192,5 +193,11 @@ public class GameInvitesScreen extends AppCompatActivity {
         if (gameInvitesScreen != null) {
             gameInvitesScreen.finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ShareGameScreen.releaseAllValues();
     }
 }

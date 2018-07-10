@@ -129,6 +129,7 @@ public class GameInfoScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        ShareGameScreen.releaseAllValues();
         finish();
     }
 

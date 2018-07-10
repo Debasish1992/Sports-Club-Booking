@@ -65,5 +65,17 @@
         android:background="@color/colorPrimary"
         app:srcCompat="@drawable/ic_person_add_white_24dp" />
 
+    <TextView
+        android:id="@+id/tvTeammatesNotFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="Oops !! You did not have added any teammate yet. Please click the add teammate button bottom right corner to add teammates."
+        />
+
 
 </RelativeLayout>
