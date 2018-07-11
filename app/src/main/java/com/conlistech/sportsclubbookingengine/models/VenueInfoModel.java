@@ -10,6 +10,15 @@ public class VenueInfoModel {
             venue_name, venue_offers,
             venue_phone, venue_website, venueId,
             venueDesc, price;
+    LocationModel location;
+
+    public LocationModel getLocationModel() {
+        return location;
+    }
+
+    public void setLocationModel(LocationModel locationModel) {
+        this.location = locationModel;
+    }
 
     public String getPrice() {
         return price;

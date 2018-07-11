@@ -17,6 +17,7 @@ import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.TimeSlotAdapter;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.GameModel;
+import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
 import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.VenueInfoModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
@@ -28,7 +29,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +57,7 @@ public class GameInfoScreen extends AppCompatActivity {
     public static GameInfoScreen gameInfoScreen;
     SqliteHelper sqliteHelper;
     public static String primaryCardNo = null;
+    SharedPreferences prefs;
 
 
     @OnClick(R.id.btnSubmit)
@@ -145,9 +150,31 @@ public class GameInfoScreen extends AppCompatActivity {
         gameModel.setVenueId(LandingScreen.venueId);
         gameModel.setGameTotalAmount(Constants.venueTotalBookingPrice);
         gameModel.setTimeSlot(getGameBookingTimeSlots());
-        gameModel.setGameDate(Constants.gameScheduledDate);
+        gameModel.setGameDate(String.valueOf(convertDateToMillis(Constants.gameScheduledDate)));
         gameModel.setGameSport(Constants.gameSport);
+        gameModel.setGameCreatorUserId(getCurrentUserId());
+        gameModel.setGameCreatorUserName(getCurrentUserName());
+        gameModel.setVenueInfoModel(LandingScreen.venueInfoModel);
         gameModel.setGameId(gameId);
+
+        // Adding Game Players
+        GamePlayersModel gamePlayersModel = new GamePlayersModel();
+        gamePlayersModel.setUserId(getCurrentUserId());
+        gamePlayersModel.setUserName(getCurrentUserName());
+        gamePlayersModel.setUserRole(Constants.GAME_ROLE_CREATOR);
+        ArrayList<GamePlayersModel> gamePlayersModelArray = new ArrayList<>();
+        gamePlayersModelArray.add(gamePlayersModel);
+        gameModel.setGamePlayers(gamePlayersModelArray);
+
+        // Pushing the pending invitations
+        /*GamePlayersModel pendingGameInvitationModel = new GamePlayersModel();
+        pendingGameInvitationModel.setUserRole(null);
+        pendingGameInvitationModel.setUserName(null);
+        pendingGameInvitationModel.setUserId(null);
+        ArrayList<GamePlayersModel> pendingGameInvitationArray = new ArrayList<>();
+        pendingGameInvitationArray.add(pendingGameInvitationModel);
+        gameModel.setPendingGameInvitations(pendingGameInvitationArray);*/
+
 
         // saving Game Data
         pushGameInfo(gameId, gameModel);
@@ -206,7 +233,40 @@ public class GameInfoScreen extends AppCompatActivity {
     }
 
     public String getCurrentUserId() {
-        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         return prefs.getString(Constants.USER_ID, null);
+    }
+
+    public String getCurrentUserName() {
+        prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        return prefs.getString(Constants.USER_FULL_NAME, null);
+    }
+
+    public static long convertDateToMillis(String date) {
+        long millis = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("d-MM-yyyy");
+            Date dateFormatted = sdf.parse(date);
+            millis = dateFormatted.getTime();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return millis;
+    }
+
+    /**
+     * Return date in specified format.
+     *
+     * @param milliSeconds Date in milliseconds
+     * @return String representing date in specified format
+     */
+    public static String getDate(long milliSeconds) {
+        // Create a DateFormatter object for displaying date in specified format.
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE dd, MMM");
+
+        // Create a calendar object that will convert the date and time value in milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(calendar.getTime());
     }
 }

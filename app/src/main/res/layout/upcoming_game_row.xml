@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/white"
+    android:layout_marginRight="10dp">
+
+    <ImageView
+        android:id="@+id/ivVenueImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_default_place_holder_image" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivVenueImage"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/tvGameName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tvGamePrice"
+            android:text=""
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvGameSports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tvGamePrice"
+            android:text=""
+            android:layout_marginTop="7dp"
+            android:layout_below="@+id/tvGameName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:src="@drawable/ic_location_on_grey_500_24dp"
+            android:layout_below="@+id/tvGameSports"
+            android:id="@+id/ivLocation"
+            android:layout_width="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_height="20dp" />
+
+
+        <TextView
+            android:id="@+id/tvVenueaddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvGameSports"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/ivLocation"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/tvGamePrice"
+            android:text="fdsfdsfdsfdsfdsfdsfdsfdsfdsfds"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvGamePrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:text="fdsfdsfdsfds"
+            android:textStyle="bold"
+            android:textColor="@color/md_green_500"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:src="@drawable/ic_event_grey_500_24dp"
+            android:layout_below="@+id/tvVenueaddress"
+            android:layout_marginTop="7dp"
+            android:id="@+id/ivEvent"
+            android:layout_marginLeft="10dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:id="@+id/tvGameCreator"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvVenueaddress"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/ivEvent"
+            android:textStyle="normal"
+            android:textColor="@color/md_orange_300"
+            android:text="dsadsadsadsadsa"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

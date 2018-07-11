@@ -82,6 +82,7 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
     SqliteHelper db_sqlite;
     private static final int PERMISSION_REQUEST_CODE = 200;
     LocationTracker locationTracker;
+    public static VenueInfoModel venueInfoModel = null;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -223,7 +224,8 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_noti) {
 
         } else if (id == R.id.nav_upcoming_games) {
-
+            Intent intent = new Intent(LandingScreen.this, UpcomingGamesScreen.class);
+            startActivity(intent);
         } else if (id == R.id.nav_profile) {
             TeammatesScreen.userId = pref.getString(Constants.USER_ID, null);
             Intent intent = new Intent(LandingScreen.this, ProfileScreen.class);
@@ -361,6 +363,7 @@ public class LandingScreen extends AppCompatActivity implements NavigationView.O
     @Override
     public void onClick(View view, int position) {
         final VenueInfoModel venues = VenueAdapter.mArrayList.get(position);
+        venueInfoModel = venues;
         venueId = venues.getVenueId();
         Intent i = new Intent(this, DetailsScreen.class);
         startActivity(i);

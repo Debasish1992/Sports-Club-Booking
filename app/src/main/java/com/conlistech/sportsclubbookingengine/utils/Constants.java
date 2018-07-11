@@ -1,6 +1,9 @@
 package com.conlistech.sportsclubbookingengine.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class Constants {
 
@@ -29,6 +32,12 @@ public class Constants {
     public static String maximumNoPlayers = null;
     public static String gameNotes = null;
     public static String gameSport = null;
+
+    public static final String GAME_ROLE_CREATOR = "Creator";
+    public static final String GAME_ROLE_PLAYER = "Teammate";
+
+
+
     public static final String APP_FIREBASE_BASE_LINK = "https://sports-club-eeee7.firebaseio.com/";
     public static final String APP_BASE_LINK = "http://www.conlistech.com/";
     public static final String APP_PACKAGE_NAME = "com.conlistech.sportsclubbookingengine";
@@ -46,6 +55,13 @@ public class Constants {
         }
 
         return deepLink;
+    }
+
+    // COnvertig millisecond to date
+    public static String convertToUTCDate(long time){
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(new Date(time));
     }
 
 

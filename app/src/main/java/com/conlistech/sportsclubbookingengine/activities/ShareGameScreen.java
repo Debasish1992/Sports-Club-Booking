@@ -123,6 +123,7 @@ public class ShareGameScreen extends AppCompatActivity {
         GameInfoScreen.gameId = null;
         GameInfoScreen.indicesArray = null;
         GameInvitesScreen.gameInvitedUserId = null;
+        LandingScreen.venueInfoModel = null;
 
 
     }

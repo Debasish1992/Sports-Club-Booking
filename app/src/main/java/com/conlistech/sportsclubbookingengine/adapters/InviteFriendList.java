@@ -54,13 +54,16 @@ public class InviteFriendList extends RecyclerView.Adapter<InviteFriendList.View
                 int pos = position;
                 // Getting time Slot
                 String getUserId = mArrayList.get(pos).getUserId();
+                String getUserName = mArrayList.get(pos).getUserFullName();
 
                 if (isChecked) {
                     // Getting the clicked Index
                     GameInvitesScreen.gameInvitedUserId.add(getUserId);
+                    GameInvitesScreen.gameInvitedUserNames.add(getUserName);
                 } else {
                     int indexClicked = getCategoryPos(getUserId);
                     GameInvitesScreen.gameInvitedUserId.remove(indexClicked);
+                    GameInvitesScreen.gameInvitedUserNames.remove(indexClicked);
                 }
             }
         });

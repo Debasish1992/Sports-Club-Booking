@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.LocationModel;
 import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.SportsModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
@@ -50,10 +51,7 @@ public class SplashScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Stetho.initializeWithDefaults(this);
-
-
        /* if (mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
@@ -125,12 +123,33 @@ public class SplashScreen extends AppCompatActivity {
     }
 
 
-    /*public void add_timeSlots() {
-        ArrayList<String> arrayList = new ArrayList();
-        arrayList.add("100");
-        arrayList.add("150");
-        arrayList.add("60");
-        arrayList.add("250");
+    public void add_timeSlots() {
+        ArrayList<LocationModel> arrayList = new ArrayList();
+
+        LocationModel locationModel1 = new LocationModel();
+        locationModel1.setLatitude("18.986634");
+        locationModel1.setLongitude("72.814460");
+        locationModel1.setAddress("Lala Lajpatrai Marg, Lotus Colony, Worli, Mumbai, Maharashtra 400018");
+
+        LocationModel locationModel2 = new LocationModel();
+        locationModel2.setLatitude("18.977142");
+        locationModel2.setLongitude("72.815435");
+        locationModel2.setAddress(" Keshav Rao Khadye Marg, Near Hajiali Circle, Tulsiwadi, Tardeo, Mumbai, Maharashtra 400034");
+
+        LocationModel locationModel3 = new LocationModel();
+        locationModel3.setLatitude("18.594139");
+        locationModel3.setLongitude("73.758917");
+        locationModel3.setAddress("165/1, 166/5 , Near by Mumbai-Bangalore Highway, Behind Vedanta Society, Wakad, Pune, Maharashtra 411057");
+
+        LocationModel locationModel4 = new LocationModel();
+        locationModel4.setLatitude("18.545523");
+        locationModel4.setLongitude("73.804129");
+        locationModel4.setAddress("19/1B/1, Near Hotel Green Park, Someshwar Wadi Road, Ward No. 8, Someshwarwadi, Pashan, Pune, Maharashtra 411008");
+        arrayList.add(locationModel1);
+        arrayList.add(locationModel2);
+        arrayList.add(locationModel3);
+        arrayList.add(locationModel4);
+
 
         ArrayList<String> arrayList1 = new ArrayList();
         arrayList1.add("-LFaxAYqiZb-1g-1kiEi");
@@ -143,8 +162,8 @@ public class SplashScreen extends AppCompatActivity {
             String date = String.valueOf(i);
             DatabaseReference mDatabaseReviews =
                     FirebaseDatabase.getInstance().getReference("venues")
-                            .child(arrayList1.get(i)).child("price");
+                            .child(arrayList1.get(i)).child("location");
             mDatabaseReviews.setValue(arrayList.get(i));
         }
-    }*/
+    }
 }

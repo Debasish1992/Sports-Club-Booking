@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.InviteFriendList;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
+import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -47,6 +48,7 @@ public class GameInvitesScreen extends AppCompatActivity {
     TextView inviteText;
     ArrayList<UserModel> userArray;
     public static ArrayList<String> gameInvitedUserId = new ArrayList<>();
+    public static ArrayList<String> gameInvitedUserNames = new ArrayList<>();
     InviteFriendList inviteAdapter;
     public static GameInvitesScreen gameInvitesScreen;
 
@@ -150,15 +152,38 @@ public class GameInvitesScreen extends AppCompatActivity {
     // Pushing game invites Data
     public void pushInviteData() {
         LoaderUtils.showProgressBar(GameInvitesScreen.this, "Please Wait..");
+        DatabaseReference mDatabase = null;
+        // Getting the pending invitation array
+        ArrayList<GamePlayersModel> gamePlayersModelArrayList = new ArrayList<>();
+
+        // Getting the Game Id
+        String getGameId = GameInfoScreen.gameModel.getGameId();
+
+        // Initializing the games Database Referance
+        DatabaseReference mDatabaseGames = FirebaseDatabase
+                .getInstance()
+                .getReference("games")
+                .child(getGameId);
         for (int i = 0; i < gameInvitedUserId.size(); i++) {
-            DatabaseReference mDatabase = FirebaseDatabase
+
+            // Saving Game invitations
+            mDatabase = FirebaseDatabase
                     .getInstance()
                     .getReference("game_invites")
                     .child(gameInvitedUserId.get(i))
                     .child(GameInfoScreen.gameId);
             // pushing user to 'game_invites' node using the userId
             mDatabase.setValue(GameInfoScreen.gameModel);
+
+            // Saving Pending Invitations
+            GamePlayersModel gamePlayersModel = new GamePlayersModel();
+            gamePlayersModel.setUserId(gameInvitedUserId.get(i));
+            gamePlayersModel.setUserName(gameInvitedUserNames.get(i));
+            gamePlayersModel.setUserRole(Constants.GAME_ROLE_PLAYER);
+            gamePlayersModelArrayList.add(gamePlayersModel);
         }
+
+        mDatabaseGames.child("pendingGameInvitations").setValue(gamePlayersModelArrayList);
 
         LoaderUtils.dismissProgress();
 

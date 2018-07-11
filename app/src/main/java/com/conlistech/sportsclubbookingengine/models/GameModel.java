@@ -1,8 +1,56 @@
 package com.conlistech.sportsclubbookingengine.models;
 
+import java.util.ArrayList;
+
 public class GameModel {
 
-    String gameId, gameName, gameTotalAmount, timeSlot, gameNote, venueId, gameTotalNoOfplayers, gameDate, gameSport;
+    String gameId, gameName, gameTotalAmount,
+            timeSlot, gameNote, venueId, gameTotalNoOfplayers,
+            gameDate, gameSport, gameCreatorUserId,
+            gameCreatorUserName;
+    ArrayList<GamePlayersModel> gamePlayers;
+    ArrayList<GamePlayersModel> pendingGameInvitations;
+    VenueInfoModel venueInfoModel;
+
+    public VenueInfoModel getVenueInfoModel() {
+        return venueInfoModel;
+    }
+
+    public void setVenueInfoModel(VenueInfoModel venueInfoModel) {
+        this.venueInfoModel = venueInfoModel;
+    }
+
+    public ArrayList<GamePlayersModel> getGamePlayers() {
+        return gamePlayers;
+    }
+
+    public void setGamePlayers(ArrayList<GamePlayersModel> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
+
+    public ArrayList<GamePlayersModel> getPendingGameInvitations() {
+        return pendingGameInvitations;
+    }
+
+    public void setPendingGameInvitations(ArrayList<GamePlayersModel> pendingGameInvitations) {
+        pendingGameInvitations = pendingGameInvitations;
+    }
+
+    public String getGameCreatorUserId() {
+        return gameCreatorUserId;
+    }
+
+    public void setGameCreatorUserId(String gameCreatorUserId) {
+        this.gameCreatorUserId = gameCreatorUserId;
+    }
+
+    public String getGameCreatorUserName() {
+        return gameCreatorUserName;
+    }
+
+    public void setGameCreatorUserName(String gameCreatorUserName) {
+        this.gameCreatorUserName = gameCreatorUserName;
+    }
 
     public String getGameSport() {
         return gameSport;
