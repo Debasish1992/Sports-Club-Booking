@@ -13,6 +13,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings_screen">Settings</string>
+    <string name="GOOGLE_MAP_API_KEY">AIzaSyCKwniy-i6bTPkxpjT5AcN5UUB8ZPIEO34</string>
+
 
     <!-- Strings related to Settings -->
 

@@ -59,7 +59,7 @@ public class Constants {
 
     // COnvertig millisecond to date
     public static String convertToUTCDate(long time){
-        SimpleDateFormat sdf = new SimpleDateFormat();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE dd, MMM");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(new Date(time));
     }

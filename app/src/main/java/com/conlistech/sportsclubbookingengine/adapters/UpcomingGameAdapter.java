@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +14,6 @@ import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.activities.GameInfoScreen;
 import com.conlistech.sportsclubbookingengine.models.GameModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
-import com.conlistech.sportsclubbookingengine.models.VenueInfoModel;
 import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
@@ -24,21 +22,20 @@ import java.util.ArrayList;
 public class UpcomingGameAdapter
         extends RecyclerView.Adapter<UpcomingGameAdapter.ViewHolder> {
 
-    public static ArrayList<GameModel> gameModel;
-    // public static ArrayList<UserModel> mFilteredList;
+    public ArrayList<GameModel> gameModel;
     Context context;
     ArrayList<String> keyArray;
     DatabaseReference mDatabase;
-    private VenueAdapter.ItemClickListener clickListener;
+    UpcomingGameAdapter.ItemClickListener clickListenerGames;
     String userIdCurrent;
     UserModel currentUserModel;
 
 
-    public UpcomingGameAdapter(Context ctx, ArrayList<GameModel> gameModel) {
+    public UpcomingGameAdapter(Context ctx, ArrayList<GameModel> gameModel, String currentUSerId) {
         this.gameModel = gameModel;
         this.context = ctx;
+        this.userIdCurrent = currentUSerId;
     }
-
 
     @NonNull
     @Override
@@ -53,10 +50,20 @@ public class UpcomingGameAdapter
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_game_name.setText(gameModel.get(position).getGameName());
         holder.tvGameSports.setText(gameModel.get(position).getGameSport());
+        String venueAddress = gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress();
         holder.tv_venue_address.setText(gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress());
-        holder.tv_game_creator.setText(gameModel.get(position).getGameCreatorUserName() +
-                " has scheduled this game for " +
-                GameInfoScreen.getDate(Long.parseLong(gameModel.get(position).getGameDate())));
+        String gameCreatorUserId = gameModel.get(position).getGameCreatorUserId();
+        if (userIdCurrent != null && userIdCurrent.equalsIgnoreCase(gameCreatorUserId)) {
+            holder.tv_game_creator.setText("You" +
+                    " have scheduled this game for " +
+                    GameInfoScreen.getDate(Long.parseLong(gameModel.get(position).getGameDate())));
+        } else {
+            holder.tv_game_creator.setText(gameModel.get(position).getGameCreatorUserName() +
+                    " has scheduled this game for " +
+                    GameInfoScreen.getDate(Long.parseLong(gameModel.get(position).getGameDate())));
+        }
+
+
         holder.tv_game_price.setText("$" + gameModel.get(position).getVenueInfoModel().getPrice());
         String getVenueImage = gameModel.get(position).getVenueInfoModel().getVenue_image();
         if (getVenueImage != null) {
@@ -78,17 +85,18 @@ public class UpcomingGameAdapter
         return gameModel.size();
     }
 
-    public void setClickListener(VenueAdapter.ItemClickListener itemClickListener) {
-        this.clickListener = itemClickListener;
+    public void setClickListener(UpcomingGameAdapter.ItemClickListener itemClickListener) {
+        this.clickListenerGames = itemClickListener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+
         private TextView tv_game_name, tv_venue_address, tv_game_creator, tv_game_price, tvGameSports;
         ImageView ivVenueImage;
 
         public ViewHolder(View view) {
             super(view);
-            view.setOnClickListener(this);
             tv_game_name = (TextView) view.findViewById(R.id.tvGameName);
             tv_venue_address = (TextView) view.findViewById(R.id.tvVenueaddress);
             tv_game_creator = (TextView) view.findViewById(R.id.tvGameCreator);
@@ -101,7 +109,7 @@ public class UpcomingGameAdapter
 
         @Override
         public void onClick(View v) {
-            if (clickListener != null) clickListener.onClick(v, getAdapterPosition());
+            if (clickListenerGames != null) clickListenerGames.onClick(v, getAdapterPosition());
         }
     }
 

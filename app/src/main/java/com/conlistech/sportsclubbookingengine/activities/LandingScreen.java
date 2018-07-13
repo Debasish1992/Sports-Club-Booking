@@ -64,7 +64,8 @@ import butterknife.OnClick;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class LandingScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, VenueAdapter.ItemClickListener {
+public class LandingScreen extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, VenueAdapter.ItemClickListener {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     Toolbar toolbar;
