@@ -139,7 +139,7 @@ public class GameInvitations
     @Override
     protected void onResume() {
         super.onResume();
-        if(!isOnCreateCalled && GameInvitations.gameInvitationsCount == 0){
+        if (!isOnCreateCalled && GameInvitations.gameInvitationsCount == 0) {
             Toast.makeText(this, "You do not have any pending game invitations", Toast.LENGTH_SHORT).show();
             GameInvitations.this.finish();
         }

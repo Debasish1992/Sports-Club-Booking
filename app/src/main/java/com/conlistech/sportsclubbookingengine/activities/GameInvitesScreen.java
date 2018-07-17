@@ -154,6 +154,7 @@ public class GameInvitesScreen extends AppCompatActivity {
     public void pushInviteData() {
         LoaderUtils.showProgressBar(GameInvitesScreen.this, "Please Wait..");
         DatabaseReference mDatabase = null;
+
         // Getting the pending invitation array
         ArrayList<GamePlayersModel> gamePlayersModelArrayList = new ArrayList<>();
 
@@ -173,6 +174,7 @@ public class GameInvitesScreen extends AppCompatActivity {
                     .getReference("game_invites")
                     .child(gameInvitedUserId.get(i))
                     .child(GameInfoScreen.gameId);
+
             // pushing user to 'game_invites' node using the userId
             mDatabase.setValue(GameInfoScreen.gameModel);
 

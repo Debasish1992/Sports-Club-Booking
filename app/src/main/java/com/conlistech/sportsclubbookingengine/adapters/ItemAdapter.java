@@ -56,11 +56,6 @@ public class ItemAdapter extends
         viewHolder.ivProfileImage.setBackgroundResource(R.drawable.ic_person_black_48dp);
     }
 
-   /* public static int getItemPos(String category) {
-        return HomeScreen.favoriteArray.indexOf(category);
-    }*/
-
-
     @Override
     public int getItemCount() {
         return mFilteredList.size();

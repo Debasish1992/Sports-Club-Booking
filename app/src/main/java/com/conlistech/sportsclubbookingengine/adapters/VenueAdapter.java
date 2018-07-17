@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> {
 
     public static ArrayList<VenueInfoModel> mArrayList;
-   // public static ArrayList<UserModel> mFilteredList;
+    // public static ArrayList<UserModel> mFilteredList;
     Context context;
     ArrayList<String> keyArray;
     DatabaseReference mDatabase;
@@ -41,7 +41,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> 
     @NonNull
     @Override
     public VenueAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                     int viewType) {
+                                                      int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.row_venues, parent, false);
         return new VenueAdapter.ViewHolder(view);
@@ -50,10 +50,10 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.tv_venue_name.setText(mArrayList.get(position).getVenue_name());
-        viewHolder.tv_venue_address.setText("$"+ mArrayList.get(position).getPrice() + "/hour");
+        viewHolder.tv_venue_address.setText("$" + mArrayList.get(position).getPrice() + "/hour");
         viewHolder.tv_venue_distance.setText("5.0 Miles");
         String getVenueImage = mArrayList.get(position).getVenue_image();
-        if(getVenueImage != null){
+        if (getVenueImage != null) {
             Picasso.get()
                     .load(getVenueImage)
                     .placeholder(R.drawable.default_loading)
@@ -62,13 +62,13 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.ViewHolder> 
     }
 
     // Function responsible for refreshing the list
-    public void refreshList(int position){
+    public void refreshList(int position) {
         mArrayList.remove(position);
         notifyDataSetChanged();
     }
 
     // Function responsible for displaying the message
-    public void displayMessage(String message){
+    public void displayMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 

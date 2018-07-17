@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,6 +60,8 @@ public class TeammatesScreen extends AppCompatActivity
     TextView tvNoTeamatesFound;
     public static TeammatesScreen teammatesScreen;
     SqliteHelper sqliteHelper;
+    @BindView(R.id.swipeContainer)
+    android.support.v4.widget.SwipeRefreshLayout swipeRefreshLayout;
 
     @OnClick(R.id.layTeammateRequest)
     void redirectUser() {
@@ -88,6 +91,20 @@ public class TeammatesScreen extends AppCompatActivity
         teammatesScreen = TeammatesScreen.this;
 
         sqliteHelper = new SqliteHelper(this);
+
+        // Refreshing the layout of the teammates
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchAllRequests();
+            }
+        });
+
+        // Configure the refreshing colors
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         fetchAllRequests();
     }
@@ -152,16 +169,17 @@ public class TeammatesScreen extends AppCompatActivity
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
+    // Function responsible for getting all the teammates
     public void fetchAllUsers() {
         LoaderUtils.showProgressBar(TeammatesScreen.this, "Please wait while loading...");
-        userModel = new ArrayList<>();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("teammates")
                 .child("my_teamates").child(getCurrentUserId());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                userModel = new ArrayList<>();
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     UserModel users = noteDataSnapshot.getValue(UserModel.class);
                     String userId = users.getUserId();
@@ -171,6 +189,7 @@ public class TeammatesScreen extends AppCompatActivity
                 }
                 setUpAdapter();
                 LoaderUtils.dismissProgress();
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -183,6 +202,7 @@ public class TeammatesScreen extends AppCompatActivity
     }
 
 
+    // Function responsible for getting all the friend Requests
     public void fetchAllRequests() {
         LoaderUtils.showProgressBar(TeammatesScreen.this, "Please wait while loading...");
         userModel = new ArrayList<>();
