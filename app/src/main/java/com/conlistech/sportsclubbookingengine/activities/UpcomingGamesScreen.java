@@ -17,6 +17,7 @@ import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.UpcomingGameAdapter;
 import com.conlistech.sportsclubbookingengine.models.GameModel;
+import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -50,6 +51,8 @@ public class UpcomingGamesScreen extends AppCompatActivity
     ArrayList<GameModel> gameInvitationArrayList;
     UpcomingGameAdapter upcomingGameAdapter;
     public static GameModel gameModel;
+    public static boolean isInvitationAccepted = false;
+    public static boolean isOnCreateCalled = false;
 
 
     @Override
@@ -71,9 +74,12 @@ public class UpcomingGamesScreen extends AppCompatActivity
         gameNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isOnCreateCalled = false;
                 startActivity(new Intent(UpcomingGamesScreen.this, GameInvitations.class));
             }
         });
+
+        isOnCreateCalled = true;
 
         // Getting all the game invitations
         fetchAllGameInvitations();
@@ -110,7 +116,8 @@ public class UpcomingGamesScreen extends AppCompatActivity
                 "Please wait while loading your games...");
         gameModelArrayList = new ArrayList<>();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("games");
-        Query query = mDatabase.orderByChild("gameCreatorUserId").equalTo(getCurrentUserId());
+        Query query = mDatabase.orderByChild("gameDate")
+                .startAt(String.valueOf(GameInfoScreen.convertDateToMillis(getCurrentDate())));
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -118,11 +125,20 @@ public class UpcomingGamesScreen extends AppCompatActivity
                 // whenever data at this location is updated.
                 for (DataSnapshot gameData : dataSnapshot.getChildren()) {
                     GameModel games = gameData.getValue(GameModel.class);
-                    long getGameTime = Long.parseLong(games.getGameDate());
+                    ArrayList<GamePlayersModel> gamePlayersModel = games.getGamePlayers();
+
+                    for (int i = 0; i < gamePlayersModel.size(); i++) {
+                        String userId = gamePlayersModel.get(i).getUserId();
+                        if (getCurrentUserId().equalsIgnoreCase(userId)) {
+                            gameModelArrayList.add(games);
+                            break;
+                        }
+                    }
+                    /*long getGameTime = Long.parseLong(games.getGameDate());
                     long getCurrentTimeMillis = GameInfoScreen.convertDateToMillis(getCurrentDate());
                     if (getGameTime > getCurrentTimeMillis) {
-                        gameModelArrayList.add(games);
-                    }
+
+                    }*/
                 }
 
                 Collections.sort(gameModelArrayList, new Comparator<GameModel>() {
@@ -169,7 +185,7 @@ public class UpcomingGamesScreen extends AppCompatActivity
         }
     }
 
-    public String getCurrentDate() {
+    public static String getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("d-MM-yyyy");
         return sdf.format(new Date());
     }
@@ -180,9 +196,11 @@ public class UpcomingGamesScreen extends AppCompatActivity
         LoaderUtils.showProgressBar(UpcomingGamesScreen.this,
                 "Checking your game Invitations...");
         gameInvitationArrayList = new ArrayList<>();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("game_invites").
-                child(getCurrentUserId());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("game_invites");
+        Query query = mDatabase.child(getCurrentUserId()).orderByChild("gameDate")
+                .startAt(String.valueOf(GameInfoScreen.convertDateToMillis(UpcomingGamesScreen.getCurrentDate())));
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -209,7 +227,24 @@ public class UpcomingGamesScreen extends AppCompatActivity
 
     @Override
     public void onClick(View view, int position) {
+        isOnCreateCalled = false;
         gameModel = gameModelArrayList.get(position);
         startActivity(new Intent(UpcomingGamesScreen.this, GameDetails.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Hiding the notification icon
+        if (!isOnCreateCalled && GameInvitations.gameInvitationsCount == 0) {
+            gameNotifications.setVisibility(ImageView.GONE);
+        }
+
+        // Refreshing the List view
+        if (UpcomingGamesScreen.isInvitationAccepted) {
+            fetchAllGameInvitations();
+            UpcomingGamesScreen.isInvitationAccepted = false;
+        }
     }
 }

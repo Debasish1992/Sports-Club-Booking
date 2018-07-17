@@ -33,6 +33,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -75,8 +78,10 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     RelativeLayout layGameMain;
     double venueLatitude, venueLongitude;
     ArrayList<GamePlayersModel> getTotalGamePlayers;
+    int totalPlayerCount = 0;
     String venuePhoneNumber, venueWebsite, venueAddress;
     final String GOOGLE_NAV_PARAM = "google.navigation:q=";
+    ArrayList<String> gameTeamates = new ArrayList<>();
 
 
     @OnClick(R.id.layWebsite)
@@ -98,9 +103,50 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
         navigateUserToGoogleMap();
     }
 
+    @OnClick(R.id.btnJoinGame)
+    void joinGame() {
+        doGameJoin();
+    }
+
+    // Adding the new player to the model array
+    public GamePlayersModel addNewPlayer() {
+        GamePlayersModel gamePlayersModel = new GamePlayersModel();
+        gamePlayersModel.setUserRole("Player");
+        gamePlayersModel.setUserId(getCurrentUserId());
+        gamePlayersModel.setUserName(getCurrentUserName());
+        return gamePlayersModel;
+    }
+
+    // Building game players array
+    public ArrayList<GamePlayersModel> buildGamePlayers() {
+        ArrayList<GamePlayersModel> gamePlayers = UpcomingGamesScreen.gameModel.getGamePlayers();
+        GamePlayersModel gamePlayersModel = new GamePlayersModel();
+        gamePlayersModel.setUserRole("Player");
+        gamePlayersModel.setUserId(getCurrentUserId());
+        gamePlayersModel.setUserName(getCurrentUserName());
+        gamePlayers.add(gamePlayersModel);
+        return gamePlayers;
+    }
+
+    // Building the pending game players array
+    public ArrayList<GamePlayersModel> buildPendingPlayers() {
+        ArrayList<GamePlayersModel> pendingPlayers =
+                UpcomingGamesScreen.gameModel.getPendingGameInvitations();
+
+        for (int i = 0; i < pendingPlayers.size(); i++) {
+            String getUserId = pendingPlayers.get(i).getUserId();
+
+            if (getCurrentUserId().equalsIgnoreCase(getUserId)) {
+                pendingPlayers.remove(i);
+                break;
+            }
+        }
+        return pendingPlayers;
+    }
+
+
     @OnClick(R.id.tvTeamMates)
     void showTeammates() {
-        ArrayList<String> gameTeamates = new ArrayList<>();
         for (int i = 0; i < getTotalGamePlayers.size(); i++) {
             gameTeamates.add(getTotalGamePlayers.get(i).getUserName() + " | " + getTotalGamePlayers.get(i).getUserRole());
         }
@@ -109,7 +155,7 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     }
 
     /**
-     * Setting up Teamates list
+     * Setting up Teammates list
      *
      * @param gameTeamates Teamates List
      */
@@ -121,6 +167,52 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
                 .canceledOnTouchOutside(true)
                 .negativeText("OK")
                 .show();
+    }
+
+
+    // Function responsible for making a user join the game
+    public void doGameJoin() {
+        DatabaseReference mDatabase = FirebaseDatabase
+                .getInstance()
+                .getReference("game_invites");
+
+        mDatabase.child(getCurrentUserId())
+                .child(UpcomingGamesScreen.gameModel.getGameId())
+                .removeValue();
+
+        // Pushing the Game Players Data
+        DatabaseReference mDatabase_games = FirebaseDatabase.getInstance().getReference("games");
+        mDatabase_games
+                .child(UpcomingGamesScreen.gameModel.getGameId())
+                .child("gamePlayers")
+                .setValue(buildGamePlayers());
+
+        mDatabase_games
+                .child(UpcomingGamesScreen.gameModel.getGameId())
+                .child("gameInvitations")
+                .setValue(buildPendingPlayers());
+
+        UpcomingGamesScreen.isInvitationAccepted = true;
+
+        GameInvitations.gameInvitationsCount = GameInvitations.gameInvitationsCount - 1;
+
+        Toast.makeText(this, "You have successfully joined the game.", Toast.LENGTH_SHORT).show();
+        // Making the join button GONE
+        refreshScrollViewLayout();
+        // Adding the Player data into the model array
+        gameTeamates.add(getCurrentUserName() + "|" + Constants.GAME_ROLE_PLAYER);
+        // Refreshing the Player Count
+        refreshGameTotalPlayerCount(totalPlayerCount + 1);
+        // Adding new Player to the Model Array
+        setGamePlayerIntoArray();
+    }
+
+    // Function responsible for adding the new player into the array
+    public void setGamePlayerIntoArray() {
+        ArrayList<GamePlayersModel> gamePlayersModels =
+                UpcomingGamesScreen.gameModel.getGamePlayers();
+        gamePlayersModels.add(addNewPlayer());
+        UpcomingGamesScreen.gameModel.setGamePlayers(gamePlayersModels);
     }
 
     @Override
@@ -192,15 +284,13 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
 
             tvVenueAddress.setText(UpcomingGamesScreen.gameModel.getVenueInfoModel().getLocationModel().getAddress());
             getTotalGamePlayers = UpcomingGamesScreen.gameModel.getGamePlayers();
+            totalPlayerCount = getTotalGamePlayers.size();
             venueAddress = UpcomingGamesScreen.gameModel.getVenueInfoModel().getLocationModel().getAddress();
 
             venueWebsite = UpcomingGamesScreen.gameModel.getVenueInfoModel().getVenue_website();
 
-            if (getTotalGamePlayers.size() == 1) {
-                gamePlayers.setText(String.valueOf(getTotalGamePlayers.size()) + " player is playing this game");
-            } else {
-                gamePlayers.setText(String.valueOf(getTotalGamePlayers.size()) + " players are playing this game");
-            }
+            // Refreshing Game total game player count
+            refreshGameTotalPlayerCount(totalPlayerCount);
 
             venuePhoneNumber = UpcomingGamesScreen.gameModel.getVenueInfoModel().getVenue_phone();
 
@@ -216,6 +306,14 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
             }
 
             checkUserExistanceInTheGame();
+        }
+    }
+
+    public void refreshGameTotalPlayerCount(int playerCount) {
+        if (playerCount == 1) {
+            gamePlayers.setText(String.valueOf(playerCount) + " player is playing this game");
+        } else {
+            gamePlayers.setText(String.valueOf(playerCount) + " players are playing this game");
         }
     }
 
@@ -301,24 +399,28 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     }
 
     // Checking for the game teammates
-    public void checkUserExistanceInTheGame(){
+    public void checkUserExistanceInTheGame() {
         ArrayList<String> gameTeammates = new ArrayList<>();
         String gameCreatorUserId = UpcomingGamesScreen.gameModel.getGameCreatorUserId();
         gameTeammates.add(gameCreatorUserId);
         ArrayList<GamePlayersModel> acceptedTeamates = UpcomingGamesScreen.gameModel.getGamePlayers();
-        for(int i = 0; i < acceptedTeamates.size(); i++){
+        for (int i = 0; i < acceptedTeamates.size(); i++) {
             String userId = acceptedTeamates.get(i).getUserId();
             gameTeammates.add(userId);
         }
 
-        if(gameTeammates.contains(getCurrentUserId())){
-            btnJoinGame.setVisibility(View.GONE);
-
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scMain
-                    .getLayoutParams();
-            layoutParams.setMargins(0, 0, 0, 0);
-            scMain.setLayoutParams(layoutParams);
+        if (gameTeammates.contains(getCurrentUserId())) {
+            refreshScrollViewLayout();
         }
+    }
+
+    // Refreshing the Scroll View Layout
+    public void refreshScrollViewLayout() {
+        btnJoinGame.setVisibility(View.GONE);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) scMain
+                .getLayoutParams();
+        layoutParams.setMargins(0, 0, 0, 0);
+        scMain.setLayoutParams(layoutParams);
     }
 
 
@@ -326,5 +428,11 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     public String getCurrentUserId() {
         SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         return prefs.getString(Constants.USER_ID, null);
+    }
+
+    // Getting current User id
+    public String getCurrentUserName() {
+        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        return prefs.getString(Constants.USER_FULL_NAME, null);
     }
 }

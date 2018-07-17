@@ -21,11 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-public class InviteFriendList extends RecyclerView.Adapter<InviteFriendList.ViewHolder> {
+public class InviteFriendList
+        extends RecyclerView.Adapter<InviteFriendList.ViewHolder>
+        {
 
     private ArrayList<UserModel> mArrayList;
     Context context;
     DatabaseReference mDatabase;
+
 
     public InviteFriendList(Context ctx,
                             ArrayList<UserModel> userModels) {
@@ -91,5 +94,8 @@ public class InviteFriendList extends RecyclerView.Adapter<InviteFriendList.View
             cbSelection = (CheckBox) view.findViewById(R.id.cbSelectTimeSlot);
             view.setTag(view);
         }
+
+
     }
+
 }

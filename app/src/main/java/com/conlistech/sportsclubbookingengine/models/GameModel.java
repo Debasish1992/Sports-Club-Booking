@@ -1,5 +1,7 @@
 package com.conlistech.sportsclubbookingengine.models;
 
+import com.google.firebase.database.PropertyName;
+
 import java.util.ArrayList;
 
 public class GameModel {
@@ -9,7 +11,8 @@ public class GameModel {
             gameDate, gameSport, gameCreatorUserId,
             gameCreatorUserName;
     ArrayList<GamePlayersModel> gamePlayers;
-    ArrayList<GamePlayersModel> pendingGameInvitations;
+    @PropertyName("gameInvitations")
+    ArrayList<GamePlayersModel> gameInvitations;
     VenueInfoModel venueInfoModel;
 
     public VenueInfoModel getVenueInfoModel() {
@@ -29,11 +32,11 @@ public class GameModel {
     }
 
     public ArrayList<GamePlayersModel> getPendingGameInvitations() {
-        return pendingGameInvitations;
+        return gameInvitations;
     }
 
     public void setPendingGameInvitations(ArrayList<GamePlayersModel> pendingGameInvitations) {
-        pendingGameInvitations = pendingGameInvitations;
+        gameInvitations = pendingGameInvitations;
     }
 
     public String getGameCreatorUserId() {

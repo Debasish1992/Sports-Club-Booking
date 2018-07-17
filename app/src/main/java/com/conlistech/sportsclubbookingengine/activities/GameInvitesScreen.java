@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.InviteFriendList;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
+import com.conlistech.sportsclubbookingengine.adapters.UpcomingGameAdapter;
 import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
@@ -164,8 +165,8 @@ public class GameInvitesScreen extends AppCompatActivity {
                 .getInstance()
                 .getReference("games")
                 .child(getGameId);
-        for (int i = 0; i < gameInvitedUserId.size(); i++) {
 
+        for (int i = 0; i < gameInvitedUserId.size(); i++) {
             // Saving Game invitations
             mDatabase = FirebaseDatabase
                     .getInstance()
@@ -183,7 +184,20 @@ public class GameInvitesScreen extends AppCompatActivity {
             gamePlayersModelArrayList.add(gamePlayersModel);
         }
 
-        mDatabaseGames.child("pendingGameInvitations").setValue(gamePlayersModelArrayList);
+        mDatabaseGames.child("gameInvitations").setValue(gamePlayersModelArrayList);
+
+        DatabaseReference mDatabaseGameInvites = FirebaseDatabase
+                .getInstance()
+                .getReference("game_invites");
+
+        for (int i = 0; i < gameInvitedUserId.size(); i++) {
+            mDatabaseGameInvites
+                    .child(gameInvitedUserId.get(i))
+                    .child(GameInfoScreen.gameId)
+                    .child("gameInvitations")
+                    .setValue(gamePlayersModelArrayList);
+        }
+
 
         LoaderUtils.dismissProgress();
 
@@ -225,4 +239,6 @@ public class GameInvitesScreen extends AppCompatActivity {
         super.onBackPressed();
         ShareGameScreen.releaseAllValues();
     }
+
+
 }
