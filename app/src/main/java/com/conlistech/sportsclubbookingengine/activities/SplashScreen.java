@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class SplashScreen extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_screen);
         Stetho.initializeWithDefaults(this);
+        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
        /* if (mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
