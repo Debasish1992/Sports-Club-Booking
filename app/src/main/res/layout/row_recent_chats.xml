@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:id="@+id/lyt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/iv_profile_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/chat_profile_img"
+            android:src="@drawable/icon_sample_profile" />
+
+        <LinearLayout
+            android:id="@+id/lyt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/iv_profile_pic"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvFullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@string/font_roboto_regular"
+                android:maxEms="8"
+                android:maxLines="1"
+                android:text="Bill Clinton"
+                android:textColor="@color/md_grey_900"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/img_online"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/tvName"
+                android:src="@drawable/circle_small_green" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lyt_name"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/iv_profile_pic"
+            android:ellipsize="end"
+            android:fontFamily="@string/font_roboto_regular"
+            android:maxEms="12"
+            android:maxLines="1"
+            android:text="Have a good weekened."
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvTimeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="12dp"
+            android:text="12.00"
+            android:textColor="@color/md_grey_600"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvUnreadMsgs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lyt_name"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/circle_small_pink"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/lyt_content"
+        android:layout_marginLeft="75dp"
+        android:background="@color/md_grey_300" />
+
+</RelativeLayout>

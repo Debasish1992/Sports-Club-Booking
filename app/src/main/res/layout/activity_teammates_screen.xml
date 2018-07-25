@@ -45,19 +45,19 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
-        android:layout_below="@+id/layTeammateRequest"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_height="match_parent">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_teammates"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollIndicators="none"
-        android:scrollbars="vertical"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_below="@+id/layTeammateRequest"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_teammates"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollIndicators="none"
+            android:scrollbars="vertical"
+            tools:layout_editor_absoluteX="0dp" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -78,9 +78,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:gravity="center"
-        android:textSize="20sp"
         android:text="Oops !! You did not have added any teammate yet. Please click the add teammate button bottom right corner to add teammates."
-        />
+        android:textSize="20sp" />
 
 
 </RelativeLayout>

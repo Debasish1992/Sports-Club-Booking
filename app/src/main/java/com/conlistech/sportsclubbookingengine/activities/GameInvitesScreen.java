@@ -58,7 +58,6 @@ public class GameInvitesScreen extends AppCompatActivity {
         startActivity(new Intent(GameInvitesScreen.this, ShareGameScreen.class));
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

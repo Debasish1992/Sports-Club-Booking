@@ -29,41 +29,90 @@
         android:roundIcon="@drawable/app_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SplashScreen">
+        <activity
+            android:name=".activities.SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginScreen" />
-        <activity android:name=".activities.SignupScreen" />
-        <activity android:name=".activities.ForgotPasswordScreen" />
+        <activity
+            android:name=".activities.LoginScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SignupScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ForgotPasswordScreen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.HomeScreen"
-            android:label="@string/title_activity_home_screen" />
-
+            android:label="@string/title_activity_home_screen"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.LandingScreen"
             android:label="@string/title_activity_landing_screen"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.TeammatesScreen" />
-        <activity android:name=".activities.ProfileScreen" />
-        <activity android:name=".activities.FriendRequestsScreen" />
-        <activity android:name=".activities.AddTeammates" />
+        <activity
+            android:name=".activities.TeammatesScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ProfileScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FriendRequestsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.AddTeammates"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SettingsScreen"
-            android:label="@string/title_activity_settings_screen" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.PaymentCardsScreen" />
-        <activity android:name=".activities.DetailsScreen" />
-        <activity android:name=".activities.TimeSlotSelector" />
-        <activity android:name=".activities.SelectTimeSlot" />
-        <activity android:name=".activities.GameInfoScreen" />
-        <activity android:name=".activities.GameInvitesScreen" />
-        <activity android:name=".activities.ShareGameScreen" />
-        <activity android:name=".activities.UpcomingGamesScreen" />
-        <activity android:name=".activities.GameDetails" />
-        <activity android:name=".activities.GameInvitations"></activity>
+            android:label="@string/title_activity_settings_screen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.PaymentCardsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DetailsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.TimeSlotSelector"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SelectTimeSlot"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameInfoScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameInvitesScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ShareGameScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.UpcomingGamesScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameInvitations"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.RecentChatListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.ChatMessageActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.AddTochatUserActivity"
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"

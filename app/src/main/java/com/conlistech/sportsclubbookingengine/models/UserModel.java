@@ -5,6 +5,8 @@ public class UserModel {
     String userId, userEmail, userPhoneNumber, userFullName, favSport;
     boolean profile_visibility, contact_visibility;
 
+    public UserModel() {
+    }
 
     public String getUserId() {
         return userId;

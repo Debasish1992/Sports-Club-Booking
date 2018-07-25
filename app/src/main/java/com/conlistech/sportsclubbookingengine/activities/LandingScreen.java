@@ -149,11 +149,11 @@ public class LandingScreen extends AppCompatActivity implements
                 if (locationTracker.canGetLocation()) {
                     Double latitude = locationTracker.getLatitude();
                     Double longitude = locationTracker.getLongitude();
-                    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
-                    String locAddress = address.get(0).getAddressLine(0);
-                    String city = address.get(0).getLocality();
-                    Log.d("Address", address.toString());
-                    getSupportActionBar().setTitle(locAddress);
+                 //   List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+                  //  String locAddress = address.get(0).getAddressLine(0);
+                 //   String city = address.get(0).getLocality();
+                 //   Log.d("Address", address.toString());
+                    getSupportActionBar().setTitle("locAddress");
                     toolbar.setSubtitle(userPrimarySport);
 
                     // Checking for the payment card table existance
@@ -223,7 +223,8 @@ public class LandingScreen extends AppCompatActivity implements
         if (id == R.id.nav_home) {
             Toast.makeText(this, "in Home", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_noti) {
-
+            Intent intent = new Intent(LandingScreen.this, RecentChatListActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_upcoming_games) {
             Intent intent = new Intent(LandingScreen.this, UpcomingGamesScreen.class);
             startActivity(intent);

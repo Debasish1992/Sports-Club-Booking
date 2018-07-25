@@ -22,8 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 
 public class InviteFriendList
-        extends RecyclerView.Adapter<InviteFriendList.ViewHolder>
-        {
+        extends RecyclerView.Adapter<InviteFriendList.ViewHolder> {
 
     private ArrayList<UserModel> mArrayList;
     Context context;

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -63,19 +64,23 @@ public class SignupScreen extends AppCompatActivity {
     String sportId = null;
     String favSport = null;
 
-    @OnClick (R.id.btn_signup) void submit(){
+    @OnClick(R.id.btn_signup)
+    void submit() {
         signUp();
     }
 
-    @OnClick (R.id.tvFavoriteSports) void displayDialog(){
+    @OnClick(R.id.tvFavoriteSports)
+    void displayDialog() {
         setUpSportsDialog();
     }
 
-    @OnClick (R.id.ivDismiss) void Dismiss(){
+    @OnClick(R.id.ivDismiss)
+    void Dismiss() {
         SignupScreen.this.finish();
     }
 
-    @OnClick(R.id.link_login) void goLogin(){
+    @OnClick(R.id.link_login)
+    void goLogin() {
         SignupScreen.this.finish();
     }
 
@@ -121,7 +126,7 @@ public class SignupScreen extends AppCompatActivity {
         LoaderUtils.dismissProgress();
         Toast.makeText(getBaseContext(), "Registration Successful.", Toast.LENGTH_LONG).show();
         btnSignUp.setEnabled(false);
-        if(LoginScreen.loginScreen != null){
+        if (LoginScreen.loginScreen != null) {
             LoginScreen.loginScreen.finish();
         }
         finish();
@@ -134,7 +139,7 @@ public class SignupScreen extends AppCompatActivity {
         btnSignUp.setEnabled(true);
     }
 
-    public void setUpSportsDialog(){
+    public void setUpSportsDialog() {
         new MaterialDialog.Builder(SignupScreen.this)
                 .title("Select Sport")
                 .items(sportsArray)
@@ -155,6 +160,7 @@ public class SignupScreen extends AppCompatActivity {
 
     /**
      * Function responsible for validating the user inputs
+     *
      * @return status of the validation
      */
     public boolean validate() {
@@ -183,7 +189,7 @@ public class SignupScreen extends AppCompatActivity {
             etPassword.setError("Password should not be less than 6 characters");
             etPassword.requestFocus();
             valid = false;
-        } else if(TextUtils.isEmpty(sportId)){
+        } else if (TextUtils.isEmpty(sportId)) {
             Toast.makeText(SignUpScreen, "Please Select Your Favorite Sports", Toast.LENGTH_SHORT).show();
             valid = false;
         } else {
@@ -194,14 +200,15 @@ public class SignupScreen extends AppCompatActivity {
 
     /**
      * Function responsible for adding the user to the cloud server
-     * @param email user given email address
+     *
+     * @param email    user given email address
      * @param password user given password
      */
     public void registerUser(final String email,
                              final String password,
                              final String userFullName,
                              final String phoneNumber,
-                             final String favSports){
+                             final String favSports) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -211,7 +218,7 @@ public class SignupScreen extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             String uId = null;
 
-                            if(user != null){
+                            if (user != null) {
                                 uId = user.getUid();
                                 UserModel userModel = new UserModel();
                                 userModel.setUserId(uId);
@@ -231,14 +238,14 @@ public class SignupScreen extends AppCompatActivity {
 
                             try {
                                 throw task.getException();
-                            } catch(FirebaseAuthWeakPasswordException e) {
-                                Toast.makeText(SignupScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                            } catch(FirebaseAuthInvalidCredentialsException e) {
-                                Toast.makeText(SignupScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                            } catch(FirebaseAuthUserCollisionException e) {
-                                Toast.makeText(SignupScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                            } catch(Exception e) {
-                                Toast.makeText(SignupScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+                                Toast.makeText(SignupScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                Toast.makeText(SignupScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthUserCollisionException e) {
+                                Toast.makeText(SignupScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                Toast.makeText(SignupScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -247,18 +254,23 @@ public class SignupScreen extends AppCompatActivity {
 
     /**
      * Function responsible for storing user details
-     * @param userId user Id
+     *
+     * @param userId    user Id
      * @param userModel User Model
      */
-    public void storeUserInfo(String userId, UserModel userModel){
+    public void storeUserInfo(String userId, UserModel userModel) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        // pushing user to 'users' node using the userId
+        mDatabase.child(userId).setValue(userModel);
         // pushing user to 'users' node using the userId
         mDatabase.child(userId).setValue(userModel);
     }
 
 
+
     /**
      * Storing the User Details in Shared Preference
+     *
      * @param userId
      * @param userEmail
      * @param userFullName
@@ -268,7 +280,7 @@ public class SignupScreen extends AppCompatActivity {
                                    String userEmail,
                                    String userFullName,
                                    String phoneNumber,
-                                   String favSports){
+                                   String favSports) {
         SharedPreferences pref = getApplicationContext().
                 getSharedPreferences("MyPref", 0); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
