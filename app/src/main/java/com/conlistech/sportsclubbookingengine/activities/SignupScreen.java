@@ -105,13 +105,11 @@ public class SignupScreen extends AppCompatActivity {
             onSignupFailed();
             return;
         }
-
         btnSignUp.setEnabled(false);
         String name = etName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String phoneNumber = etPhoneNumber.getText().toString().trim();
-
         registerUser(email, password, name, phoneNumber, favSport);
     }
 
