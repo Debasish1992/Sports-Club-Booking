@@ -53,7 +53,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setAutoCancel(false)   //Automatically delete the notification
+                .setAutoCancel(true)   //Automatically delete the notification
                 .setSmallIcon(R.mipmap.ic_launcher) //Notification icon
                 .setContentIntent(pendingIntent)
                 .setContentTitle(notificationTitle)
@@ -72,7 +72,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String channelId = this.getString(R.string.default_notification_channel_id);
             NotificationChannel channel =
                     new NotificationChannel(channelId,
-                            notificationTitle,
+                            "UserSignUps",
                             NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription(notificationBody);
             notificationManager.createNotificationChannel(channel);

@@ -62,6 +62,7 @@ public class SignupScreen extends AppCompatActivity {
     ArrayList<String> sportsArray = new ArrayList<>();
     String sportId = null;
     String favSport = null;
+    SharedPreferences pref;
 
     @OnClick(R.id.btn_signup)
     void submit() {
@@ -95,6 +96,8 @@ public class SignupScreen extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         sqLite = new SqliteHelper(SignupScreen.this);
         sportsArray = sqLite.getAllSports();
+        pref = getApplicationContext().
+                getSharedPreferences("MyPref", 0);
     }
 
     // Function responsible for making the user register
@@ -223,6 +226,7 @@ public class SignupScreen extends AppCompatActivity {
                                 userModel.setUserEmail(email);
                                 userModel.setUserPhoneNumber(phoneNumber);
                                 userModel.setFavSport(favSports);
+                                userModel.setNotificationToken(pref.getString("Fcm_id", null));
                                 // Storing User Details
                                 storeUserInfo(uId, userModel);
                                 // Storing the user details locally
@@ -275,8 +279,7 @@ public class SignupScreen extends AppCompatActivity {
                                    String userFullName,
                                    String phoneNumber,
                                    String favSports) {
-        SharedPreferences pref = getApplicationContext().
-                getSharedPreferences("MyPref", 0); // 0 - for private mode
+        // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(Constants.USER_ID, userId);
         editor.putString(Constants.USER_EMAIL, userEmail);
