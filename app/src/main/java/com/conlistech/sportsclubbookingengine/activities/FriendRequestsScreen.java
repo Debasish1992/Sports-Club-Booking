@@ -60,9 +60,14 @@ public class FriendRequestsScreen extends AppCompatActivity
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        FriendRequestsScreen.this.finish();
+       if(Constants.isTeammateRequestNotification){
+           Constants.isTeammateRequestNotification = false;
+           startActivity(new Intent(FriendRequestsScreen.this, TeammatesScreen.class));
+       }
         return true;
     }
+
 
     // Initializing the views
     private void initViews() {
