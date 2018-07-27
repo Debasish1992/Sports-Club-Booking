@@ -1,6 +1,7 @@
 package com.conlistech.sportsclubbookingengine.activities;
 
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
@@ -60,7 +62,12 @@ public class SplashScreen extends AppCompatActivity {
             mDatabase = database.getReference();
         }*/
 
+
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        if (!prefs.contains("Fcm_id")) {
+            getPushNotificationToken();
+        }
 
         db_sqlite = new SqliteHelper(this);
 
@@ -167,5 +174,18 @@ public class SplashScreen extends AppCompatActivity {
                             .child(arrayList1.get(i)).child("location");
             mDatabaseReviews.setValue(arrayList.get(i));
         }
+    }
+
+    public void getPushNotificationToken() {
+        // Get new Instance ID token
+        String token = FirebaseInstanceId.getInstance().getToken();
+        storeFcmId(token);
+    }
+
+    public void storeFcmId(String token) {
+        SharedPreferences.Editor firebase_editor =
+                prefs.edit();
+        firebase_editor.putString("Fcm_id", token);
+        firebase_editor.apply();
     }
 }

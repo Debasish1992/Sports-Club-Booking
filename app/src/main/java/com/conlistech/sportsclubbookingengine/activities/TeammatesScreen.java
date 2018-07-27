@@ -106,7 +106,11 @@ public class TeammatesScreen extends AppCompatActivity
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        fetchAllRequests();
+        if(Constants.isTeammateRequestNotification){
+            redirectUser();
+        }else{
+            fetchAllRequests();
+        }
     }
 
     @Override
@@ -273,10 +277,10 @@ public class TeammatesScreen extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (TeammatesScreen.isRequestResponded) {
+       /* if (TeammatesScreen.isRequestResponded) {
             fetchAllRequests();
             TeammatesScreen.isRequestResponded = false;
-        }
+        }*/
 
 
     }

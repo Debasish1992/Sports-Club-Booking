@@ -16,7 +16,7 @@
     <string name="GOOGLE_MAP_API_KEY">AIzaSyCKwniy-i6bTPkxpjT5AcN5UUB8ZPIEO34</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-    <string name="notification_title">SignUp</string>
+    <string name="notification_title">UserSignUp</string>
     <string name="notification_body"></string>
 
 
