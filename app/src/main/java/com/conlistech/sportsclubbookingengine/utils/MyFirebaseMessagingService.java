@@ -52,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
 
-        if (strChatArray[1].equalsIgnoreCase("ChatMessage") &&
+       /* if (strChatArray[1].equalsIgnoreCase("ChatMessage") &&
                 Constants.CHAT_USER_ID == null &&
                 strChatArray[2].equalsIgnoreCase(getCurrentUserId()) &&
                 !Constants.IS_USER_ONLINE) {
@@ -64,7 +64,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         } else if (strChatArray == null) {
             sendNotification(notificationTitle, notificationBody);
-        }
+        }*/
 
     }
 

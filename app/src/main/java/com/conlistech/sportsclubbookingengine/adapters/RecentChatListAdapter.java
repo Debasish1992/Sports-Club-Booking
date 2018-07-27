@@ -45,6 +45,7 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.tvFullname.setText(mArrayList.get(position).getUserFullName());
+        viewHolder.tvMessage.setText(mArrayList.get(position).getReceiverLastMsg());
         //   viewHolder.tvFavSport.setText(mArrayList.get(position).getFavSport());
 
         if (position == 1 || position == 4) {

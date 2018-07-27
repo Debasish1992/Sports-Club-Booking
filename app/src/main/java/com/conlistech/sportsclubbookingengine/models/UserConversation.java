@@ -6,6 +6,7 @@ public class UserConversation implements Serializable{
 
     String userId, userFullName, channelID, userImage;
     Boolean isOnline;
+    String receiverLastMsg;
 
     public String getUserId() {
         return userId;
@@ -45,5 +46,13 @@ public class UserConversation implements Serializable{
 
     public void setOnline(Boolean online) {
         isOnline = online;
+    }
+
+    public String getReceiverLastMsg() {
+        return receiverLastMsg;
+    }
+
+    public void setReceiverLastMsg(String receiverLastMsg) {
+        this.receiverLastMsg = receiverLastMsg;
     }
 }

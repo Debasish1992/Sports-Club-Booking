@@ -175,7 +175,7 @@ public class AddTochatUserActivity extends AppCompatActivity
 
         randomChannelID();
         RecentChatListActivity recentChatListActivity = new RecentChatListActivity();
-        recentChatListActivity.storeConversationInfo(String.valueOf(getRandomKey()), getCurrentUserDetails(), getReceiverDetails(user));
+        recentChatListActivity.storeConversationInfo(getCurrentUserDetails(), getReceiverDetails(user));
 
         Intent i = new Intent(this, RecentChatListActivity.class);
         startActivity(i);
@@ -188,6 +188,7 @@ public class AddTochatUserActivity extends AppCompatActivity
         userConversation.setUserFullName(userModel.getUserFullName());
         userConversation.setChannelID(randomChanelId);
         userConversation.setOnline(false);
+        userConversation.setReceiverLastMsg("Start your first chat.");
         userConversation.setUserImage("https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg");
         return userConversation;
     }
@@ -199,6 +200,7 @@ public class AddTochatUserActivity extends AppCompatActivity
         userConversation.setUserFullName(prefs.getString(Constants.USER_FULL_NAME, null));
         userConversation.setChannelID(randomChanelId);
         userConversation.setOnline(false);
+        userConversation.setReceiverLastMsg("Start your first chat.");
         userConversation.setUserImage("https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg");
         return userConversation;
     }

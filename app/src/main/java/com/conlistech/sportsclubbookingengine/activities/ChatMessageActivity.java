@@ -30,7 +30,6 @@ import android.widget.Toast;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.ChatMessageAdapter;
-import com.conlistech.sportsclubbookingengine.adapters.ChatMessageListAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.RecentChatListAdapter;
 import com.conlistech.sportsclubbookingengine.models.BaseMessage;
 import com.conlistech.sportsclubbookingengine.models.ChatModel;
@@ -120,11 +119,11 @@ public class ChatMessageActivity extends AppCompatActivity {
         // Initializing the views
         initViews();
 
-        // Setting up the adapter
-        setUpAdapter();
-
         // Calling the fetch messages function
         setActivityData();
+
+        // Setting up the adapter
+        setUpAdapter();
 
         Constants.CHAT_USER_ID = getCurrentUserId();
         Constants.IS_USER_ONLINE = true;
@@ -135,7 +134,6 @@ public class ChatMessageActivity extends AppCompatActivity {
                 refreshREcyclerViewIndex();
             }
         });*/
-
 
 
     }
@@ -176,14 +174,6 @@ public class ChatMessageActivity extends AppCompatActivity {
                     userArray.add(chatModel);
                 }
 
-                /*Collections.sort(userArray, new Comparator<ChatModel>() {
-                    @Override
-                    public int compare(ChatModel first, ChatModel second) {
-                        return first.getTimeStamp().compareToIgnoreCase(second.getTimeStamp());
-                    }
-                });*/
-
-
                 setUpAdapter();
                 LoaderUtils.dismissProgress();
             }
@@ -197,20 +187,64 @@ public class ChatMessageActivity extends AppCompatActivity {
         });
     }
 
+    public String getLastReceiverMsg() {
+        String mStrLastMsg = "";
+        if (userArray.size() > 0) {
+            mStrLastMsg = userArray.get(userArray.size() - 1).getChatMessage();
+        } else {
+            mStrLastMsg = "Start your first chat.";
+        }
+        return mStrLastMsg;
+    }
+
+    public UserConversation getCurrentUserDetails() {
+        UserConversation userConversation1 = new UserConversation();
+        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        userConversation1.setUserId(prefs.getString(Constants.USER_ID, null));
+        userConversation1.setUserFullName(prefs.getString(Constants.USER_FULL_NAME, null));
+        userConversation1.setChannelID(userConversation.getChannelID());
+        userConversation1.setOnline(false);
+        userConversation1.setReceiverLastMsg(getLastReceiverMsg());
+        userConversation1.setUserImage("https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg");
+        return userConversation1;
+    }
+
+
     // Setting up the adapter
     public void setUpAdapter() {
         chatMessageAdapter = new ChatMessageAdapter(ChatMessageActivity.this,
                 getCurrentUserId(),
                 userArray);
+
         if (userArray.size() > 0) {
-            //mMessageRecycler.setVisibility(RecyclerView.VISIBLE);
+            mMessageRecycler.setVisibility(RecyclerView.VISIBLE);
+            layNoFriendsFound.setVisibility(RelativeLayout.GONE);
             mMessageRecycler.setAdapter(chatMessageAdapter);
             refreshREcyclerViewIndex();
+            storeLastMsgInConversation(getCurrentUserDetails(), userConversation);
         } else {
-            Toast.makeText(ChatMessageActivity.this, "No Chat Found", Toast.LENGTH_LONG).show();
-            //mMessageRecycler.setVisibility(RecyclerView.GONE);
-            //layNoFriendsFound.setVisibility(RelativeLayout.VISIBLE);
+            // Toast.makeText(ChatMessageActivity.this, "No Chat Found", Toast.LENGTH_LONG).show();
+            mMessageRecycler.setVisibility(RecyclerView.GONE);
+            layNoFriendsFound.setVisibility(RelativeLayout.VISIBLE);
         }
+    }
+
+
+    public void storeLastMsgInConversation(UserConversation senderConversation,
+                                           UserConversation receiverConversation) {
+
+        String lastMessage = senderConversation.getReceiverLastMsg();
+        String senderId = senderConversation.getUserId();
+        String receiverId = receiverConversation.getUserId();
+
+        DatabaseReference mDatabaseMessagesUpdateLastMessage =
+                FirebaseDatabase.getInstance().getReference("conversation").child(senderId).child(receiverId);
+        mDatabaseMessagesUpdateLastMessage.child("receiverLastMsg").setValue(lastMessage);
+
+        DatabaseReference mDatabaseMessagesUpdateLastMessageReceiver =
+                FirebaseDatabase.getInstance().getReference("conversation").child(receiverId).child(senderId);
+
+        mDatabaseMessagesUpdateLastMessageReceiver.child("receiverLastMsg").setValue(lastMessage);
     }
 
     public void refreshREcyclerViewIndex() {

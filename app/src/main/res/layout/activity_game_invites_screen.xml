@@ -60,6 +60,7 @@
             android:layout_marginTop="20dp"
             android:background="@color/md_green_300"
             android:text="Share Game"
+            android:visibility="gone"
             android:textColor="@color/white" />
 
     </RelativeLayout>

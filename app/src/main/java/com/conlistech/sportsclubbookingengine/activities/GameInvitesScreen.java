@@ -66,6 +66,7 @@ public class GameInvitesScreen extends AppCompatActivity {
         layNoFriendsFound.setVisibility(RelativeLayout.GONE);
         inviteText = (TextView) toolbar.findViewById(R.id.toolbar_inviteText);
         gameInvitesScreen = this;
+        btnShareGame.setVisibility(View.VISIBLE);
 
         initViews();
 

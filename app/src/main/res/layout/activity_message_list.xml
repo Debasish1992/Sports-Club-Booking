@@ -84,7 +84,7 @@
             android:id="@+id/reyclerview_message_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:scrollbars="none" />
 
     </LinearLayout>
@@ -101,8 +101,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="No Conversaton with the User!!!
-Start your first chat with the user."
+            android:text="Initiate your first conversation !!!"
             android:textColor="@color/md_orange_500"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -134,7 +133,7 @@ Start your first chat with the user."
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:hint="Enter message..."
+            android:hint="Start a conversation"
             android:maxLines="6" />
 
         <ImageButton

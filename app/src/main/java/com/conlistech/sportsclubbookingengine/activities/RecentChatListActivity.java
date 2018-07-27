@@ -3,6 +3,7 @@ package com.conlistech.sportsclubbookingengine.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +54,11 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
     TextView inviteText;
     @BindView(R.id.fab_add)
     FloatingActionButton mBtnAdd;
-
+    @BindView(R.id.btnGoShare)
+    Button btnShareGame;
+    @BindView(R.id.tvNoFriendFound)
+    TextView mTxtNoFriendFound;
+    SharedPreferences prefs;
 
     @OnClick(R.id.fab_add)
     void addFriend() {
@@ -69,6 +75,8 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
         layNoFriendsFound.setVisibility(RelativeLayout.GONE);
         inviteText = (TextView) toolbar.findViewById(R.id.toolbar_inviteText);
         inviteText.setVisibility(View.GONE);
+        btnShareGame.setVisibility(View.GONE);
+        prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
 
         initViews();
 
@@ -84,25 +92,41 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
 
     // Initializing the views
     private void initViews() {
+        mTxtNoFriendFound.setText("OOPS !! We have not found any teammates associated with your chat. Add your teammates to chat list.");
         rcvRecentChatList.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rcvRecentChatList.setLayoutManager(layoutManager);
     }
 
-    public void storeConversationInfo(String randomKey,
-                                      UserConversation senderConversation, UserConversation receiverConversation) {
+    public void storeConversationInfo(UserConversation senderConversation, UserConversation receiverConversation) {
 
         DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("conversation");
 
-        mDatabaseMessages.child(senderConversation.getUserId()).child(randomKey).setValue(receiverConversation);
+        // mDatabaseMessages.child(senderConversation.getUserId()).child(randomKey).setValue(receiverConversation);
+        mDatabaseMessages.child(senderConversation.getUserId()).child(receiverConversation.getUserId())
+                .setValue(receiverConversation);
 
         DatabaseReference mDatabaseMessagesSender = FirebaseDatabase.getInstance().getReference("conversation");
-        mDatabaseMessagesSender.child(receiverConversation.getUserId()).child(randomKey).setValue(senderConversation);
+        mDatabaseMessagesSender.child(receiverConversation.getUserId()).child(senderConversation.getUserId())
+                .setValue(senderConversation);
+    }
+
+    public void storeLastMsgInConversation(UserConversation senderConversation,
+                                           UserConversation receiverConversation) {
+
+        DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("conversation");
+
+        // mDatabaseMessages.child(senderConversation.getUserId()).child(randomKey).setValue(receiverConversation);
+        mDatabaseMessages.child(senderConversation.getUserId()).child(receiverConversation.getUserId())
+                .setValue(receiverConversation);
+
+        DatabaseReference mDatabaseMessagesSender = FirebaseDatabase.getInstance().getReference("conversation");
+        mDatabaseMessagesSender.child(senderConversation.getUserId()).child(receiverConversation.getUserId())
+                .setValue(senderConversation);
     }
 
     //
     public String getCurrentUserId() {
-        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         return prefs.getString(Constants.USER_ID, null);
     }
 
@@ -114,7 +138,7 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
 
     public void getAllRecentChats() {
         LoaderUtils.showProgressBar(RecentChatListActivity.this, "Please wait while loading...");
-        userArray = new ArrayList<>();
+
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("conversation")
                 .child(getCurrentUserId());
         //  .child("my_teamates").child(getCurrentUserId());
@@ -123,6 +147,7 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                userArray = new ArrayList<>();
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     UserConversation usersCon = noteDataSnapshot.getValue(UserConversation.class);
                     userArray.add(usersCon);
@@ -150,7 +175,7 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
             recentChatListadapter.setClickListener(this);
             rcvRecentChatList.setAdapter(recentChatListadapter);
         } else {
-            Toast.makeText(RecentChatListActivity.this, "No Teammates Found", Toast.LENGTH_LONG).show();
+            //  Toast.makeText(RecentChatListActivity.this, "No Teammates Found", Toast.LENGTH_LONG).show();
             inviteText.setVisibility(TextView.GONE);
             rcvRecentChatList.setVisibility(RecyclerView.GONE);
             layNoFriendsFound.setVisibility(RelativeLayout.VISIBLE);
@@ -173,7 +198,7 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
 
         Intent intent = new Intent(this, ChatMessageActivity.class);
         intent.putExtra("userConversation", user);
-            startActivity(intent);
+        startActivity(intent);
     }
 
 }
