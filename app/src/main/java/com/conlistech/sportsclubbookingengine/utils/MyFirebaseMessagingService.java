@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -20,6 +21,9 @@ import com.conlistech.sportsclubbookingengine.activities.LandingScreen;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.facebook.stetho.inspector.network.ResponseHandlingInputStream.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -30,16 +34,43 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         String notificationTitle = null, notificationBody = null;
+        String strChatArray[] = new String[200];
+        List<String> tempCityList = null;
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             notificationTitle = remoteMessage.getNotification().getTitle();
             notificationBody = remoteMessage.getNotification().getBody();
+
+            if (notificationBody.contains("-")) {
+                strChatArray = notificationBody.split("-");
+                // tempCityList = Arrays.asList(strChatArray);
+                //notificationBody = tempCityList.get(0);
+            }
         }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(notificationTitle, notificationBody);
+
+        if (strChatArray[1].equalsIgnoreCase("ChatMessage") &&
+                Constants.CHAT_USER_ID == null &&
+                strChatArray[2].equalsIgnoreCase(getCurrentUserId()) &&
+                !Constants.IS_USER_ONLINE) {
+            notificationBody = strChatArray[0];
+            sendNotification(notificationTitle, notificationBody);
+        } else if (strChatArray[1].equalsIgnoreCase("ChatMessage") &&
+                Constants.CHAT_USER_ID != null &&
+                strChatArray[3].equalsIgnoreCase(Constants.CHAT_USER_ID)) {
+
+        } else if (strChatArray == null) {
+            sendNotification(notificationTitle, notificationBody);
+        }
+
+    }
+
+    public String getCurrentUserId() {
+        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
+        return prefs.getString(Constants.USER_ID, null);
     }
 
 

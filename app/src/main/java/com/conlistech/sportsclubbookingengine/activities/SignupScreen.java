@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -263,7 +264,10 @@ public class SignupScreen extends AppCompatActivity {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
         // pushing user to 'users' node using the userId
         mDatabase.child(userId).setValue(userModel);
+        // pushing user to 'users' node using the userId
+        mDatabase.child(userId).setValue(userModel);
     }
+
 
 
     /**

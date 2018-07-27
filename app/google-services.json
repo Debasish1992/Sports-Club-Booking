@@ -23,8 +23,12 @@
           }
         },
         {
-          "client_id": "431550388392-nup48trh3sb1k50s4aprlrm2tuhadlh3.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "431550388392-ntvsofkgjc0s8cdl25t25othcddoc0ts.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.conlistech.sportsclubbookingengine",
+            "certificate_hash": "efb4d5572b5898b2f1d754ea9db05f52ff80be8d"
+          }
         },
         {
           "client_id": "431550388392-nup48trh3sb1k50s4aprlrm2tuhadlh3.apps.googleusercontent.com",

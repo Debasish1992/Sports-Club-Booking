@@ -5,6 +5,10 @@ public class UserModel {
     String userId, userEmail, userPhoneNumber, userFullName, favSport, notificationToken;
     boolean profile_visibility, contact_visibility;
 
+    public UserModel() {
+
+    }
+
     public String getNotificationToken() {
         return notificationToken;
     }
