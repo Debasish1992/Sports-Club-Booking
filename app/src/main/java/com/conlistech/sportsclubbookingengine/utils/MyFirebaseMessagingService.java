@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.activities.LandingScreen;
+import com.conlistech.sportsclubbookingengine.activities.RecentChatListActivity;
 import com.conlistech.sportsclubbookingengine.activities.TeammatesScreen;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -53,43 +54,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (remoteMessage.getData().size() > 0) {
                 data = remoteMessage.getData();
                 messageType = data.get(Constants.MESSAGE_TYPE);
+
+                if (messageType != null && messageType.equalsIgnoreCase("ChatMessage")) {
+                    receiverId = data.get(Constants.RECEIVER_ID);
+                    senderId = data.get(Constants.SENDER_ID);
+                }
             }
+
+            String currentUserId = getCurrentUserId();
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             notificationTitle = remoteMessage.getNotification().getTitle();
             notificationBody = remoteMessage.getNotification().getBody();
 
-            if (notificationBody.contains("-")) {
-                strChatArray = notificationBody.split("-");
-                // tempCityList = Arrays.asList(strChatArray);
-                //notificationBody = tempCityList.get(0);
-            }
         }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
 
-        if (strChatArray != null &&
-                strChatArray.length > 0 &&
-                strChatArray[1].equalsIgnoreCase("ChatMessage") &&
+        if (messageType.equalsIgnoreCase("ChatMessage") &&
                 Constants.CHAT_USER_ID == null &&
-                strChatArray[2].equalsIgnoreCase(getCurrentUserId()) &&
+                receiverId.equalsIgnoreCase(getCurrentUserId()) &&
                 !Constants.IS_USER_ONLINE) {
-            notificationBody = strChatArray[0];
+
             sendNotification(notificationTitle, notificationBody);
-        } else if (strChatArray != null &&
-                strChatArray.length > 0 &&
-                strChatArray[1].equalsIgnoreCase("ChatMessage") &&
+        } else if (messageType.equalsIgnoreCase("ChatMessage") &&
                 Constants.CHAT_USER_ID != null &&
-                strChatArray[3].equalsIgnoreCase(Constants.CHAT_USER_ID)) {
+                senderId.equalsIgnoreCase(Constants.CHAT_USER_ID)) {
         } else if (strChatArray == null) {
             if (!TextUtils.isEmpty(messageType) &&
                     messageType.equalsIgnoreCase("Teammate Request")) {
                 senderId = data.get(Constants.SENDER_ID);
                 senderName = notificationTitle;
-                Constants.isTeammateRequestNotification = true;
+                sendNotification(notificationTitle, notificationBody);
             }
-            sendNotification(notificationTitle, notificationBody);
         }
-
     }
 
     public String getCurrentUserId() {
@@ -103,7 +100,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.app_logo);
         Intent intent = null;
         if (messageType != null && messageType.equalsIgnoreCase("Teammate Request")) {
+            Constants.isTeammateRequestNotification = true;
             intent = new Intent(this, TeammatesScreen.class);
+        } else if (messageType != null && messageType.equalsIgnoreCase("ChatMessage")) {
+            intent = new Intent(this, RecentChatListActivity.class);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

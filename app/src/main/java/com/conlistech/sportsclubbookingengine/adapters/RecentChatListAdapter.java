@@ -48,7 +48,7 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
         viewHolder.tvMessage.setText(mArrayList.get(position).getReceiverLastMsg());
         //   viewHolder.tvFavSport.setText(mArrayList.get(position).getFavSport());
 
-        if (position == 1 || position == 4) {
+       /* if (position == 1 || position == 4) {
             viewHolder.tvUnreadMsgs.setVisibility(View.VISIBLE);
         } else {
             viewHolder.tvUnreadMsgs.setVisibility(View.GONE);
@@ -58,7 +58,7 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
             viewHolder.mImgOnline.setImageResource(R.drawable.circle_small_green);
         } else {
             viewHolder.mImgOnline.setImageResource(R.drawable.circle_small_grey);
-        }
+        }*/
 
         /*viewHolder.cbSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

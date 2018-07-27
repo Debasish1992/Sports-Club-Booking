@@ -21,7 +21,7 @@ public class Constants {
     public static final String TEAMMATE_REQUEST_TABLE = "teammate_request";
 
     public static final String SENDER_ID = "sender_user_id";
-    public static final String RECEIVER_ID = null;
+    public static final String RECEIVER_ID = "receiver_user_id";
     public static final String CHANNEL_ID = null;
     public static final String SENDER_NAME = "sender_user_name";
     public static final String RECEIVER_NAME = null;
