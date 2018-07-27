@@ -96,6 +96,7 @@ public class GameInvitations
                     GameModel games = gameData.getValue(GameModel.class);
                     gameInvitationArrayList.add(games);
                 }
+
                 setUpAdapter();
                 LoaderUtils.dismissProgress();
             }

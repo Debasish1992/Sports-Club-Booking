@@ -179,6 +179,7 @@ public class AddTochatUserActivity extends AppCompatActivity
 
         Intent i = new Intent(this, RecentChatListActivity.class);
         startActivity(i);
+        finish();
     }
 
     public UserConversation getReceiverDetails(UserModel userModel) {

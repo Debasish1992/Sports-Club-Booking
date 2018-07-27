@@ -35,6 +35,8 @@ public class Constants {
 
     public static final String GAME_ROLE_CREATOR = "Creator";
     public static final String GAME_ROLE_PLAYER = "Teammate";
+    public static String CHAT_USER_ID = null;
+    public static boolean IS_USER_ONLINE = false;
 
 
 

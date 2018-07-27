@@ -1,6 +1,8 @@
 package com.conlistech.sportsclubbookingengine.models;
 
-public class UserConversation {
+import java.io.Serializable;
+
+public class UserConversation implements Serializable{
 
     String userId, userFullName, channelID, userImage;
     Boolean isOnline;

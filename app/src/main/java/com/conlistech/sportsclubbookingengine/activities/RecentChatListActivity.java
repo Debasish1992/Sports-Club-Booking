@@ -64,6 +64,7 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_invites_screen);
         ButterKnife.bind(this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Conversations");
         layNoFriendsFound.setVisibility(RelativeLayout.GONE);
         inviteText = (TextView) toolbar.findViewById(R.id.toolbar_inviteText);
@@ -105,12 +106,19 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
         return prefs.getString(Constants.USER_ID, null);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
     public void getAllRecentChats() {
         LoaderUtils.showProgressBar(RecentChatListActivity.this, "Please wait while loading...");
         userArray = new ArrayList<>();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("conversation").child(getCurrentUserId());
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("conversation")
+                .child(getCurrentUserId());
         //  .child("my_teamates").child(getCurrentUserId());
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -136,6 +144,8 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
     // Setting up the adapter
     public void setUpAdapter() {
         if (userArray.size() > 0) {
+            rcvRecentChatList.setVisibility(RecyclerView.VISIBLE);
+            layNoFriendsFound.setVisibility(RelativeLayout.GONE);
             recentChatListadapter = new RecentChatListAdapter(RecentChatListActivity.this, userArray);
             recentChatListadapter.setClickListener(this);
             rcvRecentChatList.setAdapter(recentChatListadapter);
@@ -158,41 +168,12 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
     public void onItemClick(View view, int position) {
         final UserConversation user = recentChatListadapter.mArrayList.get(position);
 
-        ChatMessageActivity chatMessageActivity = new ChatMessageActivity();
-        chatMessageActivity.storeChatInfo(user.getChannelID(), getChatDetails(user));
+       /* ChatMessageActivity chatMessageActivity = new ChatMessageActivity();
+        chatMessageActivity.storeChatInfo(user.getChannelID(), getChatDetails(user));*/
 
         Intent intent = new Intent(this, ChatMessageActivity.class);
-        startActivity(intent);
+        intent.putExtra("userConversation", user);
+            startActivity(intent);
     }
 
-    public ChatModel getChatDetails(UserConversation user) {
-        ChatModel chatModel = new ChatModel();
-        //   SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
-        chatModel.setSenderId(getCurrentUserId());
-        chatModel.setReceiverID(user.getUserId());
-        chatModel.setTimeStamp(getTimestampInUTC());
-        chatModel.setChatMessage("message");
-        chatModel.setMessageId(randomMessageID());
-        chatModel.setReceiverFullName(user.getUserFullName());
-        chatModel.setReceiverImage(user.getUserImage());
-        return chatModel;
-    }
-
-    private String getTimestampInUTC() {
-        Date myDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.setTime(myDate);
-        Date time = calendar.getTime();
-        SimpleDateFormat outputFmt = new SimpleDateFormat("MMM dd, yyy h:mm a zz");
-        String dateAsString = outputFmt.format(time);
-        return dateAsString;
-    }
-
-
-    public String randomMessageID() {
-        // String easy = RandomString.digits + "ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx";
-        RandomString randoKey = new RandomString(32, new SecureRandom());
-        return randoKey.nextString();
-    }
 }

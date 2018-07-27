@@ -1,6 +1,7 @@
 package com.conlistech.sportsclubbookingengine.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.models.BaseMessage;
+import com.conlistech.sportsclubbookingengine.models.ChatModel;
+import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -20,14 +23,16 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private ArrayList<BaseMessage> mArrayList;
+    private ArrayList<ChatModel> mArrayList;
     Context context;
     DatabaseReference mDatabase;
+    String currentUserID;
     private RecentChatListAdapter.ItemClickListener mClickListener;
 
 
-    public ChatMessageAdapter(Context ctx, ArrayList<BaseMessage> userModels) {
+    public ChatMessageAdapter(Context ctx, String currentUserID, ArrayList<ChatModel> userModels) {
         this.mArrayList = userModels;
+        this.currentUserID = currentUserID;
         this.context = ctx;
 
     }
@@ -38,7 +43,6 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
                                          int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.item_message, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -46,7 +50,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
     @Override
     public int getItemViewType(int position) {
 
-        if (mArrayList.get(position).getUser().equalsIgnoreCase("sender")) {
+        if (mArrayList.get(position).getSenderId().equalsIgnoreCase(currentUserID)) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -63,12 +67,12 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
             case VIEW_TYPE_MESSAGE_SENT:
                 viewHolder.mLytSend.setVisibility(View.VISIBLE);
                 viewHolder.mLytReceive.setVisibility(View.GONE);
-                viewHolder.tvMessageSend.setText(mArrayList.get(position).getmArrMessageList().get(position).getMessage());
+                viewHolder.tvMessageSend.setText(mArrayList.get(position).getChatMessage());
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 viewHolder.mLytReceive.setVisibility(View.VISIBLE);
                 viewHolder.mLytSend.setVisibility(View.GONE);
-                viewHolder.tvMessageReceive.setText(mArrayList.get(position).getmArrMessageList().get(position).getMessage());
+                viewHolder.tvMessageReceive.setText(mArrayList.get(position).getChatMessage());
                 break;
         }
     }
