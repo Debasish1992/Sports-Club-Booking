@@ -100,6 +100,11 @@ public class ChatMessageActivity extends AppCompatActivity {
         super.onBackPressed();
         Constants.CHAT_USER_ID = null;
         Constants.IS_USER_ONLINE = false;
+        Constants.CHAT_CHANNEL_ID = null;
+        Constants.RECEIVER_USER_FULLNAME = null;
+        Constants.CHAT_RECEIVER_ID = null;
+        Constants.SENDER_USER_FULLNAME = null;
+        setAvailabilityStatusOffline();
     }
 
 
@@ -108,6 +113,13 @@ public class ChatMessageActivity extends AppCompatActivity {
         super.onPause();
         Constants.CHAT_USER_ID = null;
         Constants.IS_USER_ONLINE = false;
+        setAvailabilityStatusOffline();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setAvailabilityStatusOnline();
     }
 
     @Override
@@ -127,19 +139,59 @@ public class ChatMessageActivity extends AppCompatActivity {
 
         Constants.CHAT_USER_ID = getCurrentUserId();
         Constants.IS_USER_ONLINE = true;
+    }
 
-        /*mEdtTextMsg.setOnClickListener(new View.OnClickListener() {
+
+    /**
+     * Getting User Online Status
+     */
+    public void getUserOnLIneStatus(){
+        DatabaseReference mDatabaseUserStaus = FirebaseDatabase.getInstance()
+                .getReference("online_status")
+                .child(userConversation.getChannelID())
+                .child(userConversation.getUserId())
+                .child("online");
+
+        mDatabaseUserStaus.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                refreshREcyclerViewIndex();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isOnline = dataSnapshot.getValue(Boolean.class);
+                if(isOnline){
+                    mTvIsOnline.setVisibility(TextView.VISIBLE);
+                    mTvIsOnline.setText("Online");
+                }else{
+                    mTvIsOnline.setVisibility(TextView.GONE);
+                }
             }
-        });*/
+            @Override
+            public void onCancelled(DatabaseError error) {
+                LoaderUtils.dismissProgress();
+                // Failed to read value
+                Log.w("HomeScreen", "Failed to read value.", error.toException());
+            }
+        });
 
 
     }
 
+    /**
+     * Getting all the necessary data for the activity to set
+     */
     private void setActivityData() {
         userConversation = (UserConversation) getIntent().getSerializableExtra("userConversation");
+        if (userConversation == null) {
+            userConversation = new UserConversation();
+            userConversation.setChannelID(Constants.CHAT_CHANNEL_ID);
+            userConversation.setUserFullName(Constants.SENDER_USER_FULLNAME);
+            userConversation.setUserId(Constants.CHAT_RECEIVER_ID);
+        }
+
+        // Setting user online status
+        setAvailabilityStatusOnline();
+
+        // getting user online status
+        getUserOnLIneStatus();
+
         getAllChatMessages();
         //Setting the Data
         mTvTitle.setText(userConversation.getUserFullName());
@@ -159,8 +211,6 @@ public class ChatMessageActivity extends AppCompatActivity {
     private void getAllChatMessages() {
         LoaderUtils.showProgressBar(ChatMessageActivity.this, "Please wait while loading...");
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("chats");
-        // .child(userConversation.getChannelID());
-
         Query query = mDatabase.child(userConversation.getChannelID()).orderByChild("timeStamp");
 
         query.addValueEventListener(new ValueEventListener() {
@@ -215,13 +265,16 @@ public class ChatMessageActivity extends AppCompatActivity {
         chatMessageAdapter = new ChatMessageAdapter(ChatMessageActivity.this,
                 getCurrentUserId(),
                 userArray);
-
         if (userArray.size() > 0) {
             mMessageRecycler.setVisibility(RecyclerView.VISIBLE);
             layNoFriendsFound.setVisibility(RelativeLayout.GONE);
             mMessageRecycler.setAdapter(chatMessageAdapter);
             refreshREcyclerViewIndex();
-            storeLastMsgInConversation(getCurrentUserDetails(), userConversation);
+            if(!Constants.isChatNotification){
+                storeLastMsgInConversation(getCurrentUserDetails(), userConversation);
+            }else{
+                Constants.isChatNotification = false;
+            }
         } else {
             // Toast.makeText(ChatMessageActivity.this, "No Chat Found", Toast.LENGTH_LONG).show();
             mMessageRecycler.setVisibility(RecyclerView.GONE);
@@ -331,6 +384,7 @@ public class ChatMessageActivity extends AppCompatActivity {
         chatModel.setReceiverID(user.getUserId());
         chatModel.setSenderFullName(getCurrentUserName());
         chatModel.setTimeStamp(getTimestampInUTC());
+        chatModel.setChannelId(user.getChannelID());
         chatModel.setChatMessage(mEdtTextMsg.getText().toString().trim());
         chatModel.setReceiverFullName(user.getUserFullName());
         chatModel.setReceiverImage(user.getUserImage());
@@ -365,6 +419,28 @@ public class ChatMessageActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
         return String.valueOf(millis);
+    }
+
+    /**
+     * Setting user online status as OnLIne
+     */
+    public void setAvailabilityStatusOnline(){
+        DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("online_status");
+        mDatabaseMessages.child(userConversation.getChannelID())
+                .child(getCurrentUserId())
+                .child("online")
+                .setValue(true);
+    }
+
+    /**
+     * Setting user online status as OffLine
+     */
+    public void setAvailabilityStatusOffline(){
+        DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("online_status");
+        mDatabaseMessages.child(userConversation.getChannelID())
+                .child(getCurrentUserId())
+                .child("online")
+                .setValue(false);
     }
 
 }

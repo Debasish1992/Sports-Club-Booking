@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.activities.ChatMessageActivity;
 import com.conlistech.sportsclubbookingengine.activities.LandingScreen;
 import com.conlistech.sportsclubbookingengine.activities.RecentChatListActivity;
 import com.conlistech.sportsclubbookingengine.activities.TeammatesScreen;
@@ -55,9 +56,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 data = remoteMessage.getData();
                 messageType = data.get(Constants.MESSAGE_TYPE);
 
-                if (messageType != null && messageType.equalsIgnoreCase("ChatMessage")) {
+                if (messageType != null &&
+                        messageType.equalsIgnoreCase("ChatMessage")) {
                     receiverId = data.get(Constants.RECEIVER_ID);
                     senderId = data.get(Constants.SENDER_ID);
+                    channelId = data.get(Constants.CHANNEL_ID);
+                    receiverName = data.get(Constants.RECEIVER_NAME);
+                    senderName = data.get(Constants.SENDER_NAME);
                 }
             }
 
@@ -74,7 +79,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Constants.CHAT_USER_ID == null &&
                 receiverId.equalsIgnoreCase(getCurrentUserId()) &&
                 !Constants.IS_USER_ONLINE) {
-
             sendNotification(notificationTitle, notificationBody);
         } else if (messageType.equalsIgnoreCase("ChatMessage") &&
                 Constants.CHAT_USER_ID != null &&
@@ -103,7 +107,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Constants.isTeammateRequestNotification = true;
             intent = new Intent(this, TeammatesScreen.class);
         } else if (messageType != null && messageType.equalsIgnoreCase("ChatMessage")) {
-            intent = new Intent(this, RecentChatListActivity.class);
+            Constants.CHAT_CHANNEL_ID = channelId;
+            Constants.isChatNotification = true;
+            Constants.CHAT_RECEIVER_ID = senderId;
+            Constants.SENDER_USER_FULLNAME = senderName;
+            intent = new Intent(this, ChatMessageActivity.class);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

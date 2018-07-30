@@ -2,7 +2,8 @@ package com.conlistech.sportsclubbookingengine.models;
 
 public class ChatModel {
 
-    String senderId, receiverID, timeStamp, chatMessage,senderFullName, receiverFullName, receiverImage, messageId;
+    String senderId, receiverID, timeStamp, chatMessage,senderFullName,
+            receiverFullName, receiverImage, messageId, channelId;
 
     public String getSenderId() {
         return senderId;
@@ -66,5 +67,13 @@ public class ChatModel {
 
     public void setMessageId(String messageId) {
         this.messageId = messageId;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 }

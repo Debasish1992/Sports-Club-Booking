@@ -22,9 +22,9 @@ public class Constants {
 
     public static final String SENDER_ID = "sender_user_id";
     public static final String RECEIVER_ID = "receiver_user_id";
-    public static final String CHANNEL_ID = null;
+    public static final String CHANNEL_ID = "channelId";
     public static final String SENDER_NAME = "sender_user_name";
-    public static final String RECEIVER_NAME = null;
+    public static final String RECEIVER_NAME = "receiver_user_fullName";
     public static final String MESSAGE_TYPE = "notification_type";
 
 
@@ -45,6 +45,12 @@ public class Constants {
     public static String CHAT_USER_ID = null;
     public static boolean IS_USER_ONLINE = false;
     public static boolean isTeammateRequestNotification = false;
+    public static boolean isChatNotification = false;
+    public static String CHAT_CHANNEL_ID = null;
+    public static String CHAT_RECEIVER_ID = null;
+    public static String RECEIVER_USER_FULLNAME = null;
+    public static String SENDER_USER_FULLNAME = null;
+
 
 
 
