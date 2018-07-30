@@ -3,6 +3,7 @@ package com.conlistech.sportsclubbookingengine.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.ChatUserOnlineModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
@@ -50,6 +52,7 @@ public class AddTochatUserActivity extends AppCompatActivity
     SqliteHelper sqliteHelper;
     ArrayList<String> getAllTeammates;
     private int MAX_LENGTH = 14;
+    String chatUserId = null;
 
 
     @Override
@@ -171,15 +174,69 @@ public class AddTochatUserActivity extends AppCompatActivity
     @Override
     public void onClick(View v, int position) {
         final UserModel user = itemAdapter.mFilteredList.get(position);
-        TeammatesScreen.userId = user.getUserId();
+        chatUserId = user.getUserId();
+        checkChatExistence(user);
+    }
 
+    /**
+     * Function responsible for initiating the chat
+     *
+     * @param user
+     */
+    public void initiateChat(UserModel user) {
         randomChannelID();
         RecentChatListActivity recentChatListActivity = new RecentChatListActivity();
         recentChatListActivity.storeConversationInfo(getCurrentUserDetails(), getReceiverDetails(user));
-
+        keepUserOnlineStatus(getReceiverDetails(user));
         Intent i = new Intent(this, RecentChatListActivity.class);
         startActivity(i);
         finish();
+    }
+
+    /**
+     * Setting user onine status
+     *
+     * @param user
+     */
+    public void keepUserOnlineStatus(UserConversation user) {
+        ChatUserOnlineModel chatUserOnlineModelSender = new ChatUserOnlineModel();
+        chatUserOnlineModelSender.setOnline(false);
+        ChatUserOnlineModel chatUserOnlineModelReceiver = new ChatUserOnlineModel();
+        chatUserOnlineModelReceiver.setOnline(false);
+        DatabaseReference mDatabaseOnlineStatus = FirebaseDatabase.getInstance().getReference("online_status");
+        mDatabaseOnlineStatus.child(user.getChannelID()).child(getCurrentUserId()).setValue(chatUserOnlineModelSender);
+        DatabaseReference mDatabaseOnlineStatusReveiver = FirebaseDatabase.getInstance().getReference("online_status");
+        mDatabaseOnlineStatusReveiver.child(user.getChannelID()).child(user.getUserId()).setValue(chatUserOnlineModelReceiver);
+    }
+
+
+    /**
+     * Function responsible for checking the chat existences
+     *
+     * @param user
+     */
+    public void checkChatExistence(final UserModel user) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("conversation")
+                .child(getCurrentUserId());
+        mDatabase.child(chatUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // TODO: handle the case where the data already exists
+                    Intent i = new Intent(AddTochatUserActivity.this, RecentChatListActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    // TODO: handle the case where the data does not yet exist
+                    initiateChat(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public UserConversation getReceiverDetails(UserModel userModel) {

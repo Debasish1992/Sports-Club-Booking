@@ -99,7 +99,6 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
     }
 
     public void storeConversationInfo(UserConversation senderConversation, UserConversation receiverConversation) {
-
         DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("conversation");
 
         // mDatabaseMessages.child(senderConversation.getUserId()).child(randomKey).setValue(receiverConversation);
