@@ -2,6 +2,7 @@ package com.conlistech.sportsclubbookingengine.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.FriendModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -182,17 +184,47 @@ public class ProfileScreen extends AppCompatActivity {
 
 
     /**
+     * Checking teammate request existence for the same user
+     *
+     * @param userId
+     * @param userModel
+     */
+    public void checkChatExistence(final String userId, final FriendModel userModel) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("teammates")
+                .child("teammate_request").child(userId);
+        mDatabase.child(getCurrentUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // TODO: handle the case where the data already exists
+                    Toast.makeText(ProfileScreen.this,
+                            "You have already sent a teammate request to " + userModel.getUserFullName(), Toast.LENGTH_SHORT).show();
+                } else {
+                    // TODO: handle the case where the data does not yet exist
+                    storeUserInfo(userId, userModel);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    /**
      * Storing user info
      *
      * @param userId
      * @param userModel
      */
-    public void storeUserInfo(String userId, UserModel userModel) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(Constants.TEAMMATE_TABLE);
-        // pushing user to 'users' node using the userId
+    public void storeUserInfo(String userId, FriendModel userModel) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance()
+                .getReference(Constants.TEAMMATE_TABLE);
         mDatabase.child(Constants.TEAMMATE_REQUEST_TABLE)
                 .child(userId)
-                .child(String.valueOf(RandomNumberGenerator.getRandomNumber()))
+                .child(getCurrentUserId())
                 .setValue(userModel);
         Toast.makeText(this, "Teammate Request Sent Successfully.", Toast.LENGTH_SHORT).show();
     }
@@ -200,17 +232,18 @@ public class ProfileScreen extends AppCompatActivity {
     // Getting Current User Details
     public void getCurrentUserDetails() {
         // Building Model
-        UserModel userModel = new UserModel();
-        userModel.setUserFullName(prefs.getString(Constants.USER_FULL_NAME, null));
-        userModel.setUserPhoneNumber(prefs.getString(Constants.USER_PHONE_NUMBER, null));
-        userModel.setUserEmail(prefs.getString(Constants.USER_EMAIL, null));
-        userModel.setUserId(prefs.getString(Constants.USER_ID, null));
-        userModel.setFavSport(prefs.getString(Constants.USER_FAV_SPORT, null));
-
+        FriendModel friendModel = new FriendModel();
+        friendModel.setUserFullName(prefs.getString(Constants.USER_FULL_NAME, null));
+        friendModel.setUserPhoneNumber(prefs.getString(Constants.USER_PHONE_NUMBER, null));
+        friendModel.setUserEmail(prefs.getString(Constants.USER_EMAIL, null));
+        friendModel.setUserId(prefs.getString(Constants.USER_ID, null));
+        friendModel.setFavSport(prefs.getString(Constants.USER_FAV_SPORT, null));
+        friendModel.setFriendUserId(userModel.getUserId());
         String favSport = prefs.getString(Constants.USER_FAV_SPORT, null);
-
         // Storing User Details as Request
-        storeUserInfo(TeammatesScreen.userId, userModel);
+
+        checkChatExistence(TeammatesScreen.userId, friendModel);
+        //storeUserInfo(TeammatesScreen.userId, friendModel);
     }
 
     @Override

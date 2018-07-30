@@ -13,6 +13,7 @@ import android.view.View;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.ItemAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.TeammatesRequestAdapter;
+import com.conlistech.sportsclubbookingengine.models.FriendModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -34,7 +35,7 @@ public class FriendRequestsScreen extends AppCompatActivity
     Toolbar toolbar;
     @BindView(R.id.rcv_teammates_requests)
     RecyclerView rcv_temamates_requests;
-    ArrayList<UserModel> userModel;
+    ArrayList<FriendModel> userModel;
     TeammatesRequestAdapter teammatesRequestAdapter;
     SharedPreferences pref;
     ArrayList<String> keyArray;
@@ -93,7 +94,7 @@ public class FriendRequestsScreen extends AppCompatActivity
                 for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
                     String key = noteDataSnapshot.getKey();
                     keyArray.add(key);
-                    UserModel users = noteDataSnapshot.getValue(UserModel.class);
+                    FriendModel users = noteDataSnapshot.getValue(FriendModel.class);
                     userModel.add(users);
                     setUpAdapter();
                 }
@@ -119,7 +120,7 @@ public class FriendRequestsScreen extends AppCompatActivity
 
     @Override
     public void onClick(View v, int position) {
-        final UserModel user = TeammatesRequestAdapter.mArrayList.get(position);
+        final FriendModel user = TeammatesRequestAdapter.mArrayList.get(position);
         TeammatesScreen.userId = user.getUserId();
         Intent i = new Intent(this, ProfileScreen.class);
         startActivity(i);
@@ -131,9 +132,9 @@ public class FriendRequestsScreen extends AppCompatActivity
 
 
     // Getting userModel
-    public UserModel getUserDetails() {
+    public FriendModel getUserDetails() {
         // Building Model
-        UserModel userModel = new UserModel();
+        FriendModel userModel = new FriendModel();
         userModel.setUserFullName(pref.getString(Constants.USER_FULL_NAME, null));
         userModel.setUserPhoneNumber(pref.getString(Constants.USER_PHONE_NUMBER, null));
         userModel.setUserEmail(pref.getString(Constants.USER_EMAIL, null));
