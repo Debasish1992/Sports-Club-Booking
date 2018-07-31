@@ -2,11 +2,19 @@ package com.conlistech.sportsclubbookingengine.models;
 
 public class UserModel {
 
-    String userId, userEmail, userPhoneNumber, userFullName, favSport, notificationToken;
+    String userId, userEmail, userPhoneNumber, userFullName, favSport, notificationToken, userProfileImage;
     boolean profile_visibility, contact_visibility;
 
     public UserModel() {
 
+    }
+
+    public String getUserProfileImage() {
+        return userProfileImage;
+    }
+
+    public void setUserProfileImage(String userProfileImage) {
+        this.userProfileImage = userProfileImage;
     }
 
     public String getNotificationToken() {

@@ -14,6 +14,7 @@ public class Constants {
     public static final String USER_FAV_SPORT = "user_fav_sport";
     public static final String USER_PROFILE_VISIBILITY = "user_profile_visibility";
     public static final String USER_CONTACTS_VISIBILITY = "user_contacts_visibility";
+    public static final String USER_PROFILE_IMAGE = "user_profile_image";
 
 
     // Firebase Constants

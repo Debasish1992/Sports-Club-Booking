@@ -149,10 +149,8 @@ public class ProfileScreen extends AppCompatActivity {
      */
     public void setUserData(UserModel userModel) {
         if (userModel != null) {
-
             // boolean isProfileVisible = userModel.isProfile_visibility();
             String userId = userModel.getUserId();
-
             if (!userModel.isProfile_visibility() &&
                     !userId.equalsIgnoreCase(getCurrentUserId())) {
                 Toast.makeText(this, "The User Profile is Private", Toast.LENGTH_SHORT).show();

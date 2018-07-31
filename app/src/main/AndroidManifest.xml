@@ -159,6 +159,8 @@
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
 
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
 
     </application>
 

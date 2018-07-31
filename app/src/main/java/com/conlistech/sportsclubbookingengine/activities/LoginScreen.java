@@ -138,12 +138,13 @@ public class LoginScreen extends AppCompatActivity {
                 String userFullName = user.getUserFullName();
                 String userPhone = user.getUserPhoneNumber();
                 String userFavSport = user.getFavSport();
+                String userProfileImage = user.getUserProfileImage();
                 boolean profileVisibility = user.isProfile_visibility();
                 boolean contactsVisibility = user.isContact_visibility();
 
                 // Storing the user details locally
                 storingUserDetails(userId, userEmail, userFullName, userPhone,
-                        userFavSport, profileVisibility, contactsVisibility );
+                        userFavSport, profileVisibility, contactsVisibility, userProfileImage );
                 onLoginSuccess();
                 Log.d("HomeScreen", "Value is: " + user.toString());
             }
@@ -164,7 +165,8 @@ public class LoginScreen extends AppCompatActivity {
                                    String phoneNumber,
                                    String userFavSport,
                                    boolean isProfileVisible,
-                                   boolean isContactsVisible){
+                                   boolean isContactsVisible,
+                                   String profileImage){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(Constants.USER_ID, userId);
@@ -174,6 +176,8 @@ public class LoginScreen extends AppCompatActivity {
         editor.putString(Constants.USER_FAV_SPORT, userFavSport);
         editor.putBoolean(Constants.USER_PROFILE_VISIBILITY, isProfileVisible);
         editor.putBoolean(Constants.USER_CONTACTS_VISIBILITY, isContactsVisible);
+        editor.putString(Constants.USER_PROFILE_IMAGE, profileImage);
+
         editor.commit();
     }
 
