@@ -17,6 +17,7 @@
         android:name="android.hardware.location.gps"
         android:required="false" />
 
+
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="27" />

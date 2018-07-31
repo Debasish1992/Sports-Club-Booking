@@ -92,7 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendNotification(notificationTitle, notificationBody);
             }
         } else if (!TextUtils.isEmpty(messageType) &&
-                messageType.equalsIgnoreCase("Teammate_Response")) {
+                        messageType.equalsIgnoreCase("Teammate_Response")) {
             senderId = data.get(Constants.SENDER_ID);
             if (currentUserId.equalsIgnoreCase(senderId)) {
                 sendNotification(notificationTitle, notificationBody);

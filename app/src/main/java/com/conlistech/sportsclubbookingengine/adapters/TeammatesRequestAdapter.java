@@ -81,7 +81,8 @@ public class TeammatesRequestAdapter extends
 
                 DatabaseReference mDatabaseTeammate_Added =
                         FirebaseDatabase.getInstance().getReference("teammates")
-                                .child("my_teamates").child(getUserId).child(getKey);
+                                .child("my_teamates").child(getUserId).child(userIdCurrent);
+
                 currentUserModel.setFriendUserId(userIdCurrent);
                 mDatabaseTeammate_Added.setValue(currentUserModel);
 
