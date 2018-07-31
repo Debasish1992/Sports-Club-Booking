@@ -80,9 +80,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_arrow_white" />
-                            <entry key="sourceFile" value="C:\Users\admin" />
+                            <entry key="outputName" value="ic_user_add_white" />
+                            <entry key="sourceFile" value="C:\Users\admin\Downloads\baseline-person_add-24px.svg" />
                           </map>
                         </option>
                       </PersistentState>

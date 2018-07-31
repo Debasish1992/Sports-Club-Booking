@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.adapters.GamePlayedAdapter;
+import com.conlistech.sportsclubbookingengine.adapters.InviteFriendList;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.FriendModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
@@ -32,6 +37,8 @@ import butterknife.OnClick;
 
 public class ProfileScreen extends AppCompatActivity {
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.tvFullName)
     TextView tvFullName;
     @BindView(R.id.tvEmailValue)
@@ -40,8 +47,12 @@ public class ProfileScreen extends AppCompatActivity {
     TextView tvUserFavSport;
     @BindView(R.id.tvPhoneValue)
     TextView tvUserPhoneNumber;
-    @BindView(R.id.ivBack)
-    ImageView ivBack;
+    @BindView(R.id.ivCall)
+    ImageView ivCall;
+    @BindView(R.id.ivEmail)
+    ImageView ivEmail;
+    @BindView(R.id.ivChat)
+    ImageView ivChat;
     @BindView(R.id.ivAddFriend)
     ImageView ivAddFriend;
     @BindView(R.id.ivLogout)
@@ -51,13 +62,18 @@ public class ProfileScreen extends AppCompatActivity {
     UserModel userModel;
     SharedPreferences prefs;
     SqliteHelper sqliteHelper;
+    GamePlayedAdapter gamePlayedAdapter;
+    ArrayList<UserModel> userArray;
+    @BindView(R.id.rcv_game_played)
+    RecyclerView rcvGamePlayed;
+    @BindView(R.id.tvNoFriendFound)
+    TextView tvNoGameNotFound;
 
-
-    @OnClick(R.id.ivBack)
+   /* @OnClick(R.id.ivBack)
     void Back() {
         TeammatesScreen.userId = null;
         ProfileScreen.this.finish();
-    }
+    }*/
 
     @OnClick(R.id.ivAddFriend)
     void addFriend() {
@@ -96,8 +112,19 @@ public class ProfileScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_screen);
         ButterKnife.bind(this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Profile");
+        tvNoGameNotFound.setVisibility(RelativeLayout.GONE);
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         sqliteHelper = new SqliteHelper(this);
+
+        //setHomeButton for the Profile screen
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        //calling recycler view
+        initViews();
 
         ArrayList<String> getAllTeammates = sqliteHelper.getAllTeammateIds();
 
@@ -115,6 +142,20 @@ public class ProfileScreen extends AppCompatActivity {
         }
 
         getUserDetails();
+        getAllGamePlayed();
+    }
+
+    // Initializing the views
+    private void initViews() {
+        rcvGamePlayed.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rcvGamePlayed.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     // Getting User Model Data
@@ -140,6 +181,48 @@ public class ProfileScreen extends AppCompatActivity {
                 // Failed to read value
             }
         });
+    }
+
+    public void getAllGamePlayed() {
+        LoaderUtils.showProgressBar(ProfileScreen.this, "Please wait while loading...");
+        userArray = new ArrayList<>();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("teammates")
+                .child("my_teamates").child(getCurrentUserId());
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for (DataSnapshot noteDataSnapshot : dataSnapshot.getChildren()) {
+                    UserModel users = noteDataSnapshot.getValue(UserModel.class);
+                    userArray.add(users);
+                }
+
+                setUpAdapter();
+                LoaderUtils.dismissProgress();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                LoaderUtils.dismissProgress();
+                // Failed to read value
+                Log.w("HomeScreen", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    // Setting up the adapter for the Game Played by User
+    public void setUpAdapter() {
+        if (userArray.size() > 0) {
+            rcvGamePlayed.setVisibility(RecyclerView.VISIBLE);
+            tvNoGameNotFound.setVisibility(RelativeLayout.GONE);
+            gamePlayedAdapter = new GamePlayedAdapter(ProfileScreen.this, userArray);
+            rcvGamePlayed.setAdapter(gamePlayedAdapter);
+        } else {
+            // Toast.makeText(GameInvitesScreen.this, "No Teammates Found", Toast.LENGTH_LONG).show();
+            rcvGamePlayed.setVisibility(RecyclerView.GONE);
+            tvNoGameNotFound.setVisibility(RelativeLayout.VISIBLE);
+        }
     }
 
     /**
@@ -250,6 +333,7 @@ public class ProfileScreen extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         TeammatesScreen.userId = null;
+        ProfileScreen.this.finish();
     }
 
     // Getting Current User Id

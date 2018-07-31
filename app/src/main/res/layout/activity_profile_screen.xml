@@ -37,29 +37,22 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="3"
                 android:background="@color/colorPrimary">
 
-                <ImageView
-                    android:id="@+id/ivBack"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_arrow_back_white_36dp" />
+                <!--android:layout_weight="3"-->
 
-                <ImageView
-                    android:id="@+id/ivAddFriend"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_person_add_white_48dp" />
+                <!-- <ImageView
+                     android:id="@+id/ivBack"
+                     android:layout_width="30dp"
+                     android:layout_height="30dp"
+                     android:layout_marginLeft="20dp"
+                     android:layout_marginTop="20dp"
+                     android:visibility="gone"
+                     android:src="@drawable/ic_arrow_back_white_36dp" />
+
+-->
 
                 <ImageView
                     android:id="@+id/ivLogout"
@@ -68,8 +61,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="20dp"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_power_settings_new_white_48dp" />
+                    android:src="@drawable/ic_power_settings_new_white_48dp"
+                    android:visibility="visible" />
 
 
                 <RelativeLayout
@@ -92,7 +85,7 @@
                         android:id="@+id/tvFullName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="10dp"
                         android:layout_toRightOf="@+id/ivPerson"
                         android:text="Debasish Kumar Das"
@@ -104,30 +97,130 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tvFullName"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/ivPerson"
-                        android:text="Debasish Kumar Das"
+                        android:text="Football"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/lyt_counts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/lyt_user_details"
-
                     android:orientation="horizontal">
 
-                </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tvTeammatesCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvTeammates"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Teammates"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tvGamelayedCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/tvGamelayed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Game Played"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyt_share"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lyt_counts"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:elevation="5dp"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/ivAddFriend"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_person_add_white_24dp" />
+
+                    <ImageView
+                        android:id="@+id/ivCall"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_call_white" />
+
+                    <ImageView
+                        android:id="@+id/ivEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_toRightOf="@+id/img_call"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_email_white" />
+
+                    <ImageView
+                        android:id="@+id/ivChat"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_toRightOf="@+id/img_email"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_message_white" />
+
+                </LinearLayout>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/layDetails"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
                 android:background="@color/white">
 
                 <TextView
@@ -138,7 +231,7 @@
                     android:layout_marginTop="20dp"
                     android:text="Email"
                     android:textColor="@color/black"
-                    android:textSize="20dp" />
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/tvEmailValue"
@@ -150,36 +243,15 @@
                     android:text="debasish.das@gmail.com" />
 
                 <TextView
-                    android:id="@+id/tvTitleUserId"
+                    android:id="@+id/tvPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvEmailValue"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
-                    android:text="Favorite Sport"
-                    android:textColor="@color/black"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/tvUserId1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvTitleUserId"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:text="debasish.das@gmail.com" />
-
-                <TextView
-                    android:id="@+id/tvPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvUserId1"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
                     android:text="Phone Number"
                     android:textColor="@color/black"
-                    android:textSize="20dp" />
-
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/tvPhoneValue"
@@ -190,8 +262,50 @@
                     android:layout_marginTop="5dp"
                     android:text="debasish.das@gmail.com" />
 
+                <TextView
+                    android:id="@+id/tvTitleGamePlayed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvPhoneValue"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/md_grey_300"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="3dp"
+                    android:text="Game Played" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTitleGamePlayed">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rcv_game_played"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:scrollIndicators="none"
+                        android:scrollbars="vertical"
+                        tools:layout_editor_absoluteX="0dp" />
+
+                    <TextView
+                        android:id="@+id/tvNoFriendFound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_centerInParent="true"
+                        android:text="No game played."
+                        android:visibility="gone"
+                        android:textColor="@color/md_orange_500"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
             </RelativeLayout>
         </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>
