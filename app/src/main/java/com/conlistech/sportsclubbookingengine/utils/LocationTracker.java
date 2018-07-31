@@ -1,5 +1,6 @@
 package com.conlistech.sportsclubbookingengine.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,8 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+
+import com.conlistech.sportsclubbookingengine.R;
 
 public class LocationTracker extends Service implements LocationListener {
 
@@ -45,6 +48,7 @@ public class LocationTracker extends Service implements LocationListener {
         getLocation();
     }
 
+    @SuppressLint("MissingPermission")
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext
@@ -61,6 +65,7 @@ public class LocationTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled
+                showSettingsAlert();
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
@@ -169,15 +174,18 @@ public class LocationTracker extends Service implements LocationListener {
                 });
 
         // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel",
+        /*alertDialog.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
-                });
+                });*/
+
+        alertDialog.setNeutralButton(R.string.cancel, null);
+        alertDialog.create().show();
 
         // Showing Alert Message
-        alertDialog.show();
+        // alertDialog.show();
     }
 
     @Override

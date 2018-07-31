@@ -19,7 +19,7 @@
         android:background="@color/white"
         android:paddingBottom="10dp">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/iv_profile_pic"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -27,7 +27,18 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chat_profile_img"
-            android:src="@drawable/icon_sample_profile" />
+            android:src="@drawable/icon_sample_profile" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/icon_sample_profile"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="0.5dp" />
 
         <LinearLayout
             android:id="@+id/lyt_name"

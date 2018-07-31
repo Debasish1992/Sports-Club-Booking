@@ -46,39 +46,6 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.tvFullname.setText(mArrayList.get(position).getUserFullName());
         viewHolder.tvMessage.setText(mArrayList.get(position).getReceiverLastMsg());
-        //   viewHolder.tvFavSport.setText(mArrayList.get(position).getFavSport());
-
-       /* if (position == 1 || position == 4) {
-            viewHolder.tvUnreadMsgs.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.tvUnreadMsgs.setVisibility(View.GONE);
-        }
-
-        if (position % 2 == 0) {
-            viewHolder.mImgOnline.setImageResource(R.drawable.circle_small_green);
-        } else {
-            viewHolder.mImgOnline.setImageResource(R.drawable.circle_small_grey);
-        }*/
-
-        /*viewHolder.cbSelection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int pos = position;
-                // Getting time Slot
-                String getUserId = mArrayList.get(pos).getUserId();
-                String getUserName = mArrayList.get(pos).getUserFullName();
-
-                if (isChecked) {
-                    // Getting the clicked Index
-                    GameInvitesScreen.gameInvitedUserId.add(getUserId);
-                    GameInvitesScreen.gameInvitedUserNames.add(getUserName);
-                } else {
-                    int indexClicked = getCategoryPos(getUserId);
-                    GameInvitesScreen.gameInvitedUserId.remove(indexClicked);
-                    GameInvitesScreen.gameInvitedUserNames.remove(indexClicked);
-                }
-            }
-        });*/
     }
 
 
