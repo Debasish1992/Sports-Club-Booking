@@ -571,7 +571,7 @@ public class LandingScreen extends AppCompatActivity implements
                 //Do something after 100ms
                 callForLocationTracker();
             }
-        }, 1000);
+        }, 2000);
 
     }
 }
