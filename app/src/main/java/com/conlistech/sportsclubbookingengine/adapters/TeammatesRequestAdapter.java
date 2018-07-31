@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.activities.TeammatesScreen;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.FriendModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.google.firebase.database.DatabaseReference;
@@ -27,18 +28,18 @@ import static android.content.Context.MODE_PRIVATE;
 public class TeammatesRequestAdapter extends
         RecyclerView.Adapter<TeammatesRequestAdapter.ViewHolder> {
 
-    public static ArrayList<UserModel> mArrayList;
+    public static ArrayList<FriendModel> mArrayList;
    // public static ArrayList<UserModel> mFilteredList;
     Context context;
     ArrayList<String> keyArray;
     DatabaseReference mDatabase;
     private TeammatesRequestAdapter.ItemClickListener clickListener;
     String userIdCurrent;
-    UserModel currentUserModel;
+    FriendModel currentUserModel;
 
 
-    public TeammatesRequestAdapter(Context ctx, ArrayList<UserModel>
-            arrayList, ArrayList<String> nodeArray, String userId, UserModel userModel) {
+    public TeammatesRequestAdapter(Context ctx, ArrayList<FriendModel>
+            arrayList, ArrayList<String> nodeArray, String userId, FriendModel userModel) {
         this.mArrayList = arrayList;
        // this.mFilteredList = arrayList;
         this.keyArray = nodeArray;
@@ -81,6 +82,7 @@ public class TeammatesRequestAdapter extends
                 DatabaseReference mDatabaseTeammate_Added =
                         FirebaseDatabase.getInstance().getReference("teammates")
                                 .child("my_teamates").child(getUserId).child(getKey);
+                currentUserModel.setFriendUserId(userIdCurrent);
                 mDatabaseTeammate_Added.setValue(currentUserModel);
 
                 // Inserting user details into local database
