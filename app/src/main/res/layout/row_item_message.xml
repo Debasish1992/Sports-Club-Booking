@@ -22,18 +22,18 @@
             android:maxWidth="240dp"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
-            android:paddingRight="20dp"
             android:paddingTop="10dp"
-            android:text="hello, hello!"
+            android:text="A"
             android:textColor="#ffffff" />
 
         <TextView
             android:id="@+id/text_msg_time_send"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/text_message_send"
             android:layout_below="@+id/text_message_send"
+            android:layout_toEndOf="@+id/text_message_send"
             android:paddingBottom="5dp"
+            android:paddingRight="10dp"
             android:text="11:40 PM"
             android:textSize="10sp" />
 
@@ -48,13 +48,13 @@
         android:layout_marginTop="5dp"
         android:visibility="visible">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_message_profile"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="6dp"
-            android:background="@drawable/circle"
-            android:src="@drawable/icon_sample_profile" />
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/icon_sample_profile"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="1dp" />
 
         <TextView
             android:id="@+id/text_message_name"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text_message_name"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@+id/image_message_profile"
             android:background="@drawable/rounded_rectangle_pink"
@@ -85,18 +85,19 @@
                 android:maxWidth="240dp"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="20dp"
+                android:paddingRight="0dp"
                 android:paddingTop="10dp"
-                android:text="hi man, how are you?"
+                android:text="A"
                 android:textColor="#ffffff" />
 
             <TextView
                 android:id="@+id/text_msg_time_receive"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/text_message_receive"
                 android:layout_below="@+id/text_message_receive"
+                android:layout_toEndOf="@+id/text_message_receive"
                 android:paddingBottom="5dp"
+                android:paddingRight="10dp"
                 android:text="11:40 PM"
                 android:textSize="10sp" />
 

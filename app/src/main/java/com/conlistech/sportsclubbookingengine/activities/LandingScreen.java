@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -142,18 +143,27 @@ public class LandingScreen extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        locationTracker = new LocationTracker(LandingScreen.this);
+        //  locationTracker = new LocationTracker(LandingScreen.this);
 
+        //method to call the loacation permission and check for gps availabilty
+        //  callForLocationTracker();
+    }
+
+    /**
+     * Functionality to chek the track the current Location
+     */
+    private void callForLocationTracker() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
+                locationTracker = new LocationTracker(LandingScreen.this);
                 if (locationTracker.canGetLocation()) {
                     Double latitude = locationTracker.getLatitude();
                     Double longitude = locationTracker.getLongitude();
-                    //   List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
-                    //  String locAddress = address.get(0).getAddressLine(0);
-                    //   String city = address.get(0).getLocality();
-                    //   Log.d("Address", address.toString());
-                    getSupportActionBar().setTitle("locAddress");
+                    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+                    String locAddress = address.get(0).getAddressLine(0);
+                    String city = address.get(0).getLocality();
+                    Log.d("Address", address.toString());
+                    getSupportActionBar().setTitle(locAddress);
                     toolbar.setSubtitle(userPrimarySport);
 
                     // Checking for the payment card table existance
@@ -170,7 +180,6 @@ public class LandingScreen extends AppCompatActivity implements
                 requestPermission();
             }
         }
-
     }
 
 
@@ -464,6 +473,8 @@ public class LandingScreen extends AppCompatActivity implements
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},
                 PERMISSION_REQUEST_CODE);
+
+        locationTracker = new LocationTracker(LandingScreen.this);
     }
 
 
@@ -536,5 +547,19 @@ public class LandingScreen extends AppCompatActivity implements
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                callForLocationTracker();
+            }
+        }, 1000);
+
     }
 }

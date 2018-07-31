@@ -145,7 +145,7 @@ public class ChatMessageActivity extends AppCompatActivity {
     /**
      * Getting User Online Status
      */
-    public void getUserOnLIneStatus(){
+    public void getUserOnLIneStatus() {
         DatabaseReference mDatabaseUserStaus = FirebaseDatabase.getInstance()
                 .getReference("online_status")
                 .child(userConversation.getChannelID())
@@ -156,13 +156,14 @@ public class ChatMessageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean isOnline = dataSnapshot.getValue(Boolean.class);
-                if(isOnline){
+                if (isOnline) {
                     mTvIsOnline.setVisibility(TextView.VISIBLE);
                     mTvIsOnline.setText("Online");
-                }else{
+                } else {
                     mTvIsOnline.setVisibility(TextView.GONE);
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 LoaderUtils.dismissProgress();
@@ -195,6 +196,7 @@ public class ChatMessageActivity extends AppCompatActivity {
         getAllChatMessages();
         //Setting the Data
         mTvTitle.setText(userConversation.getUserFullName());
+
     }
 
     // Initializing the views
@@ -203,6 +205,26 @@ public class ChatMessageActivity extends AppCompatActivity {
         mMessageRecycler.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mMessageRecycler.setLayoutManager(layoutManager);
+
+        if (Build.VERSION.SDK_INT >= 11) {
+            mMessageRecycler.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v,
+                                           int left, int top, int right, int bottom,
+                                           int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if (bottom < oldBottom) {
+                        mMessageRecycler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMessageRecycler.smoothScrollToPosition(
+                                        mMessageRecycler.getAdapter().getItemCount() - 1);
+                            }
+                        }, 100);
+                    }
+                }
+            });
+        }
+
     }
 
     /**
@@ -270,9 +292,9 @@ public class ChatMessageActivity extends AppCompatActivity {
             layNoFriendsFound.setVisibility(RelativeLayout.GONE);
             mMessageRecycler.setAdapter(chatMessageAdapter);
             refreshREcyclerViewIndex();
-            if(!Constants.isChatNotification){
+            if (!Constants.isChatNotification) {
                 storeLastMsgInConversation(getCurrentUserDetails(), userConversation);
-            }else{
+            } else {
                 Constants.isChatNotification = false;
             }
         } else {
@@ -424,7 +446,7 @@ public class ChatMessageActivity extends AppCompatActivity {
     /**
      * Setting user online status as OnLIne
      */
-    public void setAvailabilityStatusOnline(){
+    public void setAvailabilityStatusOnline() {
         DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("online_status");
         mDatabaseMessages.child(userConversation.getChannelID())
                 .child(getCurrentUserId())
@@ -435,7 +457,7 @@ public class ChatMessageActivity extends AppCompatActivity {
     /**
      * Setting user online status as OffLine
      */
-    public void setAvailabilityStatusOffline(){
+    public void setAvailabilityStatusOffline() {
         DatabaseReference mDatabaseMessages = FirebaseDatabase.getInstance().getReference("online_status");
         mDatabaseMessages.child(userConversation.getChannelID())
                 .child(getCurrentUserId())
