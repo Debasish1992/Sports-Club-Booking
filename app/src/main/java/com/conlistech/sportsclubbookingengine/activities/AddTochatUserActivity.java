@@ -188,7 +188,13 @@ public class AddTochatUserActivity extends AppCompatActivity
         RecentChatListActivity recentChatListActivity = new RecentChatListActivity();
         recentChatListActivity.storeConversationInfo(getCurrentUserDetails(), getReceiverDetails(user));
         keepUserOnlineStatus(getReceiverDetails(user));
-        Intent i = new Intent(this, RecentChatListActivity.class);
+
+        Constants.CHAT_CHANNEL_ID = getCurrentUserDetails().getChannelID();
+        Constants.isChatNotification = false;
+        Constants.CHAT_RECEIVER_ID = user.getUserId();
+        Constants.SENDER_USER_FULLNAME = getCurrentUserDetails().getUserFullName();
+
+        Intent i = new Intent(this, ChatMessageActivity.class);
         startActivity(i);
         finish();
     }

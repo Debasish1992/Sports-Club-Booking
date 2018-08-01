@@ -74,12 +74,9 @@ public class ProfileScreen extends AppCompatActivity {
 
     @OnClick(R.id.ivChat)
     void sendToChat() {
-        // Constants.CHAT_CHANNEL_ID = ;
-        Constants.isChatNotification = true;
-        Constants.CHAT_RECEIVER_ID = userModel.getUserId();
-        Constants.SENDER_USER_FULLNAME = getCurrentUserName();
-        Intent intent = new Intent(this, ChatMessageActivity.class);
-        startActivity(intent);
+
+        /*Intent intent = new Intent(this, ChatMessageActivity.class);
+        startActivity(intent);*/
     }
 
     @OnClick(R.id.ivAddFriend)
