@@ -12,6 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,11 +24,14 @@ import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.GamePlayedAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.InviteFriendList;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
+import com.conlistech.sportsclubbookingengine.models.ChatUserOnlineModel;
 import com.conlistech.sportsclubbookingengine.models.FriendModel;
+import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomNumberGenerator;
+import com.conlistech.sportsclubbookingengine.utils.RandomString;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +47,7 @@ import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -60,6 +67,8 @@ public class ProfileScreen extends AppCompatActivity {
     TextView tvUserFavSport;
     @BindView(R.id.tvPhoneValue)
     TextView tvUserPhoneNumber;
+    @BindView(R.id.tvRequestSent)
+    TextView tvRequestSent;
     @BindView(R.id.ivPerson)
     ImageView ivProfileImage;
     @BindView(R.id.ivCall)
@@ -85,6 +94,13 @@ public class ProfileScreen extends AppCompatActivity {
     RecyclerView rcvGamePlayed;
     @BindView(R.id.tvNoFriendFound)
     TextView tvNoGameNotFound;
+
+    @OnClick(R.id.ivChat)
+    void sendToChat() {
+        // new AddTochatUserActivity().checkChatExistence(userModel, getCurrentUserId());
+        checkChatExistence(userModel, getCurrentUserId());
+    }
+
     long teammatesCount = 0;
     String userId;
     private final int PICK_IMAGE_REQUEST = 71;
@@ -109,14 +125,13 @@ public class ProfileScreen extends AppCompatActivity {
 
     @OnClick(R.id.ivLogout)
     void logout() {
-        SharedPreferences preferences = getSharedPreferences("MyPref", MODE_PRIVATE);
+       /* SharedPreferences preferences = getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.commit();
         sqliteHelper.removeAllRecords();
         finish();
-        finishAllActivities();
-
+        finishAllActivities();*/
     }
 
     // Finishing all the contexts
@@ -137,7 +152,6 @@ public class ProfileScreen extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
     }
-
 
     /**
      * Function to choose images
@@ -266,6 +280,7 @@ public class ProfileScreen extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Profile");
         tvNoGameNotFound.setVisibility(RelativeLayout.GONE);
+        tvRequestSent.setVisibility(View.GONE);
         prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         sqliteHelper = new SqliteHelper(this);
 
@@ -289,13 +304,15 @@ public class ProfileScreen extends AppCompatActivity {
         // Check for current User
         if (TeammatesScreen.userId.equalsIgnoreCase(currentUserId)) {
             ivAddFriend.setVisibility(ImageView.GONE);
-            ivLogoutUser.setVisibility(ImageView.VISIBLE);
+            //  ivLogoutUser.setVisibility(ImageView.VISIBLE);
         } else if (getAllTeammates.contains(TeammatesScreen.userId)) {
             ivAddFriend.setVisibility(ImageView.GONE);
         }
 
         getUserDetails();
-        //getAllGamePlayed();
+
+        // getAllGamePlayed();
+
     }
 
     // Initializing the views
@@ -323,12 +340,14 @@ public class ProfileScreen extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 userModel = dataSnapshot.getValue(UserModel.class);
-                LoaderUtils.dismissProgress();
                 // Setting all the details data
                 setUserData(userModel);
-                getTeammatesCount();
-            }
+                //  getTeammatesCount();
 
+                if (userModel != null) {
+                    checkFriendRequestExistence(userModel);
+                }
+            }
 
             @Override
             public void onCancelled(DatabaseError error) {
@@ -486,6 +505,14 @@ public class ProfileScreen extends AppCompatActivity {
                 .child(getCurrentUserId())
                 .setValue(userModel);
         Toast.makeText(this, "Teammate Request Sent Successfully.", Toast.LENGTH_SHORT).show();
+
+        showFriendRequestSent();
+    }
+
+    private void showFriendRequestSent() {
+        tvRequestSent.setVisibility(View.VISIBLE);
+        ivAddFriend.setVisibility(View.GONE);
+        findViewById(R.id.lyt_add_friend).setVisibility(View.VISIBLE);
     }
 
     // Getting Current User Details
@@ -501,7 +528,6 @@ public class ProfileScreen extends AppCompatActivity {
         friendModel.setUserProfileImage(prefs.getString(Constants.USER_PROFILE_IMAGE, null));
         String favSport = prefs.getString(Constants.USER_FAV_SPORT, null);
         // Storing User Details as Request
-
         checkChatExistence(TeammatesScreen.userId, friendModel);
         //storeUserInfo(TeammatesScreen.userId, friendModel);
     }
@@ -513,34 +539,199 @@ public class ProfileScreen extends AppCompatActivity {
         ProfileScreen.this.finish();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.itemLogout:
+                SharedPreferences preferences = getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.clear();
+                editor.commit();
+                sqliteHelper.removeAllRecords();
+                finish();
+                finishAllActivities();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     // Getting Current User Id
     public String getCurrentUserId() {
         return prefs.getString(Constants.USER_ID, null);
     }
 
     /**
-     * Function responsible for getting the teammates count
+     * Function responsible for checking the Friend request Existence
+     *
+     * @param user
      */
-    public void getTeammatesCount() {
-        LoaderUtils.showProgressBar(ProfileScreen.this,
-                "Please wait while getting teammates..");
+    public void checkFriendRequestExistence(final UserModel user) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("teammates")
-                .child("my_teamates").child(userId);
-
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("teammate_request").child(user.getUserId());
+        mDatabase.child(getCurrentUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                teammatesCount = snapshot.getChildrenCount();
-                tvTeamatesCount.setText(String.valueOf(teammatesCount));
+                if (snapshot.exists()) {
+                    // TODO: handle the case where the data already exists
+                    tvRequestSent.setVisibility(View.VISIBLE);
+                    ivAddFriend.setVisibility(View.GONE);
+                    findViewById(R.id.lyt_add_friend).setVisibility(View.VISIBLE);
+                } else {
+                    if (sqliteHelper.getAllTeammateIds().contains(user.getUserId())) {
+                        // TODO: handle the case where the data does not yet exist
+                        tvRequestSent.setVisibility(View.GONE);
+                        ivAddFriend.setVisibility(View.GONE);
+                        findViewById(R.id.lyt_add_friend).setVisibility(View.GONE);
+                    } else {
+                        tvRequestSent.setVisibility(View.GONE);
+                        ivAddFriend.setVisibility(View.VISIBLE);
+                        findViewById(R.id.lyt_add_friend).setVisibility(View.VISIBLE);
+                    }
+                }
+
                 LoaderUtils.dismissProgress();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                LoaderUtils.dismissProgress();
+
             }
         });
-
-
     }
+
+    /**
+     * Function responsible for checking the chat existences
+     *
+     * @param user
+     */
+    public void checkChatExistence(final UserModel user, final String currentUserID) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("conversation")
+                .child(currentUserID);
+        mDatabase.child(user.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // TODO: handle the case where the data already exists
+                    UserConversation usersCon = snapshot.getValue(UserConversation.class);
+                    Constants.CHAT_CHANNEL_ID = usersCon.getChannelID();
+                    Constants.isChatNotification = false;
+                    Constants.CHAT_RECEIVER_ID = user.getUserId();
+                    Constants.SENDER_USER_FULLNAME = user.getUserFullName();
+                    Intent i = new Intent(ProfileScreen.this, ChatMessageActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    // TODO: handle the case where the data does not yet exist
+                    initiateChat(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    /**
+     * Function responsible for initiating the chat
+     *
+     * @param user
+     */
+    public void initiateChat(UserModel user) {
+        randomChannelID();
+        RecentChatListActivity recentChatListActivity = new RecentChatListActivity();
+        recentChatListActivity.storeConversationInfo(getCurrentUserData(), getReceiverDetails(user));
+        keepUserOnlineStatus(getReceiverDetails(user));
+
+        Constants.CHAT_CHANNEL_ID = getCurrentUserData().getChannelID();
+        Constants.isChatNotification = false;
+        Constants.CHAT_RECEIVER_ID = user.getUserId();
+        Constants.SENDER_USER_FULLNAME = user.getUserFullName();
+
+        Intent i = new Intent(this, ChatMessageActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    /**
+     * Setting user onine status
+     *
+     * @param user
+     */
+    public void keepUserOnlineStatus(UserConversation user) {
+        ChatUserOnlineModel chatUserOnlineModelSender = new ChatUserOnlineModel();
+        chatUserOnlineModelSender.setOnline(false);
+        ChatUserOnlineModel chatUserOnlineModelReceiver = new ChatUserOnlineModel();
+        chatUserOnlineModelReceiver.setOnline(false);
+        DatabaseReference mDatabaseOnlineStatus = FirebaseDatabase.getInstance().getReference("online_status");
+        mDatabaseOnlineStatus.child(user.getChannelID()).child(getCurrentUserId()).setValue(chatUserOnlineModelSender);
+        DatabaseReference mDatabaseOnlineStatusReveiver = FirebaseDatabase.getInstance().getReference("online_status");
+        mDatabaseOnlineStatusReveiver.child(user.getChannelID()).child(user.getUserId()).setValue(chatUserOnlineModelReceiver);
+    }
+
+    public UserConversation getReceiverDetails(UserModel userModel) {
+        UserConversation userConversation = new UserConversation();
+        userConversation.setUserId(userModel.getUserId());
+        userConversation.setUserFullName(userModel.getUserFullName());
+        userConversation.setChannelID(randomChanelId);
+        userConversation.setOnline(false);
+        userConversation.setReceiverLastMsg("Start your first chat.");
+        userConversation.setUserImage("https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg");
+        return userConversation;
+    }
+
+    public UserConversation getCurrentUserData() {
+        UserConversation userConversation = new UserConversation();
+        userConversation.setUserId(prefs.getString(Constants.USER_ID, null));
+        userConversation.setUserFullName(prefs.getString(Constants.USER_FULL_NAME, null));
+        userConversation.setChannelID(randomChanelId);
+        userConversation.setOnline(false);
+        userConversation.setReceiverLastMsg("Start your first chat.");
+        userConversation.setUserImage("https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg");
+        return userConversation;
+    }
+
+    String randomChanelId = "";
+
+    public void randomChannelID() {
+        // String easy = RandomString.digits + "ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx";
+        RandomString randoKey = new RandomString(32, new SecureRandom());
+        randomChanelId = randoKey.nextString();
+    }
+
+
+    /**
+     * Function responsible for getting the teammates count
+     */
+       /* public void getTeammatesCount() {
+            LoaderUtils.showProgressBar(ProfileScreen.this,
+                    "Please wait while getting teammates..");
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("teammates")
+                    .child("my_teamates").child(userId);
+
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    teammatesCount = snapshot.getChildrenCount();
+                    tvTeamatesCount.setText(String.valueOf(teammatesCount));
+                    LoaderUtils.dismissProgress();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    LoaderUtils.dismissProgress();
+                }
+            });
+
+        }*/
+
 }

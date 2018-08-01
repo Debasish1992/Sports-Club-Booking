@@ -109,7 +109,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
     // Getting card no from payment table
-    public String getPrimaryCardNo(){
+    public String getPrimaryCardNo() {
         String primaryCardQuery = "SELECT  card_number FROM " +
                 DatabaseConstants.PAYMENT_TABLE + " WHERE is_primary = 1";
         String cardNo = null;
@@ -128,7 +128,6 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.close();
         return cardNo;
     }
-
 
 
     // Getting the row Count
@@ -212,7 +211,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c1 = db.rawQuery(
-                "SELECT sport_id FROM "+ DatabaseConstants.SPORTS_TABLE + " where sport_name = '"
+                "SELECT sport_id FROM " + DatabaseConstants.SPORTS_TABLE + " where sport_name = '"
                         + sportName + "'", null);
         c1.moveToFirst();
         if (c1.getCount() != 0) {
@@ -223,7 +222,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
     //Clearing table
-    public void clearDb(){
+    public void clearDb() {
         SQLiteDatabase db = getWritableDatabase(); // helper is object extends SQLiteOpenHelper
         //db.delete(DatabaseConstants.SPORTS_TABLE, null, null);
         db.delete(DatabaseConstants.TEAMMATE_TABLE, null, null);
@@ -231,10 +230,10 @@ public class SqliteHelper extends SQLiteOpenHelper {
     }
 
     // Removing all the data from the tables
-    public void removeAllRecords(){
+    public void removeAllRecords() {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("delete from "+ DatabaseConstants.TEAMMATE_TABLE);
-        db.execSQL("delete from "+ DatabaseConstants.PAYMENT_TABLE);
+        db.execSQL("delete from " + DatabaseConstants.TEAMMATE_TABLE);
+        db.execSQL("delete from " + DatabaseConstants.PAYMENT_TABLE);
         db.close();
     }
 }

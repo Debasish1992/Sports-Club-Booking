@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.activities.LandingScreen;
 
 public class LocationTracker extends Service implements LocationListener {
 
@@ -65,7 +66,7 @@ public class LocationTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled
-                showSettingsAlert();
+                //showSettingsAlert();
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
@@ -103,6 +104,7 @@ public class LocationTracker extends Service implements LocationListener {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return location;
     }

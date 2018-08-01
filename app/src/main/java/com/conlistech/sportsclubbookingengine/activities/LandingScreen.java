@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -91,6 +92,7 @@ public class LandingScreen extends AppCompatActivity implements
     LocationTracker locationTracker;
     public static VenueInfoModel venueInfoModel = null;
     ActionBar actionBar;
+    private static final int LOCATION_SETTING_REQUEST_CODE = 1;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -153,6 +155,9 @@ public class LandingScreen extends AppCompatActivity implements
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //  locationTracker = new LocationTracker(LandingScreen.this);
+        //method to call the loacation permission and check for gps availabilty
+        callForLocationTracker();
     }
 
 
@@ -166,11 +171,11 @@ public class LandingScreen extends AppCompatActivity implements
                 if (locationTracker.canGetLocation()) {
                     Double latitude = locationTracker.getLatitude();
                     Double longitude = locationTracker.getLongitude();
-                    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
-                    String locAddress = address.get(0).getAddressLine(0);
-                    String city = address.get(0).getLocality();
-                    Log.d("Address", address.toString());
-                    getSupportActionBar().setTitle(locAddress);
+                    //    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+                    //    String locAddress = address.get(0).getAddressLine(0);
+                    //    String city = address.get(0).getLocality();
+                    //    Log.d("Address", address.toString());
+                    //    getSupportActionBar().setTitle(locAddress);
                     toolbar.setSubtitle(userPrimarySport);
 
                     // Checking for the payment card table existance
@@ -566,14 +571,15 @@ public class LandingScreen extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        final Handler handler = new Handler();
+
+
+       /* final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //Do something after 100ms
-                callForLocationTracker();
+                Toast.makeText(LandingScreen.this, "TOAST", Toast.LENGTH_LONG).show();
             }
-        }, 2000);
-
+        }, 2000);*/
     }
 }

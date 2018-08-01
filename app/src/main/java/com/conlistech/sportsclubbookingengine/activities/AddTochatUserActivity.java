@@ -53,6 +53,7 @@ public class AddTochatUserActivity extends AppCompatActivity
     ArrayList<String> getAllTeammates;
     private int MAX_LENGTH = 14;
     String chatUserId = null;
+    SharedPreferences prefs;
 
 
     @Override
@@ -65,6 +66,7 @@ public class AddTochatUserActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         sqliteHelper = new SqliteHelper(this);
+        prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
 
         addTochatUserActivity = AddTochatUserActivity.this;
 
@@ -77,7 +79,6 @@ public class AddTochatUserActivity extends AppCompatActivity
     }
 
     public String getCurrentUserId() {
-        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         return prefs.getString(Constants.USER_ID, null);
     }
 
@@ -175,7 +176,7 @@ public class AddTochatUserActivity extends AppCompatActivity
     public void onClick(View v, int position) {
         final UserModel user = itemAdapter.mFilteredList.get(position);
         chatUserId = user.getUserId();
-        checkChatExistence(user);
+        checkChatExistence(user, getCurrentUserId());
     }
 
     /**
@@ -188,7 +189,13 @@ public class AddTochatUserActivity extends AppCompatActivity
         RecentChatListActivity recentChatListActivity = new RecentChatListActivity();
         recentChatListActivity.storeConversationInfo(getCurrentUserDetails(), getReceiverDetails(user));
         keepUserOnlineStatus(getReceiverDetails(user));
-        Intent i = new Intent(this, RecentChatListActivity.class);
+
+        Constants.CHAT_CHANNEL_ID = getCurrentUserDetails().getChannelID();
+        Constants.isChatNotification = false;
+        Constants.CHAT_RECEIVER_ID = user.getUserId();
+        Constants.SENDER_USER_FULLNAME = user.getUserFullName();
+
+        Intent i = new Intent(this, ChatMessageActivity.class);
         startActivity(i);
         finish();
     }
@@ -215,15 +222,20 @@ public class AddTochatUserActivity extends AppCompatActivity
      *
      * @param user
      */
-    public void checkChatExistence(final UserModel user) {
+    public void checkChatExistence(final UserModel user, final String currentUserID) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("conversation")
-                .child(getCurrentUserId());
-        mDatabase.child(chatUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+                .child(currentUserID);
+        mDatabase.child(user.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     // TODO: handle the case where the data already exists
-                    Intent i = new Intent(AddTochatUserActivity.this, RecentChatListActivity.class);
+                    UserConversation usersCon = snapshot.getValue(UserConversation.class);
+                    Constants.CHAT_CHANNEL_ID = usersCon.getChannelID();
+                    Constants.isChatNotification = false;
+                    Constants.CHAT_RECEIVER_ID = user.getUserId();
+                    Constants.SENDER_USER_FULLNAME = user.getUserFullName();
+                    Intent i = new Intent(AddTochatUserActivity.this, ChatMessageActivity.class);
                     startActivity(i);
                     finish();
                 } else {
@@ -252,7 +264,6 @@ public class AddTochatUserActivity extends AppCompatActivity
 
     public UserConversation getCurrentUserDetails() {
         UserConversation userConversation = new UserConversation();
-        SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         userConversation.setUserId(prefs.getString(Constants.USER_ID, null));
         userConversation.setUserFullName(prefs.getString(Constants.USER_FULL_NAME, null));
         userConversation.setChannelID(randomChanelId);
