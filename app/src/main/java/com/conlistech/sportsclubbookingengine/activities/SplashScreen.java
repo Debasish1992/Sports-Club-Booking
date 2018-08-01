@@ -56,6 +56,8 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         Stetho.initializeWithDefaults(this);
         FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
+
+        addTimeSlots();
        /* if (mDatabase == null) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             database.setPersistenceEnabled(true);
@@ -188,4 +190,32 @@ public class SplashScreen extends AppCompatActivity {
         firebase_editor.putString("Fcm_id", token);
         firebase_editor.apply();
     }
+
+    public void addTimeSlots() {
+        ArrayList<String> arrayList1 = new ArrayList();
+        arrayList1.add("-LFaxAYqiZb-1g-1kiEi");
+        arrayList1.add("-LFayI-yoGkP06VNxTa6");
+        arrayList1.add("-LFb2xylAm59CQkqOyRB");
+        arrayList1.add("-LFpwKNw_O0JbAt9z2BE");
+
+        ArrayList<String> arrayList2 = new ArrayList();
+        arrayList2.add("9AM - 11AM");
+        arrayList2.add("11AM - 1PM");
+        arrayList2.add("1PM - 3PM");
+        arrayList2.add("4PM - 6PM");
+        arrayList2.add("4PM - 6PM");
+        arrayList2.add("6PM - 8PM");
+        arrayList2.add("8PM - 10PM");
+
+
+        for (int j = 1; j < 31; j++) {
+            for (int i = 0; i < arrayList1.size(); i++) {
+                DatabaseReference mDatabaseReviews =
+                        FirebaseDatabase.getInstance().getReference("venues")
+                                .child(arrayList1.get(i)).child("time_slots").child(j + "-08-2018");
+                mDatabaseReviews.setValue(arrayList2);
+            }
+        }
+    }
 }
+

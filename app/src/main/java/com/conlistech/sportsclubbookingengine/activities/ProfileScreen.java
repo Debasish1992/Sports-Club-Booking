@@ -21,6 +21,7 @@ import com.conlistech.sportsclubbookingengine.adapters.GamePlayedAdapter;
 import com.conlistech.sportsclubbookingengine.adapters.InviteFriendList;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.FriendModel;
+import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
@@ -71,11 +72,15 @@ public class ProfileScreen extends AppCompatActivity {
     @BindView(R.id.tvNoFriendFound)
     TextView tvNoGameNotFound;
 
-   /* @OnClick(R.id.ivBack)
-    void Back() {
-        TeammatesScreen.userId = null;
-        ProfileScreen.this.finish();
-    }*/
+    @OnClick(R.id.ivChat)
+    void sendToChat() {
+        // Constants.CHAT_CHANNEL_ID = ;
+        Constants.isChatNotification = true;
+        Constants.CHAT_RECEIVER_ID = userModel.getUserId();
+        Constants.SENDER_USER_FULLNAME = getCurrentUserName();
+        Intent intent = new Intent(this, ChatMessageActivity.class);
+        startActivity(intent);
+    }
 
     @OnClick(R.id.ivAddFriend)
     void addFriend() {
@@ -234,10 +239,8 @@ public class ProfileScreen extends AppCompatActivity {
      */
     public void setUserData(UserModel userModel) {
         if (userModel != null) {
-
             // boolean isProfileVisible = userModel.isProfile_visibility();
             String userId = userModel.getUserId();
-
             if (!userModel.isProfile_visibility() &&
                     !userId.equalsIgnoreCase(getCurrentUserId())) {
                 Toast.makeText(this, "The User Profile is Private", Toast.LENGTH_SHORT).show();
@@ -358,5 +361,9 @@ public class ProfileScreen extends AppCompatActivity {
     // Getting Current User Id
     public String getCurrentUserId() {
         return prefs.getString(Constants.USER_ID, null);
+    }
+
+    public String getCurrentUserName() {
+        return prefs.getString(Constants.USER_FULL_NAME, null);
     }
 }

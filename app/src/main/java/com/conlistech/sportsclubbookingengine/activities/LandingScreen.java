@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -29,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +58,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +79,7 @@ public class LandingScreen extends AppCompatActivity implements
     TextView tvFullName;
     TextView tvEmail;
     String userPrimarySport = null;
+    ImageView ivUserProfileImage;
     View header;
     SharedPreferences pref;
     ArrayList<VenueInfoModel> venueInfoModels;
@@ -107,6 +111,7 @@ public class LandingScreen extends AppCompatActivity implements
         header = navigationView.getHeaderView(0);
         tvFullName = (TextView) header.findViewById(R.id.tvFullname);
         tvEmail = (TextView) header.findViewById(R.id.tvEmail);
+        ivUserProfileImage = (ImageView) header.findViewById(R.id.imageView);
     }
 
 
@@ -161,11 +166,11 @@ public class LandingScreen extends AppCompatActivity implements
                 if (locationTracker.canGetLocation()) {
                     Double latitude = locationTracker.getLatitude();
                     Double longitude = locationTracker.getLongitude();
-                    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
-                    String locAddress = address.get(0).getAddressLine(0);
-                    String city = address.get(0).getLocality();
-                    Log.d("Address", address.toString());
-                    getSupportActionBar().setTitle(locAddress);
+                    //    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+                    //    String locAddress = address.get(0).getAddressLine(0);
+                    //    String city = address.get(0).getLocality();
+                    //    Log.d("Address", address.toString());
+                    //    getSupportActionBar().setTitle(locAddress);
                     toolbar.setSubtitle(userPrimarySport);
 
                     // Checking for the payment card table existance
@@ -190,6 +195,13 @@ public class LandingScreen extends AppCompatActivity implements
         tvFullName.setText(pref.getString(Constants.USER_FULL_NAME, null));
         tvEmail.setText(pref.getString(Constants.USER_EMAIL, null));
         userPrimarySport = pref.getString(Constants.USER_FAV_SPORT, null);
+        String userProfileImage = pref.getString(Constants.USER_PROFILE_IMAGE, null);
+
+        if (!TextUtils.isEmpty(userProfileImage)) {
+            Picasso.get()
+                    .load(userProfileImage)
+                    .into(ivUserProfileImage);
+        }
 
     }
 
@@ -550,36 +562,6 @@ public class LandingScreen extends AppCompatActivity implements
                 .create()
                 .show();
     }
-
-    /**
-     * Function to show settings alert dialog On pressing Settings button will
-     * lauch Settings Options
-     */
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext());
-
-        // Setting DialogHelp Title
-        alertDialog.setTitle("GPS is settings");
-
-        // Setting DialogHelp Message
-        alertDialog
-                .setMessage("GPS is not enabled. Do you want to go to settings menu?");
-
-        // On pressing Settings button
-        alertDialog.setPositiveButton("Settings",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(
-                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        // mContext.startActivity(intent);
-                        startActivityForResult(intent, LOCATION_SETTING_REQUEST_CODE);
-                    }
-                });
-
-        alertDialog.setNeutralButton(R.string.cancel, null);
-        alertDialog.create().show();
-    }
-
 
     @Override
     protected void onResume() {
