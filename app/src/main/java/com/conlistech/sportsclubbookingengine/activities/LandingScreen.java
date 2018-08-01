@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -85,6 +86,7 @@ public class LandingScreen extends AppCompatActivity implements
     private static final int PERMISSION_REQUEST_CODE = 200;
     LocationTracker locationTracker;
     public static VenueInfoModel venueInfoModel = null;
+    private static final int LOCATION_SETTING_REQUEST_CODE = 1;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -146,7 +148,7 @@ public class LandingScreen extends AppCompatActivity implements
         //  locationTracker = new LocationTracker(LandingScreen.this);
 
         //method to call the loacation permission and check for gps availabilty
-        //  callForLocationTracker();
+        callForLocationTracker();
     }
 
     /**
@@ -549,17 +551,48 @@ public class LandingScreen extends AppCompatActivity implements
                 .show();
     }
 
+    /**
+     * Function to show settings alert dialog On pressing Settings button will
+     * lauch Settings Options
+     */
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext());
+
+        // Setting DialogHelp Title
+        alertDialog.setTitle("GPS is settings");
+
+        // Setting DialogHelp Message
+        alertDialog
+                .setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        // On pressing Settings button
+        alertDialog.setPositiveButton("Settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        // mContext.startActivity(intent);
+                        startActivityForResult(intent, LOCATION_SETTING_REQUEST_CODE);
+                    }
+                });
+
+        alertDialog.setNeutralButton(R.string.cancel, null);
+        alertDialog.create().show();
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        final Handler handler = new Handler();
+
+
+       /* final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //Do something after 100ms
-                callForLocationTracker();
+                Toast.makeText(LandingScreen.this, "TOAST", Toast.LENGTH_LONG).show();
             }
-        }, 2000);
-
+        }, 2000);*/
     }
 }

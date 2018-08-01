@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -142,7 +144,7 @@ public class ProfileScreen extends AppCompatActivity {
         }
 
         getUserDetails();
-        getAllGamePlayed();
+        // getAllGamePlayed();
     }
 
     // Initializing the views
@@ -334,6 +336,23 @@ public class ProfileScreen extends AppCompatActivity {
         super.onBackPressed();
         TeammatesScreen.userId = null;
         ProfileScreen.this.finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.itemLogout:
+                Toast.makeText(ProfileScreen.this, "LOGOUT", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // Getting Current User Id

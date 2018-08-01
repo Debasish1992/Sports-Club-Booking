@@ -41,19 +41,6 @@
                 android:layout_gravity="center"
                 android:background="@color/colorPrimary">
 
-                <!--android:layout_weight="3"-->
-
-                <!-- <ImageView
-                     android:id="@+id/ivBack"
-                     android:layout_width="30dp"
-                     android:layout_height="30dp"
-                     android:layout_marginLeft="20dp"
-                     android:layout_marginTop="20dp"
-                     android:visibility="gone"
-                     android:src="@drawable/ic_arrow_back_white_36dp" />
-
--->
-
                 <ImageView
                     android:id="@+id/ivLogout"
                     android:layout_width="30dp"
@@ -189,14 +176,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_person_add_white_24dp" />
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/ic_person_add_white_24dp"
+                        tools:targetApi="lollipop" />
 
                     <ImageView
                         android:id="@+id/ivCall"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_call_white" />
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/ic_call_white"
+                        tools:targetApi="lollipop" />
 
                     <ImageView
                         android:id="@+id/ivEmail"
@@ -204,7 +197,10 @@
                         android:layout_height="30dp"
                         android:layout_toRightOf="@+id/img_call"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_email_white" />
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/ic_email_white"
+                        tools:targetApi="lollipop" />
 
                     <ImageView
                         android:id="@+id/ivChat"
@@ -212,7 +208,10 @@
                         android:layout_height="30dp"
                         android:layout_toRightOf="@+id/img_email"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_message_white" />
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/ic_message_white"
+                        tools:targetApi="lollipop" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -272,7 +271,8 @@
                     android:paddingBottom="3dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="3dp"
-                    android:text="Game Played" />
+                    android:text="Game Played"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -293,13 +293,13 @@
                         android:id="@+id/tvNoFriendFound"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_centerInParent="true"
                         android:text="No game played."
-                        android:visibility="gone"
                         android:textColor="@color/md_orange_500"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
