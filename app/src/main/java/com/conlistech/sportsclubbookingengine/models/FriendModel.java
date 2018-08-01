@@ -2,8 +2,15 @@ package com.conlistech.sportsclubbookingengine.models;
 
 public class FriendModel {
 
-    String userId, userEmail, userPhoneNumber, userFullName, favSport, notificationToken, friendUserId;
+    String userId, userEmail, userPhoneNumber, userFullName, favSport, notificationToken, friendUserId, userProfileImage;
 
+    public String getUserProfileImage() {
+        return userProfileImage;
+    }
+
+    public void setUserProfileImage(String userProfileImage) {
+        this.userProfileImage = userProfileImage;
+    }
 
     public String getFriendUserId() {
         return friendUserId;

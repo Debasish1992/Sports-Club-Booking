@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,6 +90,7 @@ public class LandingScreen extends AppCompatActivity implements
     private static final int PERMISSION_REQUEST_CODE = 200;
     LocationTracker locationTracker;
     public static VenueInfoModel venueInfoModel = null;
+    ActionBar actionBar;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -122,6 +124,7 @@ public class LandingScreen extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db_sqlite = new SqliteHelper(this);
+        actionBar = getSupportActionBar();
 
         initViews();
 
@@ -139,20 +142,19 @@ public class LandingScreen extends AppCompatActivity implements
             }
         });
 
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //  locationTracker = new LocationTracker(LandingScreen.this);
-
-        //method to call the loacation permission and check for gps availabilty
-        //  callForLocationTracker();
     }
+
 
     /**
      * Functionality to chek the track the current Location
@@ -195,7 +197,7 @@ public class LandingScreen extends AppCompatActivity implements
         userPrimarySport = pref.getString(Constants.USER_FAV_SPORT, null);
         String userProfileImage = pref.getString(Constants.USER_PROFILE_IMAGE, null);
 
-        if(!TextUtils.isEmpty(userProfileImage)){
+        if (!TextUtils.isEmpty(userProfileImage)) {
             Picasso.get()
                     .load(userProfileImage)
                     .into(ivUserProfileImage);

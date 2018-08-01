@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -48,6 +50,16 @@ public class TeammatesRequestAdapter extends
         this.currentUserModel = userModel;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 
     @NonNull
     @Override
@@ -62,7 +74,12 @@ public class TeammatesRequestAdapter extends
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         viewHolder.tv_name.setText(mArrayList.get(position).getUserFullName());
         viewHolder.tv_fav_sports.setText(mArrayList.get(position).getFavSport());
-        viewHolder.ivProfileImage.setBackgroundResource(R.drawable.ic_person_black_48dp);
+        String userProfilePic = mArrayList.get(position).getUserProfileImage();
+        if (!TextUtils.isEmpty(userProfilePic)) {
+            Picasso.get()
+                    .load(userProfilePic)
+                    .into(viewHolder.ivProfileImage);
+        }
 
         viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +89,7 @@ public class TeammatesRequestAdapter extends
                 String getUserId = mArrayList.get(pos).getUserId();
 
                 // Accept User Friend Request
-                removeUserTeammateRequest(getKey);
+                removeUserTeammateRequest(getUserId);
 
                 DatabaseReference mDatabaseTeammate =
                         FirebaseDatabase.getInstance().getReference("teammates")

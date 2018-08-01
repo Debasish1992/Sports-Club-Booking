@@ -352,7 +352,6 @@ public class SignupScreen extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             String uId = null;
-
                             if (user != null) {
                                 uId = user.getUid();
                                 UserModel userModel = new UserModel();
@@ -366,7 +365,8 @@ public class SignupScreen extends AppCompatActivity {
                                 // Storing User Details
                                 storeUserInfo(uId, userModel);
                                 // Storing the user details locally
-                                storingUserDetails(uId, email, userFullName, phoneNumber, favSports, userProfileImage);
+                                storingUserDetails(uId, email, userFullName, phoneNumber,
+                                        favSports, userProfileImage);
                             }
                             onSignUpSuccess();
                         } else {

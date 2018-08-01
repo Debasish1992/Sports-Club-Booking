@@ -34,6 +34,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,6 +47,8 @@ public class SplashScreen extends AppCompatActivity {
     SqliteHelper db_sqlite;
     SharedPreferences prefs;
     DatabaseReference mDatabase;
+
+    Map<String, String> data = null;
 
 
     @Override

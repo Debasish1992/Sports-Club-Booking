@@ -106,9 +106,9 @@ public class TeammatesScreen extends AppCompatActivity
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        if(Constants.isTeammateRequestNotification){
+        if (Constants.isTeammateRequestNotification) {
             redirectUser();
-        }else{
+        } else {
             fetchAllRequests();
         }
     }
@@ -159,7 +159,6 @@ public class TeammatesScreen extends AppCompatActivity
             itemAdapter.setClickListener(this);
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -277,11 +276,5 @@ public class TeammatesScreen extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-       /* if (TeammatesScreen.isRequestResponded) {
-            fetchAllRequests();
-            TeammatesScreen.isRequestResponded = false;
-        }*/
-
-
     }
 }

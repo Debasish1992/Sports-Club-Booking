@@ -86,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="7dp"
                         android:layout_toRightOf="@+id/ivPerson"
                         android:text="Debasish Kumar Das"
                         android:textColor="@color/white"
@@ -102,7 +102,7 @@
                         android:layout_toRightOf="@+id/ivPerson"
                         android:text="Football"
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="10sp" />
 
                 </RelativeLayout>
 
@@ -272,6 +272,7 @@
                     android:paddingBottom="3dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="3dp"
+                    android:visibility="gone"
                     android:text="Game Played" />
 
                 <RelativeLayout

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.google.firebase.database.DatabaseReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -37,6 +39,15 @@ public class ItemAdapter extends
         this.context = ctx;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @NonNull
     @Override
@@ -53,7 +64,12 @@ public class ItemAdapter extends
                                  final int position) {
         viewHolder.tv_name.setText(mFilteredList.get(position).getUserFullName());
         viewHolder.tv_fav_sports.setText(mFilteredList.get(position).getFavSport());
-        viewHolder.ivProfileImage.setBackgroundResource(R.drawable.ic_person_black_48dp);
+        String userProfilePic = mFilteredList.get(position).getUserProfileImage();
+        if (!TextUtils.isEmpty(userProfilePic)) {
+            Picasso.get()
+                    .load(userProfilePic)
+                    .into(viewHolder.ivProfileImage);
+        }
     }
 
     @Override
@@ -63,9 +79,7 @@ public class ItemAdapter extends
 
     @Override
     public Filter getFilter() {
-
         return new Filter() {
-
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();

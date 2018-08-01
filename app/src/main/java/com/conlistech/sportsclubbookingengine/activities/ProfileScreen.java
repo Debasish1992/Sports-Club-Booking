@@ -498,7 +498,7 @@ public class ProfileScreen extends AppCompatActivity {
         friendModel.setUserId(prefs.getString(Constants.USER_ID, null));
         friendModel.setFavSport(prefs.getString(Constants.USER_FAV_SPORT, null));
         friendModel.setFriendUserId(userModel.getUserId());
-        friendModel.setUserProfileImage(userModel.getUserProfileImage());
+        friendModel.setUserProfileImage(prefs.getString(Constants.USER_PROFILE_IMAGE, null));
         String favSport = prefs.getString(Constants.USER_FAV_SPORT, null);
         // Storing User Details as Request
 

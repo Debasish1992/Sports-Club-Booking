@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
     android:layout_marginTop="5dp"
     android:background="@color/white"
     android:paddingBottom="10dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_profile_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/ic_person_black_48dp" />
+        android:src="@drawable/icon_sample_profile"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="0.5dp" />
 
     <TextView
         android:id="@+id/tvName"
@@ -35,7 +39,7 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/iv_profile_pic"
         android:text="dsadsadsa"
-        android:textSize="15sp" />
+        android:textSize="12sp" />
 
     <LinearLayout
         android:id="@+id/layAccept"
@@ -50,18 +54,20 @@
         <Button
             android:id="@+id/btnDecline"
             android:layout_width="40dp"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="@color/md_red_700"
+            android:textColor="@color/md_red_400"
+            style="?android:attr/borderlessButtonStyle"
             android:text="Decline" />
 
         <Button
             android:id="@+id/btnAccept"
             android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:background="@color/md_light_green_600"
+            android:textColor="@color/md_green_500"
+            style="?android:attr/borderlessButtonStyle"
             android:text="Accept" />
 
 

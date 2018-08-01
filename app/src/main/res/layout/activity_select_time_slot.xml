@@ -22,66 +22,72 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:title="Available Slots" />
 
-        <TextView
-            android:id="@+id/tvNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="20dp"
-            android:text="NEXT" />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rcv_time_slots"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/svMain"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appBar"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="5dp"
-        android:scrollIndicators="none"
-        android:scrollbars="vertical"
-        tools:layout_editor_absoluteX="0dp" />
+        android:scrollbars="none">
 
-    <RelativeLayout
-        android:id="@+id/layTotalAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rcv_time_slots"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:id="@+id/ttText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:text="Booking Summary"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/summaryText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ttText"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
-            android:text=""
-            android:textColor="@color/md_green_500"
-            android:textSize="17sp" />
-
-        <Button
-            android:id="@+id/btnConfirm"
+        <RelativeLayout
+            android:id="@+id/layTotalAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/summaryText"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/colorPrimary"
-            android:text="Confirm"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:layout_below="@+id/appBar"
+            android:layout_marginTop="10dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_time_slots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:scrollIndicators="none"
+                android:scrollbars="vertical"
+                tools:layout_editor_absoluteX="0dp" />
+
+
+            <TextView
+                android:layout_below="@+id/rcv_time_slots"
+                android:id="@+id/ttText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Booking Summary"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/summaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ttText"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="80dp"
+                android:text=""
+                android:textColor="@color/md_green_500"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
+        android:text="Confirm"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
 
 </RelativeLayout>
