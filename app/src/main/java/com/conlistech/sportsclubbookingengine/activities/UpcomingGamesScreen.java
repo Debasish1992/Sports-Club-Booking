@@ -126,7 +126,6 @@ public class UpcomingGamesScreen extends AppCompatActivity
                 for (DataSnapshot gameData : dataSnapshot.getChildren()) {
                     GameModel games = gameData.getValue(GameModel.class);
                     ArrayList<GamePlayersModel> gamePlayersModel = games.getGamePlayers();
-
                     for (int i = 0; i < gamePlayersModel.size(); i++) {
                         String userId = gamePlayersModel.get(i).getUserId();
                         if (getCurrentUserId().equalsIgnoreCase(userId)) {

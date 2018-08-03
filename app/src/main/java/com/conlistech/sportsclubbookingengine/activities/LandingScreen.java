@@ -249,7 +249,9 @@ public class LandingScreen extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            //  Toast.makeText(this, "in Home", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_explore) {
+            Intent intent = new Intent(LandingScreen.this, ExploreGamesScreen.class);
+            startActivity(intent);
         } else if (id == R.id.nav_noti) {
 
         } else if (id == R.id.nav_conver) {

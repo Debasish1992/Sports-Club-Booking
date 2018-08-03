@@ -27,6 +27,12 @@ public class Constants {
     public static final String SENDER_NAME = "sender_user_name";
     public static final String RECEIVER_NAME = "receiver_user_fullName";
     public static final String MESSAGE_TYPE = "notification_type";
+    public static final String GAME_ID = "game_id";
+    public static final String GAME_CREATOR_NAME = "game_creator_name";
+    public static final String GAME_CREATOR_ID = "game_creator_id";
+    public static final String GAME_PLAY_DATE = "game_play_date";
+
+
 
 
     //Game Schedule Constants
@@ -40,6 +46,7 @@ public class Constants {
     public static String maximumNoPlayers = null;
     public static String gameNotes = null;
     public static String gameSport = null;
+    public static String pushNotificationGameId = null;
 
     public static final String GAME_ROLE_CREATOR = "Creator";
     public static final String GAME_ROLE_PLAYER = "Teammate";

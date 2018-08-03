@@ -3,6 +3,7 @@ package com.conlistech.sportsclubbookingengine.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +51,20 @@ public class UpcomingGameAdapter
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_game_name.setText(gameModel.get(position).getGameName());
         holder.tvGameSports.setText(gameModel.get(position).getGameSport());
+        /*String venueAddress = null;
+        if(!TextUtils.isEmpty(gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress())){
+             venueAddress = gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress();
+        }else{
+            venueAddress = "Address Not Provided by the venue owner.";
+        }*/
+
         String venueAddress = gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress();
-        holder.tv_venue_address.setText(gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress());
+        if(venueAddress != null){
+            holder.tv_venue_address.setText(gameModel.get(position).getVenueInfoModel().getLocationModel().getAddress());
+        }else{
+            holder.tv_venue_address.setText("Address not provided by the venue owner.");
+        }
+
         String gameCreatorUserId = gameModel.get(position).getGameCreatorUserId();
         if (userIdCurrent != null && userIdCurrent.equalsIgnoreCase(gameCreatorUserId)) {
             holder.tv_game_creator.setText("You" +
