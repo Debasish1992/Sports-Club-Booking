@@ -595,28 +595,15 @@ public class LandingScreen extends AppCompatActivity implements
         alertDialog.setPositiveButton("Settings",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        /*Intent intent = new Intent(
-                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                       // this.start(intent);*/
 
                         startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 2);
 
                     }
                 });
 
-        // on pressing cancel button
-        /*alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });*/
-
         alertDialog.setNeutralButton(R.string.cancel, null);
         alertDialog.create().show();
 
-        // Showing Alert Message
-        // alertDialog.show();
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {

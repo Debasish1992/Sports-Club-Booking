@@ -22,6 +22,7 @@ import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.ChatUserOnlineModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomString;
@@ -63,6 +64,7 @@ public class AddTochatUserActivity extends AppCompatActivity
         ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        CommonUtils.changeToolbarFont(toolbar, this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         sqliteHelper = new SqliteHelper(this);

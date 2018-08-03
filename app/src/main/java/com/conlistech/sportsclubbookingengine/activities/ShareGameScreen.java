@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
@@ -69,6 +70,7 @@ public class ShareGameScreen extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
 
         getDeepLink = generateDynamicLink();
         Log.d("DeepLink", getDeepLink);

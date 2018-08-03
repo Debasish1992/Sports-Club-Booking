@@ -22,6 +22,7 @@ import com.conlistech.sportsclubbookingengine.interfaces.ItemClickListener;
 import com.conlistech.sportsclubbookingengine.models.ChatModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomString;
@@ -84,6 +85,7 @@ public class RecentChatListActivity extends AppCompatActivity implements ItemCli
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
 
 
         getAllRecentChats();

@@ -35,6 +35,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.models.VenueModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -70,6 +71,7 @@ public class HomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen2);
         ButterKnife.bind(this);
         setSupportActionBar(tbBar);
+        CommonUtils.changeToolbarFont(tbBar, this);
         setUpTabBar();
 
         fetchAllVenues();

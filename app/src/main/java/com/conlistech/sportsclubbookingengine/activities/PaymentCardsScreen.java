@@ -27,6 +27,7 @@ import com.conlistech.sportsclubbookingengine.adapters.PaymentCardAdapter;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomNumberGenerator;
@@ -76,6 +77,7 @@ public class PaymentCardsScreen extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
         checkPermission();
         pref = getSharedPreferences("MyPref", MODE_PRIVATE);
         sqliteHelper = new SqliteHelper(this);

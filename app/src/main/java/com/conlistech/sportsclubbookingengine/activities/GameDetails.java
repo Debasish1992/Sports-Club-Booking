@@ -28,6 +28,7 @@ import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.models.GameModel;
 import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -233,6 +234,7 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
 
 
         // Checking the condition for refreshing the UI

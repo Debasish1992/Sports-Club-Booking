@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 
 import java.util.List;
 
@@ -135,7 +136,7 @@ public class SettingsScreen extends AppCompatPreferenceActivity {
         }
     }
 
-    /**
+    /**f
      * {@inheritDoc}
      */
     @Override

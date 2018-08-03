@@ -20,6 +20,7 @@ import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.models.VenueInfoModel;
 import com.conlistech.sportsclubbookingengine.models.VenueReviewModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomNumberGenerator;
@@ -92,6 +93,7 @@ public class DetailsScreen extends AppCompatActivity implements RatingDialogList
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        CommonUtils.changeToolbarFont(toolbar, this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 

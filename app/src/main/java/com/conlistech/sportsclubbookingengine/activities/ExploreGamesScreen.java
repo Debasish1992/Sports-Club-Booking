@@ -18,6 +18,7 @@ import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.UpcomingGameAdapter;
 import com.conlistech.sportsclubbookingengine.models.GameModel;
 import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -89,6 +90,7 @@ public class ExploreGamesScreen extends AppCompatActivity implements UpcomingGam
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
     }
 
     // Initializing the views
