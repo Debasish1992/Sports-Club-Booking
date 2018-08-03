@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
+import com.conlistech.sportsclubbookingengine.utils.FontChangeCrawler;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +79,11 @@ public class LoginScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //setting the font for the activity
+        /*FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(),
+                getString(R.string.font_OpenSans_light));
+        fontChanger.replaceFonts((ViewGroup) this.findViewById(android.R.id.content));*/
         setContentView(R.layout.activity_login_screen);
         ButterKnife.bind(this);
         firebaseAuth = FirebaseAuth.getInstance();
