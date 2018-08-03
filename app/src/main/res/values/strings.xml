@@ -98,6 +98,7 @@
     <string name="font_OpenSans_semibold">OpenSans_Semibold.ttf</string>
     <string name="font_OpenSans_regular">OpenSans_Regular.ttf</string>
     <string name="font_OpenSans_light">OpenSans_Light.ttf</string>
+    <string name="font_OpenSans_italic">OpenSans_Italic.ttf</string>
 
 
 </resources>

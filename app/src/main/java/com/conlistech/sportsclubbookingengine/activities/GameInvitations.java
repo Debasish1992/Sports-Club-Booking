@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.UpcomingGameAdapter;
 import com.conlistech.sportsclubbookingengine.models.GameModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +55,7 @@ public class GameInvitations
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
 
         isOnCreateCalled = true;
         // Fetching all the invitations

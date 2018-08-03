@@ -31,6 +31,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,7 +45,9 @@ import com.conlistech.sportsclubbookingengine.models.PaymentCardModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.models.VenueInfoModel;
 import com.conlistech.sportsclubbookingengine.models.VenueModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
+import com.conlistech.sportsclubbookingengine.utils.FontChangeCrawler;
 import com.conlistech.sportsclubbookingengine.utils.GetAddress;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.LocationTracker;
@@ -125,6 +128,7 @@ public class LandingScreen extends AppCompatActivity implements
         initializeNabViews();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        CommonUtils.changeToolbarFont(toolbar, this);
         db_sqlite = new SqliteHelper(this);
         actionBar = getSupportActionBar();
 
@@ -591,28 +595,15 @@ public class LandingScreen extends AppCompatActivity implements
         alertDialog.setPositiveButton("Settings",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        /*Intent intent = new Intent(
-                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                       // this.start(intent);*/
 
                         startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 2);
 
                     }
                 });
 
-        // on pressing cancel button
-        /*alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });*/
-
         alertDialog.setNeutralButton(R.string.cancel, null);
         alertDialog.create().show();
 
-        // Showing Alert Message
-        // alertDialog.show();
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {

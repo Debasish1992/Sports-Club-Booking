@@ -18,6 +18,7 @@ import com.conlistech.sportsclubbookingengine.interfaces.ItemClickListener;
 import com.conlistech.sportsclubbookingengine.models.NotificationModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
+import com.conlistech.sportsclubbookingengine.utils.CommonUtils;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomString;
@@ -70,6 +71,7 @@ public class NotificationActivity extends AppCompatActivity implements ItemClick
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CommonUtils.changeToolbarFont(toolbar, this);
 
         getAllNotificationList();
     }
