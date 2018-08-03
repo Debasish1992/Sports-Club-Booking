@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.adapters.RecentChatListAdapter;
+import com.conlistech.sportsclubbookingengine.interfaces.ItemClickListener;
 import com.conlistech.sportsclubbookingengine.models.ChatModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
@@ -41,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecentChatListActivity extends AppCompatActivity implements RecentChatListAdapter.ItemClickListener {
+public class RecentChatListActivity extends AppCompatActivity implements ItemClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -124,7 +125,7 @@ public class RecentChatListActivity extends AppCompatActivity implements RecentC
                 .setValue(senderConversation);
     }
 
-    //
+    //gettting the current user id
     public String getCurrentUserId() {
         return prefs.getString(Constants.USER_ID, null);
     }

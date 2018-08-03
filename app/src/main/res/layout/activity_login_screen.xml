@@ -42,6 +42,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Email"
                     android:textSize="12sp"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white" />
@@ -62,6 +63,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:hint="Password"
                     android:textSize="12sp"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white" />

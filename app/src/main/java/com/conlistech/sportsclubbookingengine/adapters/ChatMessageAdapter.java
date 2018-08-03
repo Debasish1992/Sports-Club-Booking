@@ -27,7 +27,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
     Context context;
     DatabaseReference mDatabase;
     String currentUserID;
-    private RecentChatListAdapter.ItemClickListener mClickListener;
+    private ItemClickListener mClickListener;
 
 
     public ChatMessageAdapter(Context ctx, String currentUserID, ArrayList<ChatModel> userModels) {
@@ -120,7 +120,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
     }
 
     // allows clicks events to be caught
-    public void setClickListener(RecentChatListAdapter.ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

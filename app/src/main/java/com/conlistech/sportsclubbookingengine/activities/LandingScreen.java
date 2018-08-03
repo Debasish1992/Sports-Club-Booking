@@ -74,6 +74,7 @@ public class LandingScreen extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, VenueAdapter.ItemClickListener {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    int LOCATION_SETTING_REQUEST_CODE = 2;
     Toolbar toolbar;
     @BindView(R.id.venues_recycler_view)
     RecyclerView venueRecyclerView;
@@ -92,7 +93,6 @@ public class LandingScreen extends AppCompatActivity implements
     LocationTracker locationTracker;
     public static VenueInfoModel venueInfoModel = null;
     ActionBar actionBar;
-    private static final int LOCATION_SETTING_REQUEST_CODE = 1;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -168,29 +168,38 @@ public class LandingScreen extends AppCompatActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
                 locationTracker = new LocationTracker(LandingScreen.this);
-                if (locationTracker.canGetLocation()) {
-                    Double latitude = locationTracker.getLatitude();
-                    Double longitude = locationTracker.getLongitude();
-                    //    List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
-                    //    String locAddress = address.get(0).getAddressLine(0);
-                    //    String city = address.get(0).getLocality();
-                    //    Log.d("Address", address.toString());
-                    //    getSupportActionBar().setTitle(locAddress);
-                    toolbar.setSubtitle(userPrimarySport);
-
-                    // Checking for the payment card table existance
-                    if (db_sqlite.getPaymentCardCount() == 0) {
-                        getUserPaymentMethods();
-                    } else {
-                        // Getting all the venues
-                        getAllVenues();
-                    }
-                } else {
+                if (locationTracker.canGetLocation() && locationTracker.getLocation() != null) {
+                    getLocationAddress();
+                } else if (!locationTracker.canGetLocation()) {
                     System.out.println("Unable to locate the position");
+                    //locationTracker.showSettingsAlert();
+                    showSettingsAlert();
+                } else {
+                    locationTracker.getLocation();
+                    getLocationAddress();
                 }
             } else {
                 requestPermission();
             }
+        }
+    }
+
+    private void getLocationAddress() {
+        Double latitude = locationTracker.getLatitude();
+        Double longitude = locationTracker.getLongitude();
+        List<Address> address = GetAddress.getAddress(LandingScreen.this, latitude, longitude);
+        String locAddress = address.get(0).getAddressLine(0);
+        String city = address.get(0).getLocality();
+        Log.d("Address", address.toString());
+        getSupportActionBar().setTitle(locAddress);
+        toolbar.setSubtitle(userPrimarySport);
+
+        // Checking for the payment card table existance
+        if (db_sqlite.getPaymentCardCount() == 0) {
+            getUserPaymentMethods();
+        } else {
+            // Getting all the venues
+            getAllVenues();
         }
     }
 
@@ -251,7 +260,8 @@ public class LandingScreen extends AppCompatActivity implements
         if (id == R.id.nav_home) {
             //  Toast.makeText(this, "in Home", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_noti) {
-
+            Intent intent = new Intent(LandingScreen.this, NotificationActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_conver) {
             Intent intent = new Intent(LandingScreen.this, RecentChatListActivity.class);
             startActivity(intent);
@@ -327,6 +337,12 @@ public class LandingScreen extends AppCompatActivity implements
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
                 Toast.makeText(this, "User has not selected any location", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == LOCATION_SETTING_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "RESULT_OK", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "RESULT_CANCELED", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -559,6 +575,44 @@ public class LandingScreen extends AppCompatActivity implements
         }
     }
 
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        // Setting DialogHelp Title
+        alertDialog.setTitle("GPS is settings");
+
+        // Setting DialogHelp Message
+        alertDialog
+                .setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        // On pressing Settings button
+        alertDialog.setPositiveButton("Settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        /*Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                       // this.start(intent);*/
+
+                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 2);
+
+                    }
+                });
+
+        // on pressing cancel button
+        /*alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });*/
+
+        alertDialog.setNeutralButton(R.string.cancel, null);
+        alertDialog.create().show();
+
+        // Showing Alert Message
+        // alertDialog.show();
+    }
+
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(LandingScreen.this)
                 .setMessage(message)
@@ -571,15 +625,9 @@ public class LandingScreen extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+    }
 
-
-       /* final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 100ms
-                Toast.makeText(LandingScreen.this, "TOAST", Toast.LENGTH_LONG).show();
-            }
-        }, 2000);*/
+    public void showToast(String msg) {
+        Toast.makeText(this, "" + msg, Toast.LENGTH_SHORT).show();
     }
 }

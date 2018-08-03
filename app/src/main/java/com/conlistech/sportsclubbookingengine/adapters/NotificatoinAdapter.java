@@ -1,34 +1,39 @@
 package com.conlistech.sportsclubbookingengine.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.interfaces.ItemClickListener;
+import com.conlistech.sportsclubbookingengine.models.NotificationModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
-import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAdapter.ViewHolder> {
+import static com.conlistech.sportsclubbookingengine.adapters.ChatMessageAdapter.convertSecondsToHMmSs;
 
-    public ArrayList<UserConversation> mArrayList;
+public class NotificatoinAdapter extends RecyclerView.Adapter<NotificatoinAdapter.ViewHolder> {
+
+    public ArrayList<NotificationModel> mArrayList;
     Context context;
     DatabaseReference mDatabase;
     private ItemClickListener mClickListener;
+    SpannableStringBuilder builder = new SpannableStringBuilder();
 
 
-    public RecentChatListAdapter(Context ctx,
-                                 ArrayList<UserConversation> userModels) {
+    public NotificatoinAdapter(Context ctx,
+                               ArrayList<NotificationModel> userModels) {
         this.mArrayList = userModels;
         this.context = ctx;
 
@@ -39,15 +44,29 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                          int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.row_recent_chats, parent, false);
+                inflate(R.layout.row_notification, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
-        viewHolder.tvFullname.setText(mArrayList.get(position).getUserFullName());
-        viewHolder.tvMessage.setText(mArrayList.get(position).getReceiverLastMsg());
+        //  viewHolder.tvFullname.setText(mArrayList.get(position).getUserFullName());
+
+        String str = mArrayList.get(position).getSenderFullName() + " " +
+                mArrayList.get(position).getNotifyMessage();
+        str = str.replace("" + mArrayList.get(position).getSenderFullName(),
+                "<b><font color='#424242'>" + mArrayList.get(position).getSenderFullName() + "</font></b>");
+        viewHolder.tvMessage.setText(Html.fromHtml(str));
+        viewHolder.tvTimeStamp.setText(convertSecondsToHMmSs(
+                Long.parseLong(mArrayList.get(position).getNotifyTime())));
     }
+
+   /* public String getColoredStringText(String str) {
+        SpannableString str1 = new SpannableString(str);
+        str1.setSpan(new ForegroundColorSpan(Color.RED), 0, str1.length(), 0);
+        builder.append(str1);
+        return builder;
+    }*/
 
 
     private int getCategoryPos(String category) {
@@ -61,9 +80,7 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView tvFullname, tvMessage, tvUnreadMsgs;
-        CheckBox cbSelection;
-        ImageView mImgOnline;
+        private TextView tvFullname, tvMessage, tvTimeStamp;
         private View mView;
 
         public ViewHolder(View view) {
@@ -71,9 +88,7 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
             mView = view;
             tvFullname = (TextView) view.findViewById(R.id.tvFullname);
             tvMessage = (TextView) view.findViewById(R.id.tvMessage);
-            tvUnreadMsgs = (TextView) view.findViewById(R.id.tvUnreadMsgs);
-            mImgOnline = view.findViewById(R.id.img_online);
-            //  cbSelection = (CheckBox) view.findViewById(R.id.cbSelectTimeSlot);
+            tvTimeStamp = (TextView) view.findViewById(R.id.tvTimeStamp);
             view.setOnClickListener(this);
             view.setTag(view);
         }
@@ -90,4 +105,5 @@ public class RecentChatListAdapter extends RecyclerView.Adapter<RecentChatListAd
     }
 
 }
+
 
