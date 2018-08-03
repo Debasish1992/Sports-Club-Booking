@@ -415,7 +415,7 @@ public class ProfileScreen extends AppCompatActivity {
             if (userModel.getUserId().equalsIgnoreCase(getCurrentUserId())) {
                 mItem.setVisible(true);
             } else {
-                mItem.setVisible(true);
+                mItem.setVisible(false);
             }
             // boolean isProfileVisible = userModel.isProfile_visibility();
             userId = userModel.getUserId();
