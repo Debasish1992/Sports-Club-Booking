@@ -115,7 +115,7 @@ public class TeammatesRequestAdapter extends
 
                 displayMessage("Friend Request Successfully Accepted");
 
-                createNotificatonForRequestAcceptedRejected("Accepted", mArrayList.get(pos).getUserId());
+                createNotificatonForRequestAcceptedRejected("Accepted", getUserId);
 
                 TeammatesScreen.isRequestResponded = true;
 
