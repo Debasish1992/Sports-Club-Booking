@@ -19,7 +19,9 @@ import android.util.Log;
 
 import com.conlistech.sportsclubbookingengine.R;
 import com.conlistech.sportsclubbookingengine.activities.ChatMessageActivity;
+import com.conlistech.sportsclubbookingengine.activities.ExploreGamesScreen;
 import com.conlistech.sportsclubbookingengine.activities.FriendRequestsScreen;
+import com.conlistech.sportsclubbookingengine.activities.GameDetails;
 import com.conlistech.sportsclubbookingengine.activities.LandingScreen;
 import com.conlistech.sportsclubbookingengine.activities.RecentChatListActivity;
 import com.conlistech.sportsclubbookingengine.activities.TeammatesScreen;
@@ -41,6 +43,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     String senderName = null;
     String receiverName = null;
     String messageType = null;
+    String gameId = null;
+    String game_creator_name = null;
+    String game_creator_id = null;
+    String game_play_date = null;
     Map<String, String> data = null;
 
     @Override
@@ -97,7 +103,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if (currentUserId.equalsIgnoreCase(senderId)) {
                 sendNotification(notificationTitle, notificationBody);
             }
-
+        }else if(!TextUtils.isEmpty(messageType) &&
+                messageType.equalsIgnoreCase("NearBy_Game")){
+            gameId = data.get(Constants.GAME_ID);
+            game_creator_name = data.get(Constants.GAME_CREATOR_NAME);
+            game_play_date = data.get(Constants.GAME_PLAY_DATE);
+            game_creator_id =  data.get(Constants.GAME_CREATOR_ID);
+            if(!getCurrentUserId().equalsIgnoreCase(game_creator_id)){
+                sendNotification(notificationTitle,notificationBody);
+            }
         }
     }
 
@@ -123,6 +137,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (!TextUtils.isEmpty(messageType) &&
                 messageType.equalsIgnoreCase("Teammate_Response")) {
             intent = new Intent(this, TeammatesScreen.class);
+        }else if(!TextUtils.isEmpty(messageType) &&
+                messageType.equalsIgnoreCase("NearBy_Game")){
+            Constants.pushNotificationGameId = gameId;
+            intent = new Intent(this, GameDetails.class);
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,

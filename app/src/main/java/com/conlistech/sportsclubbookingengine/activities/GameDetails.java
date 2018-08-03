@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,8 +25,11 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.models.GameModel;
 import com.conlistech.sportsclubbookingengine.models.GamePlayersModel;
+import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
+import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,9 +37,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -82,6 +89,7 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     String venuePhoneNumber, venueWebsite, venueAddress;
     final String GOOGLE_NAV_PARAM = "google.navigation:q=";
     ArrayList<String> gameTeamates = new ArrayList<>();
+    GameModel gameModel;
 
 
     @OnClick(R.id.layWebsite)
@@ -226,9 +234,20 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        // Refreshing the UI
-        refreshUi();
 
+        // Checking the condition for refreshing the UI
+        if (!TextUtils.isEmpty(Constants.pushNotificationGameId)) {
+            //Fetching the Game Details
+            fetchGameDetails();
+        } else {
+            // Refreshing the UI
+            refreshUi();
+            // initializing the Map
+            initMap();
+        }
+    }
+
+    public void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -243,6 +262,8 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Constants.pushNotificationGameId = null;
+        UpcomingGamesScreen.gameModel = null;
         GameDetails.this.finish();
     }
 
@@ -434,5 +455,37 @@ public class GameDetails extends AppCompatActivity implements OnMapReadyCallback
     public String getCurrentUserName() {
         SharedPreferences prefs = getSharedPreferences("MyPref", MODE_PRIVATE);
         return prefs.getString(Constants.USER_FULL_NAME, null);
+    }
+
+    /**
+     * Function Responsible for getting Game Details
+     */
+    public void fetchGameDetails() {
+        LoaderUtils.showProgressBar(GameDetails.this, "Please wait while loading...");
+        gameModel = new GameModel();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("games").child(Constants.pushNotificationGameId);
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                UpcomingGamesScreen.gameModel = dataSnapshot.getValue(GameModel.class);
+                // Refreshing the UI
+                refreshUi();
+
+                // Initializing the Google Map
+                initMap();
+
+                // Stopping the loader
+                LoaderUtils.dismissProgress();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                LoaderUtils.dismissProgress();
+                // Failed to read value
+                Log.w("HomeScreen", "Failed to read value.", error.toException());
+            }
+        });
     }
 }
