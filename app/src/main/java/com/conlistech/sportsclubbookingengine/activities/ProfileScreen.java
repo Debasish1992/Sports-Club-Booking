@@ -97,6 +97,7 @@ public class ProfileScreen extends AppCompatActivity {
     RecyclerView rcvGamePlayed;
     @BindView(R.id.tvNoFriendFound)
     TextView tvNoGameNotFound;
+    MenuItem mItem;
 
     @OnClick(R.id.ivChat)
     void sendToChat() {
@@ -410,6 +411,12 @@ public class ProfileScreen extends AppCompatActivity {
      */
     public void setUserData(UserModel userModel) {
         if (userModel != null) {
+
+            if (userModel.getUserId().equalsIgnoreCase(getCurrentUserId())) {
+                mItem.setVisible(true);
+            } else {
+                mItem.setVisible(true);
+            }
             // boolean isProfileVisible = userModel.isProfile_visibility();
             userId = userModel.getUserId();
             if (!userModel.isProfile_visibility() &&
@@ -556,6 +563,7 @@ public class ProfileScreen extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_profile, menu);
+        mItem = menu.findItem(R.id.itemLogout);
         return super.onCreateOptionsMenu(menu);
     }
 

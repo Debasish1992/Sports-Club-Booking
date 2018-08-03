@@ -1,5 +1,6 @@
 package com.conlistech.sportsclubbookingengine.activities;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -96,6 +97,7 @@ public class LandingScreen extends AppCompatActivity implements
     LocationTracker locationTracker;
     public static VenueInfoModel venueInfoModel = null;
     ActionBar actionBar;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 3;
 
     @OnClick(R.id.toolbar)
     void getLocation() {
@@ -505,17 +507,21 @@ public class LandingScreen extends AppCompatActivity implements
     }
 
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(getApplicationContext(),
-                ACCESS_FINE_LOCATION);
-
-        return result == PackageManager.PERMISSION_GRANTED;
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION},
-                PERMISSION_REQUEST_CODE);
-
-        locationTracker = new LocationTracker(LandingScreen.this);
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(this, "Location permission needed. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+       // callForLocationTracker();
     }
 
 
