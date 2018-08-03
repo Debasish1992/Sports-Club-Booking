@@ -114,9 +114,18 @@
         <activity
             android:name=".activities.ChatMessageActivity"
             android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".activities.AddTochatUserActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"></activity>
+
+
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:screenOrientation="portrait"></activity>
+
+
 
         <meta-data
             android:name="com.google.android.gms.version"

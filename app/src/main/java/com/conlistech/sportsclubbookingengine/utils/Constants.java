@@ -59,6 +59,10 @@ public class Constants {
     public static String RECEIVER_USER_FULLNAME = null;
     public static String SENDER_USER_FULLNAME = null;
 
+    //For Notification section
+    public static String FRIEND_REQUEST_SEND = "friend_request_send";
+    public static String FRIEND_REQUEST_ACCEPTED = "friend_request_accepted";
+    public static String FRIEND_REQUEST_REJECTED = "friend_request_rejected";
 
 
 

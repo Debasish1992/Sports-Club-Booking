@@ -26,10 +26,12 @@ import com.conlistech.sportsclubbookingengine.adapters.InviteFriendList;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.ChatUserOnlineModel;
 import com.conlistech.sportsclubbookingengine.models.FriendModel;
+import com.conlistech.sportsclubbookingengine.models.NotificationModel;
 import com.conlistech.sportsclubbookingengine.models.UserConversation;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
 import com.conlistech.sportsclubbookingengine.utils.LoaderUtils;
+import com.conlistech.sportsclubbookingengine.utils.NotificationUtils;
 import com.conlistech.sportsclubbookingengine.utils.RandomNumberGenerator;
 import com.conlistech.sportsclubbookingengine.utils.RandomString;
 import com.google.android.gms.tasks.Continuation;
@@ -506,14 +508,24 @@ public class ProfileScreen extends AppCompatActivity {
                 .setValue(userModel);
         Toast.makeText(this, "Teammate Request Sent Successfully.", Toast.LENGTH_SHORT).show();
 
-        showFriendRequestSent();
+        showFriendRequestSent(userModel);
     }
 
-    private void showFriendRequestSent() {
+    private void showFriendRequestSent(FriendModel userModel) {
         tvRequestSent.setVisibility(View.VISIBLE);
         ivAddFriend.setVisibility(View.GONE);
         findViewById(R.id.lyt_add_friend).setVisibility(View.VISIBLE);
+
+        //store in Notification table of firebase
+        createNotificationForRequestSend();
     }
+
+    private void createNotificationForRequestSend() {
+        NotificationActivity notificationActivity = new NotificationActivity();
+        notificationActivity.storeNotificationInfo(NotificationUtils.getNotificationInfo(userId, getCurrentUserId(), getCurrentUserName(),
+                Constants.FRIEND_REQUEST_SEND));
+    }
+
 
     // Getting Current User Details
     public void getCurrentUserDetails() {
@@ -565,6 +577,11 @@ public class ProfileScreen extends AppCompatActivity {
     // Getting Current User Id
     public String getCurrentUserId() {
         return prefs.getString(Constants.USER_ID, null);
+    }
+
+    // Getting Current User Name
+    public String getCurrentUserName() {
+        return prefs.getString(Constants.USER_FULL_NAME, null);
     }
 
     /**

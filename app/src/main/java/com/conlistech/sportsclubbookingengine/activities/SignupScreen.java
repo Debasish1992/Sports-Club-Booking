@@ -11,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -228,9 +230,22 @@ public class SignupScreen extends AppCompatActivity {
         pref = getApplicationContext().
                 getSharedPreferences("MyPref", 0);
         initFirebaseStorage();
+
+        etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    signUp();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
     }
 
-    public void initFirebaseStorage(){
+    public void initFirebaseStorage() {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
     }
@@ -430,6 +445,5 @@ public class SignupScreen extends AppCompatActivity {
         editor.putBoolean(Constants.USER_CONTACTS_VISIBILITY, true);
         editor.commit();
     }
-
 
 }

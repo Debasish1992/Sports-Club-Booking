@@ -419,7 +419,7 @@ public class ChatMessageActivity extends AppCompatActivity {
      *
      * @return
      */
-    private String getTimestampInUTC() {
+    public static String getTimestampInUTC() {
         Date myDate = new Date();
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -431,7 +431,7 @@ public class ChatMessageActivity extends AppCompatActivity {
         return millis;
     }
 
-    public static String convertDateToMillis(String date) {
+    private static String convertDateToMillis(String date) {
         long millis = 0;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyy h:mm:ss a zz");

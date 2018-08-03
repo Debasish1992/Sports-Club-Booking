@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,7 +42,8 @@ import butterknife.OnClick;
 
 public class LoginScreen extends AppCompatActivity {
 
-    @BindView(R.id.link_signup) TextView tvSignUpLink;
+    @BindView(R.id.link_signup)
+    TextView tvSignUpLink;
     @BindView(R.id.input_email)
     EditText etEmail;
     @BindView(R.id.input_password)
@@ -52,17 +55,20 @@ public class LoginScreen extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     public static LoginScreen loginScreen;
 
-    @OnClick(R.id.link_signup) void submit() {
+    @OnClick(R.id.link_signup)
+    void submit() {
         startActivity(new Intent(LoginScreen.this,
                 SignupScreen.class));
     }
 
-    @OnClick (R.id.link_forgotpassword) void forgotPassword(){
+    @OnClick(R.id.link_forgotpassword)
+    void forgotPassword() {
         startActivity(new Intent(LoginScreen.this,
                 ForgotPasswordScreen.class));
     }
 
-    @OnClick(R.id.btn_login) void letUserIn(){
+    @OnClick(R.id.btn_login)
+    void letUserIn() {
         login();
     }
 
@@ -75,6 +81,19 @@ public class LoginScreen extends AppCompatActivity {
         ButterKnife.bind(this);
         firebaseAuth = FirebaseAuth.getInstance();
         loginScreen = this;
+
+        etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    login();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
     }
 
     // Function Responsible for letting the user login
@@ -94,7 +113,7 @@ public class LoginScreen extends AppCompatActivity {
         signIn(email, password);
     }
 
-    public void signIn(final String email, final String password){
+    public void signIn(final String email, final String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -110,14 +129,14 @@ public class LoginScreen extends AppCompatActivity {
 
                             try {
                                 throw task.getException();
-                            } catch(FirebaseAuthWeakPasswordException e) {
-                                Toast.makeText(LoginScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                            } catch(FirebaseAuthInvalidCredentialsException e) {
-                                Toast.makeText(LoginScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                            } catch(FirebaseAuthUserCollisionException e) {
-                                Toast.makeText(LoginScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                            } catch(Exception e) {
-                                Toast.makeText(LoginScreen.this,e.getMessage().toString(),Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+                                Toast.makeText(LoginScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                Toast.makeText(LoginScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthUserCollisionException e) {
+                                Toast.makeText(LoginScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            } catch (Exception e) {
+                                Toast.makeText(LoginScreen.this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -125,7 +144,7 @@ public class LoginScreen extends AppCompatActivity {
     }
 
     // Function responsible fro fetching the guitar details
-    public void fetchUserDetails(final String userId){
+    public void fetchUserDetails(final String userId) {
         LoaderUtils.showProgressBar(LoginScreen.this, "Please wait while fetching the details..");
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,7 +163,7 @@ public class LoginScreen extends AppCompatActivity {
 
                 // Storing the user details locally
                 storingUserDetails(userId, userEmail, userFullName, userPhone,
-                        userFavSport, profileVisibility, contactsVisibility, userProfileImage );
+                        userFavSport, profileVisibility, contactsVisibility, userProfileImage);
                 onLoginSuccess();
                 Log.d("HomeScreen", "Value is: " + user.toString());
             }
@@ -166,7 +185,7 @@ public class LoginScreen extends AppCompatActivity {
                                    String userFavSport,
                                    boolean isProfileVisible,
                                    boolean isContactsVisible,
-                                   String profileImage){
+                                   String profileImage) {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(Constants.USER_ID, userId);
@@ -183,10 +202,11 @@ public class LoginScreen extends AppCompatActivity {
 
     /**
      * Function responsible for storing user details
-     * @param userId user Id
+     *
+     * @param userId    user Id
      * @param userModel User Model
      */
-    public void storeUserInfo(String userId, UserModel userModel){
+    public void storeUserInfo(String userId, UserModel userModel) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
         // pushing user to 'users' node using the userId
         mDatabase.child(userId).setValue(userModel);
@@ -214,6 +234,7 @@ public class LoginScreen extends AppCompatActivity {
 
     /**
      * Validating user inputs
+     *
      * @return
      */
     public boolean validate() {

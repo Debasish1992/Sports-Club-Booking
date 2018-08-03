@@ -20,7 +20,6 @@
     <string name="notification_body"></string>
     <string name="cancel">Cancel</string>
 
-
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
@@ -94,7 +93,11 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <!--App fonts-->
-    <string name="font_roboto_regular">Roboto_Regular.ttf</string>
+    <string name="font_OpenSanso_extrabold">OpenSans_ExtraBold.ttf</string>
+    <string name="font_OpenSans_bold">OpenSans_Bold.ttf</string>
+    <string name="font_OpenSans_semibold">OpenSans_Semibold.ttf</string>
+    <string name="font_OpenSans_regular">OpenSans_Regular.ttf</string>
+    <string name="font_OpenSans_light">OpenSans_Light.ttf</string>
 
 
 </resources>

@@ -14,11 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.conlistech.sportsclubbookingengine.R;
+import com.conlistech.sportsclubbookingengine.activities.NotificationActivity;
 import com.conlistech.sportsclubbookingengine.activities.TeammatesScreen;
 import com.conlistech.sportsclubbookingengine.database.SqliteHelper;
 import com.conlistech.sportsclubbookingengine.models.FriendModel;
 import com.conlistech.sportsclubbookingengine.models.UserModel;
 import com.conlistech.sportsclubbookingengine.utils.Constants;
+import com.conlistech.sportsclubbookingengine.utils.NotificationUtils;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -31,7 +33,7 @@ public class TeammatesRequestAdapter extends
         RecyclerView.Adapter<TeammatesRequestAdapter.ViewHolder> {
 
     public static ArrayList<FriendModel> mArrayList;
-   // public static ArrayList<UserModel> mFilteredList;
+    // public static ArrayList<UserModel> mFilteredList;
     Context context;
     ArrayList<String> keyArray;
     DatabaseReference mDatabase;
@@ -43,7 +45,7 @@ public class TeammatesRequestAdapter extends
     public TeammatesRequestAdapter(Context ctx, ArrayList<FriendModel>
             arrayList, ArrayList<String> nodeArray, String userId, FriendModel userModel) {
         this.mArrayList = arrayList;
-       // this.mFilteredList = arrayList;
+        // this.mFilteredList = arrayList;
         this.keyArray = nodeArray;
         this.context = ctx;
         this.userIdCurrent = userId;
@@ -64,7 +66,7 @@ public class TeammatesRequestAdapter extends
     @NonNull
     @Override
     public TeammatesRequestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                     int viewType) {
+                                                                 int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.row_teammate_requests, parent, false);
         return new TeammatesRequestAdapter.ViewHolder(view);
@@ -113,6 +115,8 @@ public class TeammatesRequestAdapter extends
 
                 displayMessage("Friend Request Successfully Accepted");
 
+                createNotificatonForRequestAcceptedRejected("Accepted", mArrayList.get(pos).getUserId());
+
                 TeammatesScreen.isRequestResponded = true;
 
             }
@@ -130,24 +134,37 @@ public class TeammatesRequestAdapter extends
                 // Displaying the message
                 displayMessage("Friend Request Successfully Rejected");
 
+                createNotificatonForRequestAcceptedRejected("Rejected", mArrayList.get(pos).getUserId());
+
                 TeammatesScreen.isRequestResponded = true;
             }
         });
     }
 
+    private void createNotificatonForRequestAcceptedRejected(String msg, String userId) {
+        NotificationActivity notificationActivity = new NotificationActivity();
+        if (msg.equalsIgnoreCase("Accepted")) {
+            notificationActivity.storeNotificationInfo(NotificationUtils.getNotificationInfo(userId,
+                    currentUserModel.getUserId(), currentUserModel.getUserFullName(), Constants.FRIEND_REQUEST_ACCEPTED));
+        } else {
+            notificationActivity.storeNotificationInfo(NotificationUtils.getNotificationInfo(userId,
+                    currentUserModel.getUserId(), currentUserModel.getUserFullName(), Constants.FRIEND_REQUEST_REJECTED));
+        }
+    }
+
     // Function responsible for refreshing the list
-    public void refreshList(int position){
+    public void refreshList(int position) {
         mArrayList.remove(position);
         notifyDataSetChanged();
     }
 
     // Function responsible for displaying the message
-    public void displayMessage(String message){
+    public void displayMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     // Function responsible for accepting user friend request
-    public void removeUserTeammateRequest(String key){
+    public void removeUserTeammateRequest(String key) {
         DatabaseReference mDatabase =
                 FirebaseDatabase.getInstance().getReference("teammates")
                         .child("teammate_request").child(userIdCurrent).child(key);
