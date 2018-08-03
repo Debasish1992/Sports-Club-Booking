@@ -62,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@+id/image_message_profile"
-            android:fontFamily="@string/font_roboto_regular"
             android:text="John Doe"
             android:textSize="12sp"
             android:visibility="gone" />

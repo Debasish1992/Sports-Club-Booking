@@ -71,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/textUserTitle"
                     android:layout_centerVertical="true"
-                    android:fontFamily="@string/font_roboto_regular"
                     android:text=""
                     android:textSize="12dp"
                     android:textStyle="bold" />
