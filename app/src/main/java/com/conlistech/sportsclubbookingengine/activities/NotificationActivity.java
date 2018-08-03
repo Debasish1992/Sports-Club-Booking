@@ -78,14 +78,14 @@ public class NotificationActivity extends AppCompatActivity implements ItemClick
 
     // Initializing the views
     private void initViews() {
-        mTxtNoFriendFound.setText("OOPS !! We have not found any Notifications associated with you.");
+        mTxtNoFriendFound.setText("OOPS !! No Notifications Yet.");
         rcvRecentChatList.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rcvRecentChatList.setLayoutManager(layoutManager);
     }
 
     /**
-     * Function to store notificatios into the firebase Notification table
+     * Function to store notification into the firebase Notification table
      *
      * @param notificationModel
      */
